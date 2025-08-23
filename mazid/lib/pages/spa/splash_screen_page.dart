@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/pages/home/home_page.dart';
 import 'package:mazid/pages/spa/widget/LogoPrintWidget.dart';
-import 'package:mazid/pages/spa/widget/LogoTextWidget';
+import 'package:mazid/pages/spa/widget/LogoTextWidget.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -59,7 +59,6 @@ class _SplashScreenState extends State<SplashScreen>
 
             const SizedBox(height: 30),
 
-            /// النص Mazid Shop
             LogoTextWidget(animation: _animation),
           ],
         ),
