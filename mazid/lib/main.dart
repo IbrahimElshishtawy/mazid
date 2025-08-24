@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:mazid/pages/spa/splash_screen_page.dart';
+import 'package:mazid/pages/spa/intro_page.dart';
 
 void main() {
   runApp(const MyApp());

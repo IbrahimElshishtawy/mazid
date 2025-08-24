@@ -38,6 +38,7 @@ dependencies:
   liquid_swipe: ^3.1.0
   particles_flutter: ^1.0.1
   wave: ^0.2.2
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
