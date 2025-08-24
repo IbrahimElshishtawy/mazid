@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
-import 'package:mazid/pages/spa/page/intro_pages.dart';
+import 'package:mazid/pages/spa/widget/pages_builder.dart';
 import 'package:mazid/pages/spa/widget/bubbles.dart';
 import 'package:mazid/pages/spa/widget/page_indicator.dart';
 import 'package:particles_flutter/component/particle/particle.dart';
