@@ -15,8 +15,8 @@ class IntroPage extends StatefulWidget {
 class _IntroPageState extends State<IntroPage> {
   final LiquidController _liquidController = LiquidController();
   int currentPage = 0;
-  int _lastPage = 0; // لمعرفة اتجاه الانتقال (تقديم/رجوع)
-  bool _spawnedThisSwipe = false; // عشان منطلّعش فقاعات كتير في نفس السحبة
+  int _lastPage = 0;
+  bool _spawnedThisSwipe = false;
   Timer? _timer;
 
   final pages = [
@@ -56,10 +56,9 @@ class _IntroPageState extends State<IntroPage> {
     });
   }
 
-  // فقاعات تظهر أثناء الانتقال — اتجاهها بيتأثر باتجاه السحب
+  // فقاعات تظهر أثناء الانتقال
   List<Particle> _waveBubbles(SlideDirection dir) {
     final rng = Random();
-    // انحياز بسيط في اتجاه السحب: يمين←يسار = موجب، يسار←يمين = سالب
     final double bias = (dir == SlideDirection.rightToLeft)
         ? 30.0
         : (dir == SlideDirection.leftToRight)
@@ -68,8 +67,7 @@ class _IntroPageState extends State<IntroPage> {
 
     return List.generate(22, (_) {
       final size = rng.nextDouble() * 12 + 4;
-      final vx =
-          bias + (rng.nextDouble() - 0.5) * 60; // فيه انحياز + شوية عشوائية
+      final vx = bias + (rng.nextDouble() - 0.5) * 60;
       final vy = -(15 + rng.nextDouble() * 25);
       return Particle(
         color: Colors.white.withOpacity(rng.nextDouble() * 0.5 + 0.5),
@@ -86,7 +84,6 @@ class _IntroPageState extends State<IntroPage> {
     super.initState();
     _bubbles = _createBubbles();
 
-    // تحريك/تحديث بسيط دوري عشان يبان في حركة
     _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       if (!mounted) return;
       setState(() {
@@ -101,9 +98,8 @@ class _IntroPageState extends State<IntroPage> {
     super.dispose();
   }
 
-  // نستدعيها جوه slidePercentCallback
+  // التحكم في الفقاعات أثناء السحب
   void _onSwipeProgress(double percent, SlideDirection direction) {
-    // أول لما السحبة تبدأ بنسبة صغيرة نطلّع فقاعات في اتجاه السحب
     if (!_spawnedThisSwipe &&
         percent > 0.02 &&
         direction != SlideDirection.none) {
@@ -112,7 +108,6 @@ class _IntroPageState extends State<IntroPage> {
         _spawnedThisSwipe = true;
       });
     }
-    // لما السحبة تخلص (رجعت للصفر أو خلصت 100%) نسمح بسحبة جديدة تطلع فقاعات
     if (percent == 0.0 || percent == 1.0) {
       _spawnedThisSwipe = false;
     }
@@ -150,7 +145,7 @@ class _IntroPageState extends State<IntroPage> {
               width: size.width,
               onTapAnimation: false,
               awayAnimationDuration: const Duration(milliseconds: 200),
-              awayAnimationCurve: Curves.linear, // عشان الإحساس يبقى أقل نعومة
+              awayAnimationCurve: Curves.linear,
               enableHover: false,
               hoverRadius: 80,
               connectDots: false,
@@ -162,17 +157,13 @@ class _IntroPageState extends State<IntroPage> {
             pages: pages,
             liquidController: _liquidController,
             enableLoop: true,
-            fullTransitionValue: 450, // سرعة انتقال (أقل = أحدة)
-            enableSideReveal: false, // نفس الحركة رايح/راجع
-            waveType: WaveType.liquidReveal, // موج بحر
+            fullTransitionValue: 450,
+            enableSideReveal: false,
+            waveType: WaveType.liquidReveal,
             slideIconWidget: null,
 
-            // دالة للسحب (تطبيقها في الاتجاهين: تقديم *و* رجوع)
-            slidePercentCallback: (percent, direction) {
-              _onSwipeProgress(percent, direction as SlideDirection);
-            },
-
-            // دالة تغيير الصفحة — هنحدد منها هل الانتقال كان رجوع ولا تقديم ونطلع فقاعات تاني
+            // ✅ التعديل هنا
+            // onSwipeCallback: _onSwipeProgress, // Removed because it's not a valid parameter
             onPageChangeCallback: (page) {
               final int pagesLen = pages.length;
               final bool isBack =
@@ -184,9 +175,7 @@ class _IntroPageState extends State<IntroPage> {
               setState(() {
                 currentPage = page;
                 _lastPage = page;
-                _bubbles.addAll(
-                  _waveBubbles(dir),
-                ); // فقاعات إضافية بعد اكتمال الانتقال
+                _bubbles.addAll(_waveBubbles(dir));
               });
             },
           ),
