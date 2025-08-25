@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/spa/page/intro_page.dart';
+import 'package:mazid/pages/home/home_page.dart';
+import 'package:mazid/pages/spa/page/inrto_page3.dart';
+import 'package:mazid/pages/spa/page/intro_page1.dart';
+import 'package:mazid/pages/spa/page/intro_page2.dart';
 
 final pagesData = [
   (Colors.black, Colors.white, "intro"), // الصفحة الأولى خاصة
@@ -16,28 +19,14 @@ List<Widget> buildPages(List<(Color, Color, String)> data) {
     final bgColor = page.$1;
     final textColor = (bgColor == Colors.black) ? Colors.white : Colors.black;
 
-    // ✅ الصفحة الأولى تستدعي IntroPage
     if (index == 0) {
-      return IntroPageVideo(textColor: textColor);
+      return IntroPage1(textColor: textColor);
+    } else if (index == 1) {
+      return IntroPage2(textColor: textColor);
+    } else if (index == 2) {
+      return InrtoPage3(textColor: textColor);
+    } else {
+      return HomePage();
     }
-
-    // ✅ باقي الصفحات عادية
-    return Container(
-      color: bgColor,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            page.$3,
-            style: TextStyle(
-              fontSize: 26,
-              color: textColor,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ),
-      ),
-    );
   }).toList();
 }

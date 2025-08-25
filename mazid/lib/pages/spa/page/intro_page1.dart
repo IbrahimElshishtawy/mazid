@@ -3,15 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class IntroPageVideo extends StatefulWidget {
+class IntroPage1 extends StatefulWidget {
   final Color textColor;
-  const IntroPageVideo({super.key, required this.textColor});
+  const IntroPage1({super.key, required this.textColor});
 
   @override
-  State<IntroPageVideo> createState() => _IntroPageVideoState();
+  State<IntroPage1> createState() => _IntroPageVideoState();
 }
 
-class _IntroPageVideoState extends State<IntroPageVideo> {
+class _IntroPageVideoState extends State<IntroPage1> {
   late VideoPlayerController _controller;
 
   @override
