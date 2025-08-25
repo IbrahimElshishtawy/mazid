@@ -18,7 +18,7 @@ List<Widget> buildPages(List<(Color, Color, String)> data) {
 
     // ✅ الصفحة الأولى تستدعي IntroPage
     if (index == 0) {
-      return IntroPageAnimated(textColor: textColor);
+      return IntroPageVideo(textColor: textColor);
     }
 
     // ✅ باقي الصفحات عادية
