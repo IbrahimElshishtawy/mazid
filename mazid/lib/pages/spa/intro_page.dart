@@ -6,8 +6,6 @@ class IntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: IntroAnimation(), // استدعاء الانيميشن كله من ملف مستقل
-    );
+    return const Scaffold(body: IntroAnimation());
   }
 }

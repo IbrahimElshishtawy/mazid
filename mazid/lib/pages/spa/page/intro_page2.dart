@@ -13,6 +13,7 @@ class IntroPage2 extends StatefulWidget {
 
 class _IntroPage2State extends State<IntroPage2> {
   late VideoPlayerController _controller;
+  bool _isInitialized = false;
 
   @override
   void initState() {
@@ -21,10 +22,11 @@ class _IntroPage2State extends State<IntroPage2> {
       ..setLooping(true)
       ..setVolume(0.0)
       ..initialize().then((_) {
-        setState(() {});
+        setState(() {
+          _isInitialized = true;
+        });
+        _controller.play();
       });
-
-    _controller.play();
   }
 
   @override
@@ -38,21 +40,16 @@ class _IntroPage2State extends State<IntroPage2> {
     return Scaffold(
       body: Stack(
         children: [
-          SizedBox.expand(
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child: SizedBox(
-                width: _controller.value.size.width > 0
-                    ? _controller.value.size.width
-                    : 1,
-                height: _controller.value.size.height > 0
-                    ? _controller.value.size.height
-                    : 1,
-                child: VideoPlayer(_controller),
-              ),
-            ),
+          Positioned.fill(
+            child: _isInitialized
+                ? AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
+                  )
+                : Container(color: Colors.black),
           ),
 
+          // النصوص فوق الفيديو
           Column(
             children: [
               const Spacer(flex: 5),

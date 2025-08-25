@@ -40,6 +40,7 @@ dependencies:
   wave: ^0.2.2
   lottie: ^3.3.1
   video_player: ^2.10.0
+  chewie: ^1.12.1
 
 dev_dependencies:
   flutter_test:
