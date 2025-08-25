@@ -2,7 +2,7 @@ class AnimalsModels {
   String? id;
   String? name;
   String? age;
-  String? breed;
+  String? type;
   String? image;
   String? rate;
   int? price;
@@ -11,7 +11,7 @@ class AnimalsModels {
     required this.id,
     required this.name,
     required this.age,
-    required this.breed,
+    required this.type,
     required this.image,
     required this.rate,
     required this.price,
@@ -22,7 +22,7 @@ class AnimalsModels {
       id: json['id'],
       name: json['name'],
       age: json['age'],
-      breed: json['breed'],
+      type: json['type'],
       image: json['image'],
       rate: json['rate'],
       price: json['price'],
