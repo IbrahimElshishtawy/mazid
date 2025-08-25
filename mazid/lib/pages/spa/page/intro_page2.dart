@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -14,7 +13,6 @@ class IntroPage2 extends StatefulWidget {
 class _IntroPage2State extends State<IntroPage2> {
   late VideoPlayerController _controller;
   bool _isInitialized = false;
-
   @override
   void initState() {
     super.initState();
@@ -48,8 +46,6 @@ class _IntroPage2State extends State<IntroPage2> {
                   )
                 : Container(color: Colors.black),
           ),
-
-          // النصوص فوق الفيديو
           Column(
             children: [
               const Spacer(flex: 5),

@@ -77,9 +77,7 @@ class _IntroPage1State extends State<IntroPage1> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 40),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
