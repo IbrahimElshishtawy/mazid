@@ -10,6 +10,7 @@ class RegisterFormFields extends StatefulWidget {
     required this.emailController,
     required this.passwordController,
     required this.formKey,
+    required TextEditingController nameController,
   });
 
   @override

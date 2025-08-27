@@ -1,28 +1,47 @@
 import 'package:flutter/material.dart';
 
-class LoginHeader extends StatelessWidget {
-  const LoginHeader({super.key});
+class MazidHeader extends StatelessWidget {
+  const MazidHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: const [
         SizedBox(height: 50),
+
         Text(
-          "Welcome back",
+          "Mazid",
           style: TextStyle(
-            fontSize: 26,
+            fontSize: 36,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Color.fromARGB(255, 255, 255, 255),
+            letterSpacing: 2,
           ),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: 10),
         Text(
-          "You can search c ourse, apply course and find scholarship for abroad studies",
-          style: TextStyle(fontSize: 14, color: Colors.white70),
+          "Discover, Bid & Win ",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
           textAlign: TextAlign.center,
         ),
+
+        SizedBox(height: 10),
+
+        // وصف قصير
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            "Join auctions, exchange products, or adopt what you love ",
+            style: TextStyle(fontSize: 14, color: Colors.white70, height: 1.4),
+            textAlign: TextAlign.center,
+          ),
+        ),
+
         SizedBox(height: 40),
       ],
     );

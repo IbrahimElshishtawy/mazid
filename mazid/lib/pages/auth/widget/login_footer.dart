@@ -19,8 +19,8 @@ class LoginFooter extends StatelessWidget {
             : ElevatedButton(
                 onPressed: onLogin,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF00C6A2),
+                  backgroundColor: Colors.black,
+                  foregroundColor: Colors.white,
                   minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
@@ -34,7 +34,7 @@ class LoginFooter extends StatelessWidget {
           children: [
             const Text(
               "Don't have an account? ",
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: Colors.black87),
             ),
 
             GestureDetector(
@@ -44,8 +44,9 @@ class LoginFooter extends StatelessWidget {
               child: const Text(
                 "Join us",
                 style: TextStyle(
-                  color: Colors.yellow,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
+                  decoration: TextDecoration.underline, // خط ت
                 ),
               ),
             ),

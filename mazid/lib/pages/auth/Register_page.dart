@@ -1,16 +1,12 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hajzi/cubits/auth/auth_cubit.dart';
-import 'package:hajzi/cubits/auth/auth_state.dart';
-import 'package:hajzi/pages/auth/animation/login_animation.dart';
-import 'package:hajzi/pages/auth/google/register_social_buttons.dart';
-import 'package:hajzi/pages/auth/widget/from/register_form_fields.dart';
-
-import 'package:hajzi/pages/auth/widget/header/register_header.dart';
-
-import 'package:hajzi/pages/auth/widget/register_terms.dart';
+import 'package:mazid/pages/auth/animation/login_animation.dart';
+import 'package:mazid/pages/auth/google/register_social_buttons.dart';
+import 'package:mazid/pages/auth/widget/from/login_form.dart';
+import 'package:mazid/pages/auth/widget/header/register_header.dart';
+import 'package:mazid/pages/auth/widget/register_terms.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

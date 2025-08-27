@@ -8,21 +8,30 @@ class RegisterHeader extends StatelessWidget {
     return const Column(
       children: [
         SizedBox(height: 50),
+
+        // name of the app
         Text(
-          "Join us to start searching",
+          "Create your Mazid account",
           style: TextStyle(
-            fontSize: 24,
+            fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
           textAlign: TextAlign.center,
         ),
+
         SizedBox(height: 10),
-        Text(
-          "You can search courses, apply courses and find scholarship for abroad studies",
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white70),
+
+        // description
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            "Start joining auctions, exchange items, and adopt products you love ",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
+          ),
         ),
+
         SizedBox(height: 50),
       ],
     );
