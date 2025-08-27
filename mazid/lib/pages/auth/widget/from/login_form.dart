@@ -7,10 +7,8 @@ class RegisterFormFields extends StatefulWidget {
 
   const RegisterFormFields({
     super.key,
-
     required this.emailController,
     required this.passwordController,
-
     required this.formKey,
   });
 
@@ -64,25 +62,6 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             },
           ),
           const SizedBox(height: 15),
-
-          // Confirm Password
-          TextFormField(
-            controller: widget.confirmPasswordController,
-            decoration: const InputDecoration(
-              labelText: "Confirm Password",
-              filled: true,
-              fillColor: Colors.white,
-            ),
-            obscureText: true,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Confirm your password";
-              } else if (value != widget.passwordController.text) {
-                return "Passwords do not match";
-              }
-              return null;
-            },
-          ),
         ],
       ),
     );
