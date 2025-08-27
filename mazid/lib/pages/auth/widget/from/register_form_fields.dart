@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/user_model.dart';
 
-// الفورم
+// register_form
 class RegisterFormFields extends StatefulWidget {
   final GlobalKey<FormState> formKey;
 
@@ -18,14 +18,14 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  // دالة بتكوّن userModel
+  // Function to get UserModel from the form data
   UserModel getUserModel() {
     return UserModel(
-      id: UniqueKey().toString(), // مؤقت لحد ما يجي ID من Firebase
+      id: UniqueKey().toString(),
       name: nameController.text,
       email: emailController.text,
       phone: phoneController.text,
-      avatar: "", // ممكن تحط لينك صورة افتراضي
+      avatar: "",
     );
   }
 
