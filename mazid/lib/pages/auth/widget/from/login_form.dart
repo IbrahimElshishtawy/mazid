@@ -1,64 +1,90 @@
 import 'package:flutter/material.dart';
 
-class LoginForm extends StatelessWidget {
+class RegisterFormFields extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final bool obscurePassword;
-  final VoidCallback onTogglePassword;
-  final String? Function(String?) validateEmail;
+  final GlobalKey<FormState> formKey;
 
-  const LoginForm({
+  const RegisterFormFields({
     super.key,
+
     required this.emailController,
     required this.passwordController,
-    required this.obscurePassword,
-    required this.onTogglePassword,
-    required this.validateEmail,
+
+    required this.formKey,
   });
 
   @override
+  State<RegisterFormFields> createState() => _RegisterFormFieldsState();
+}
+
+class _RegisterFormFieldsState extends State<RegisterFormFields> {
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TextFormField(
-          controller: emailController,
-          validator: validateEmail,
-          decoration: const InputDecoration(
-            labelText: "Email",
-            prefixIcon: Icon(
-              Icons.email,
-              color: Color.fromARGB(212, 254, 254, 255),
+    return Form(
+      key: widget.formKey,
+      child: Column(
+        children: [
+          // Email
+          TextFormField(
+            controller: widget.emailController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(
+              labelText: "Email",
+              filled: true,
+              fillColor: Colors.white,
             ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        TextFormField(
-          controller: passwordController,
-          obscureText: obscurePassword,
-          validator: (v) => v!.isEmpty ? "Please enter your password" : null,
-          decoration: InputDecoration(
-            labelText: "Password",
-            suffixIcon: IconButton(
-              icon: Icon(
-                obscurePassword ? Icons.visibility_off : Icons.visibility,
-              ),
-              onPressed: onTogglePassword,
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            onPressed: () {
-              Navigator.pushNamed(context, '/forgot-password');
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Enter your email";
+              } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                return "Enter a valid email";
+              }
+              return null;
             },
-            child: const Text(
-              "Forgot password",
-              style: TextStyle(color: Colors.white),
-            ),
           ),
-        ),
-      ],
+          const SizedBox(height: 15),
+
+          // Password
+          TextFormField(
+            controller: widget.passwordController,
+            decoration: const InputDecoration(
+              labelText: "Password",
+              filled: true,
+              fillColor: Colors.white,
+            ),
+            obscureText: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Enter your password";
+              } else if (value.length < 6) {
+                return "Password must be at least 6 characters";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 15),
+
+          // Confirm Password
+          TextFormField(
+            controller: widget.confirmPasswordController,
+            decoration: const InputDecoration(
+              labelText: "Confirm Password",
+              filled: true,
+              fillColor: Colors.white,
+            ),
+            obscureText: true,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Confirm your password";
+              } else if (value != widget.passwordController.text) {
+                return "Passwords do not match";
+              }
+              return null;
+            },
+          ),
+        ],
+      ),
     );
   }
 }
