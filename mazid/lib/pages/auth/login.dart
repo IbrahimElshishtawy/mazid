@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hajzi/pages/auth/animation/login_animation.dart';
-import 'package:hajzi/pages/auth/google/login_social_buttons.dart';
-import 'package:hajzi/pages/auth/widget/login_footer.dart';
-import 'package:hajzi/pages/auth/widget/from/login_form.dart';
-import 'package:hajzi/pages/auth/widget/header/login_header.dart';
-import '../../cubits/auth/auth_cubit.dart';
-import '../../cubits/auth/auth_state.dart';
+import 'package:mazid/pages/auth/animation/login_animation.dart';
+import 'package:mazid/pages/auth/google/login_social_buttons.dart';
+import 'package:mazid/pages/auth/widget/from/login_form.dart';
+import 'package:mazid/pages/auth/widget/header/login_header.dart';
+import 'package:mazid/pages/auth/widget/login_footer.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

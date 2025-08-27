@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
 class RegisterFormFields extends StatelessWidget {
+  final TextEditingController phoneController;
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
   const RegisterFormFields({
     super.key,
+    required this.phoneController,
     required this.nameController,
     required this.emailController,
     required this.passwordController,
@@ -16,6 +18,14 @@ class RegisterFormFields extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        TextFormField(
+          controller: phoneController,
+          decoration: const InputDecoration(
+            labelText: "Phone",
+            filled: true,
+            fillColor: Colors.white,
+          ),
+        ),
         TextFormField(
           controller: nameController,
           decoration: const InputDecoration(
@@ -47,6 +57,18 @@ class RegisterFormFields extends StatelessWidget {
           ),
           obscureText: true,
           validator: (value) => value!.isEmpty ? "Enter your password" : null,
+        ),
+        const SizedBox(height: 15),
+
+        TextFormField(
+          controller: passwordController,
+          decoration: const InputDecoration(
+            labelText: "Confirm Password",
+            filled: true,
+            fillColor: Colors.white,
+          ),
+          obscureText: true,
+          validator: (value) => value!.isEmpty ? "Confirm your password" : null,
         ),
       ],
     );

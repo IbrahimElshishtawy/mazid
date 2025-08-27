@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:hajzi/pages/auth/google/auth_service.dart';
 
 class RegisterSocialButtons extends StatelessWidget {
   RegisterSocialButtons({super.key});
