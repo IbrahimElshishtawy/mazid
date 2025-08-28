@@ -42,6 +42,8 @@ dependencies:
   video_player: ^2.10.0
   chewie: ^1.12.1
   supabase_flutter: ^2.9.1
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.7
 
 dev_dependencies:
   flutter_test:

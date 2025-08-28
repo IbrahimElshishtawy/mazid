@@ -1,12 +1,13 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mazid/core/cubit/auth/auth_cubit.dart';
+import 'package:mazid/core/cubit/auth/auth_state.dart';
 import 'package:mazid/pages/auth/animation/login_animation.dart';
-import 'package:mazid/pages/auth/google/register_social_buttons.dart';
 import 'package:mazid/pages/auth/widget/from/login_form.dart';
 import 'package:mazid/pages/auth/widget/header/register_header.dart';
 import 'package:mazid/pages/auth/widget/register_terms.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -47,12 +48,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: ListView(
                     children: [
                       const RegisterHeader(),
-                      RegisterSocialButtons(),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       RegisterFormFields(
                         nameController: nameController,
                         emailController: emailController,
                         passwordController: passwordController,
+                        formKey: _formKey,
                       ),
                       const SizedBox(height: 10),
                       RegisterTerms(
