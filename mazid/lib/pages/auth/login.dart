@@ -6,7 +6,6 @@ import 'package:mazid/pages/auth/animation/login_animation.dart';
 import 'package:mazid/pages/auth/widget/from/login_form.dart';
 import 'package:mazid/pages/auth/widget/header/login_header.dart';
 import 'package:mazid/pages/auth/widget/login_footer.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -62,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 30),
 
                       const SizedBox(height: 20),
-                      (
+                      LoginFormFields(
                         emailController: emailController,
                         passwordController: passwordController,
                         obscurePassword: _obscurePassword,

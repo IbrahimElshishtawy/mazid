@@ -1,7 +1,9 @@
 // ignore_for_file: deprecated_member_use
 
+import 'dart:math' as math show pi;
+import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart' show sin, cos;
+
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class BackgroundAnimation extends StatefulWidget {
   final Widget child;
@@ -15,10 +17,10 @@ class BackgroundAnimation extends StatefulWidget {
     super.key,
     required this.child,
     this.colors = const [Color(0xFF00C6A2), Color(0xFF007C91)],
-    this.circleOpacity1 = 0.1,
-    this.circleOpacity2 = 0.15,
-    this.circleRadius = 150,
-    this.speed = 6,
+    this.circleOpacity1 = 0.08,
+    this.circleOpacity2 = 0.12,
+    this.circleRadius = 160,
+    this.speed = 8,
   });
 
   @override
@@ -48,7 +50,6 @@ class _BackgroundAnimationState extends State<BackgroundAnimation>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Gradient background
         Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -96,13 +97,17 @@ class _BackgroundPainter extends CustomPainter {
     final paint1 = Paint()..color = Colors.white.withOpacity(circleOpacity1);
     final paint2 = Paint()..color = Colors.white.withOpacity(circleOpacity2);
 
+    final dx = size.width * 0.5;
+    final dy1 = size.height * 0.22;
+    final dy2 = size.height * 0.78;
+
     final offset1 = Offset(
-      size.width * 0.5 + math.sin(progress * 2 * math.pi) * 50,
-      size.height * 0.2,
+      dx + (size.shortestSide * 0.06) * (1 - cos(progress * 2 * math.pi)),
+      dy1,
     );
     final offset2 = Offset(
-      size.width * 0.5 + math.cos(progress * 2 * math.pi) * 50,
-      size.height * 0.75,
+      dx + (size.shortestSide * 0.06) * sin(progress * 2 * math.pi),
+      dy2,
     );
 
     canvas.drawCircle(offset1, circleRadius, paint1);

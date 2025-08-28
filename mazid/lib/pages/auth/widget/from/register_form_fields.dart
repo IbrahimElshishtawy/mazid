@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/user_model.dart';
 
-// register_form
 class RegisterFormFields extends StatefulWidget {
   final GlobalKey<FormState> formKey;
 
   const RegisterFormFields({
     super.key,
     required this.formKey,
-    required TextEditingController nameController,
     required TextEditingController emailController,
+    required TextEditingController nameController,
     required TextEditingController passwordController,
   });
 
@@ -24,13 +23,22 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  // Function to get UserModel from the form data
+  @override
+  void dispose() {
+    phoneController.dispose();
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   UserModel getUserModel() {
     return UserModel(
       id: UniqueKey().toString(),
-      name: nameController.text,
-      email: emailController.text,
-      phone: phoneController.text,
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      phone: phoneController.text.trim(),
       avatar: "",
     );
   }
@@ -44,37 +52,36 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
           // Phone
           TextFormField(
             controller: phoneController,
-            decoration: const InputDecoration(
-              labelText: "Phone",
-              filled: true,
-              fillColor: Colors.white,
-            ),
-            validator: (value) =>
-                value!.isEmpty ? "Enter your phone number" : null,
+            keyboardType: TextInputType.phone,
+            decoration: const InputDecoration(labelText: "Phone", filled: true),
+            validator: (value) => value == null || value.isEmpty
+                ? "Enter your phone number"
+                : null,
           ),
           const SizedBox(height: 15),
 
           // Name
           TextFormField(
             controller: nameController,
-            decoration: const InputDecoration(
-              labelText: "Name",
-              filled: true,
-              fillColor: Colors.white,
-            ),
-            validator: (value) => value!.isEmpty ? "Enter your name" : null,
+            decoration: const InputDecoration(labelText: "Name", filled: true),
+            validator: (value) =>
+                value == null || value.isEmpty ? "Enter your name" : null,
           ),
           const SizedBox(height: 15),
 
           // Email
           TextFormField(
             controller: emailController,
-            decoration: const InputDecoration(
-              labelText: "Email",
-              filled: true,
-              fillColor: Colors.white,
-            ),
-            validator: (value) => value!.isEmpty ? "Enter your email" : null,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(labelText: "Email", filled: true),
+            validator: (value) {
+              if (value == null || value.isEmpty) return "Enter your email";
+              final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+              if (!emailRegex.hasMatch(value)) {
+                return "Invalid email format";
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 15),
 
@@ -84,10 +91,10 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             decoration: const InputDecoration(
               labelText: "Password",
               filled: true,
-              fillColor: Colors.white,
             ),
             obscureText: true,
-            validator: (value) => value!.isEmpty ? "Enter your password" : null,
+            validator: (value) =>
+                value == null || value.isEmpty ? "Enter your password" : null,
           ),
           const SizedBox(height: 15),
 
@@ -97,11 +104,12 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             decoration: const InputDecoration(
               labelText: "Confirm Password",
               filled: true,
-              fillColor: Colors.white,
             ),
             obscureText: true,
             validator: (value) {
-              if (value!.isEmpty) return "Confirm your password";
+              if (value == null || value.isEmpty) {
+                return "Confirm your password";
+              }
               if (value != passwordController.text) {
                 return "Passwords do not match";
               }

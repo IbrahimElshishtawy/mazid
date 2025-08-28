@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
@@ -22,7 +20,20 @@ class _RegisterPageState extends State<RegisterPage> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final phoneController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
   bool agreeTerms = false;
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    phoneController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +62,17 @@ class _RegisterPageState extends State<RegisterPage> {
                       const RegisterHeader(),
                       const SizedBox(height: 20),
                       RegisterFormFields(
+                        formKey: _formKey,
                         nameController: nameController,
                         emailController: emailController,
                         passwordController: passwordController,
-                        formKey: _formKey,
                       ),
                       const SizedBox(height: 10),
                       RegisterTerms(
                         agreeTerms: agreeTerms,
                         onChanged: (val) {
                           setState(() {
-                            agreeTerms = val!;
+                            agreeTerms = val ?? false;
                           });
                         },
                       ),
