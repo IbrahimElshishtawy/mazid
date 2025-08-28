@@ -102,15 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(height: 15),
 
                         // Footer
-                        LoginFooter(
-                          onLogin: () {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              '/register',
-                            );
-                          },
-                          isLoading: state is AuthLoading,
-                        ),
+                        LoginFooter(),
                       ],
                     ),
                   ),

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LoginFooter extends StatelessWidget {
-  const LoginFooter({
-    super.key,
-    required Null Function() onLogin,
-    required bool isLoading,
-  });
+  const LoginFooter({super.key});
 
   @override
   Widget build(BuildContext context) {

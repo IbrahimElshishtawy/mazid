@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
 import 'package:mazid/core/cubit/auth/auth_state.dart';
 import 'package:mazid/pages/auth/animation/login_animation.dart';
-
 import 'package:mazid/pages/auth/widget/from/register_form_fields.dart';
 import 'package:mazid/pages/auth/widget/header/register_header.dart';
 import 'package:mazid/pages/auth/widget/register_terms.dart';
@@ -19,6 +18,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -60,14 +60,17 @@ class _RegisterPageState extends State<RegisterPage> {
                 return Form(
                   key: _formKey,
                   child: ListView(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.only(bottom: 20),
                     children: [
                       const RegisterHeader(),
                       const SizedBox(height: 20),
                       RegisterFormFields(
-                        formKey: _formKey,
                         nameController: nameController,
                         emailController: emailController,
                         passwordController: passwordController,
+                        phoneController: phoneController,
+                        confirmPasswordController: confirmPasswordController,
                       ),
                       const SizedBox(height: 10),
                       RegisterTerms(
@@ -83,14 +86,20 @@ class _RegisterPageState extends State<RegisterPage> {
                           ? const Center(child: CircularProgressIndicator())
                           : ElevatedButton(
                               onPressed: () {
-                                if (_formKey.currentState!.validate() &&
-                                    agreeTerms) {
-                                  context.read<AuthCubit>().register(
-                                    name: nameController.text.trim(),
-                                    email: emailController.text.trim(),
-                                    password: passwordController.text.trim(),
+                                if (!_formKey.currentState!.validate()) return;
+                                if (!agreeTerms) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("You must agree to terms"),
+                                    ),
                                   );
+                                  return;
                                 }
+                                context.read<AuthCubit>().register(
+                                  name: nameController.text.trim(),
+                                  email: emailController.text.trim(),
+                                  password: passwordController.text.trim(),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: theme.primaryColor,

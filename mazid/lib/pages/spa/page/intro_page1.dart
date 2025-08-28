@@ -17,11 +17,11 @@ class _IntroPage1State extends State<IntroPage1> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset('asset/video/intro1.mp4')
-      ..setLooping(true)
-      ..setVolume(0.0);
-    _controller.play();
+    _controller = VideoPlayerController.asset('asset/video/intro1.mp4');
     _controller.initialize().then((_) {
+      _controller.setLooping(true);
+      _controller.setVolume(0.0);
+      _controller.play();
       setState(() {});
     });
   }
@@ -38,24 +38,21 @@ class _IntroPage1State extends State<IntroPage1> {
       body: Stack(
         children: [
           SizedBox.expand(
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child: SizedBox(
-                width: _controller.value.size.width > 0
-                    ? _controller.value.size.width
-                    : 1,
-                height: _controller.value.size.height > 0
-                    ? _controller.value.size.height
-                    : 1,
-                child: VideoPlayer(_controller),
-              ),
-            ),
+            child: _controller.value.isInitialized
+                ? FittedBox(
+                    fit: BoxFit.cover,
+                    child: SizedBox(
+                      width: _controller.value.size.width,
+                      height: _controller.value.size.height,
+                      child: VideoPlayer(_controller),
+                    ),
+                  )
+                : const Center(child: CircularProgressIndicator()),
           ),
 
           Column(
             children: [
               const Spacer(flex: 3),
-
               Container(
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
@@ -64,7 +61,7 @@ class _IntroPage1State extends State<IntroPage1> {
                     BoxShadow(
                       color: Colors.blue.withOpacity(0.4),
                       blurRadius: 8,
-                      offset: Offset(2, 4),
+                      offset: const Offset(2, 4),
                     ),
                   ],
                 ),

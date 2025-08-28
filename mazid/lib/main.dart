@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mazid/pages/auth/Register_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supa;
 
 // Cubit & Service
@@ -39,13 +40,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "Mazid",
         theme: ThemeData.dark(),
-
-        /// التطبيق هيبدأ دايمًا بالانترو
         home: const IntroPage(),
-
         routes: {
           '/intro': (_) => const IntroPage(),
           '/login': (_) => const LoginPage(),
+          '/register': (_) => const RegisterPage(),
           '/home': (_) => const HomePage(),
         },
       ),

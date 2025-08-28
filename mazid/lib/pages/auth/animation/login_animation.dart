@@ -48,33 +48,37 @@ class _BackgroundAnimationState extends State<BackgroundAnimation>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: widget.colors,
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-        AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return CustomPaint(
-              size: MediaQuery.of(context).size,
-              painter: _BackgroundPainter(
-                progress: _controller.value,
-                circleOpacity1: widget.circleOpacity1,
-                circleOpacity2: widget.circleOpacity2,
-                circleRadius: widget.circleRadius,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: widget.colors,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
               ),
-            );
-          },
-        ),
-        widget.child,
-      ],
+            ),
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return CustomPaint(
+                  size: Size(constraints.maxWidth, constraints.maxHeight),
+                  painter: _BackgroundPainter(
+                    progress: _controller.value,
+                    circleOpacity1: widget.circleOpacity1,
+                    circleOpacity2: widget.circleOpacity2,
+                    circleRadius: widget.circleRadius,
+                  ),
+                );
+              },
+            ),
+            widget.child,
+          ],
+        );
+      },
     );
   }
 }
