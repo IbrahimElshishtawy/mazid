@@ -5,7 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
 import 'package:mazid/core/cubit/auth/auth_state.dart';
 import 'package:mazid/pages/auth/animation/login_animation.dart';
-import 'package:mazid/pages/auth/widget/from/login_form.dart';
+
+import 'package:mazid/pages/auth/widget/from/register_form_fields.dart';
 import 'package:mazid/pages/auth/widget/header/register_header.dart';
 import 'package:mazid/pages/auth/widget/register_terms.dart';
 

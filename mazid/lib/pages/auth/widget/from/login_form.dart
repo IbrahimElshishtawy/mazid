@@ -1,70 +1,63 @@
 import 'package:flutter/material.dart';
 
-class RegisterFormFields extends StatefulWidget {
+class LoginFormFields extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final GlobalKey<FormState> formKey;
+  final bool obscurePassword;
+  final VoidCallback onTogglePassword;
+  final String? Function(String?) validateEmail;
 
-  const RegisterFormFields({
+  const LoginFormFields({
     super.key,
     required this.emailController,
     required this.passwordController,
-    required this.formKey,
-    required TextEditingController nameController,
+    required this.obscurePassword,
+    required this.onTogglePassword,
+    required this.validateEmail,
   });
 
   @override
-  State<RegisterFormFields> createState() => _RegisterFormFieldsState();
-}
-
-class _RegisterFormFieldsState extends State<RegisterFormFields> {
-  @override
   Widget build(BuildContext context) {
-    return Form(
-      key: widget.formKey,
-      child: Column(
-        children: [
-          // Email
-          TextFormField(
-            controller: widget.emailController,
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              labelText: "Email",
-              filled: true,
-              fillColor: Colors.white,
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Enter your email";
-              } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                return "Enter a valid email";
-              }
-              return null;
-            },
+    return Column(
+      children: [
+        // Email
+        TextFormField(
+          controller: emailController,
+          keyboardType: TextInputType.emailAddress,
+          decoration: const InputDecoration(
+            labelText: "Email",
+            filled: true,
+            fillColor: Colors.white,
           ),
-          const SizedBox(height: 15),
+          validator: validateEmail,
+        ),
+        const SizedBox(height: 15),
 
-          // Password
-          TextFormField(
-            controller: widget.passwordController,
-            decoration: const InputDecoration(
-              labelText: "Password",
-              filled: true,
-              fillColor: Colors.white,
+        // Password
+        TextFormField(
+          controller: passwordController,
+          obscureText: obscurePassword,
+          decoration: InputDecoration(
+            labelText: "Password",
+            filled: true,
+            fillColor: Colors.white,
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscurePassword ? Icons.visibility_off : Icons.visibility,
+              ),
+              onPressed: onTogglePassword,
             ),
-            obscureText: true,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return "Enter your password";
-              } else if (value.length < 6) {
-                return "Password must be at least 6 characters";
-              }
-              return null;
-            },
           ),
-          const SizedBox(height: 15),
-        ],
-      ),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Enter your password";
+            } else if (value.length < 6) {
+              return "Password must be at least 6 characters";
+            }
+            return null;
+          },
+        ),
+      ],
     );
   }
 }

@@ -5,7 +5,13 @@ import 'package:mazid/core/models/user_model.dart';
 class RegisterFormFields extends StatefulWidget {
   final GlobalKey<FormState> formKey;
 
-  const RegisterFormFields({super.key, required this.formKey});
+  const RegisterFormFields({
+    super.key,
+    required this.formKey,
+    required TextEditingController nameController,
+    required TextEditingController emailController,
+    required TextEditingController passwordController,
+  });
 
   @override
   State<RegisterFormFields> createState() => _RegisterFormFieldsState();
