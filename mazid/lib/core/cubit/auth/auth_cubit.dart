@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'auth_state.dart';
 import 'auth_service.dart';
 
@@ -8,6 +7,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit({required this.authService}) : super(AuthInitial());
 
+  // تسجيل مستخدم جديد
   Future<void> register({
     required String name,
     required String email,
@@ -22,7 +22,7 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       if (user != null) {
-        emit(AuthSuccess());
+        emit(Authenticated(user.id));
       } else {
         emit(AuthFailure(message: "Registration failed"));
       }
@@ -31,13 +31,14 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  // تسجيل الدخول
   Future<void> login({required String email, required String password}) async {
     emit(AuthLoading());
     try {
       final user = await authService.login(email: email, password: password);
 
       if (user != null) {
-        emit(AuthSuccess());
+        emit(Authenticated(user.id));
       } else {
         emit(AuthFailure(message: "Login failed"));
       }
@@ -46,8 +47,25 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  // تسجيل الخروج
   Future<void> logout() async {
-    await authService.logout();
-    emit(AuthInitial());
+    try {
+      await authService.logout();
+      emit(Unauthenticated());
+    } catch (e) {
+      emit(AuthFailure(message: e.toString()));
+    }
   }
+
+  // التأكد من حالة المستخدم الحالي
+  Future<void> checkAuthStatus() async {
+    final user = authService.currentUser();
+    if (user != null) {
+      emit(Authenticated(user.id));
+    } else {
+      emit(Unauthenticated());
+    }
+  }
+
+  void signIn(String trim, String trim2) {}
 }

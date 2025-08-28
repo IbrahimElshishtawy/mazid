@@ -18,7 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
   bool _obscurePassword = true;
 
   void _hideKeyboard() => FocusScope.of(context).unfocus();
@@ -36,60 +35,88 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BackgroundAnimation(
-        child: SafeArea(
-          child: BlocConsumer<AuthCubit, AuthState>(
-            listener: (context, state) {
-              if (state is AuthSuccess) {
-                Navigator.pushReplacementNamed(context, '/home');
-              } else if (state is AuthFailure) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(state.message)));
-              }
-            },
-            builder: (context, state) {
-              return Padding(
-                padding: const EdgeInsets.all(20),
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-                    children: [
-                      const SizedBox(height: 50),
-                      const LoginHeader(),
-                      const SizedBox(height: 30),
+    final theme = Theme.of(context);
 
-                      const SizedBox(height: 20),
-                      LoginFormFields(
-                        emailController: emailController,
-                        passwordController: passwordController,
-                        obscurePassword: _obscurePassword,
-                        onTogglePassword: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
-                        validateEmail: _validateEmail,
-                      ),
-                      const SizedBox(height: 20),
-                      LoginFooter(
-                        onLogin: () {
-                          if (_formKey.currentState!.validate()) {
-                            _hideKeyboard();
-                            context.read<AuthCubit>().login(
-                              email: emailController.text.trim(),
-                              password: passwordController.text.trim(),
+    return Scaffold(
+      body: GestureDetector(
+        onTap: _hideKeyboard,
+        child: BackgroundAnimation(
+          child: SafeArea(
+            child: BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) {
+                if (state is AuthSuccess) {
+                  Navigator.pushReplacementNamed(context, '/home');
+                } else if (state is AuthFailure) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.message)));
+                }
+              },
+              builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Form(
+                    key: _formKey,
+                    child: ListView(
+                      children: [
+                        const SizedBox(height: 50),
+                        const LoginHeader(),
+                        const SizedBox(height: 30),
+
+                        LoginFormFields(
+                          emailController: emailController,
+                          passwordController: passwordController,
+                          obscurePassword: _obscurePassword,
+                          onTogglePassword: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                          validateEmail: _validateEmail,
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Login button + loading state
+                        state is AuthLoading
+                            ? const Center(child: CircularProgressIndicator())
+                            : ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    _hideKeyboard();
+                                    context.read<AuthCubit>().login(
+                                      email: emailController.text.trim(),
+                                      password: passwordController.text.trim(),
+                                    );
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: theme.primaryColor,
+                                  foregroundColor: Colors.white,
+                                  minimumSize: const Size(double.infinity, 50),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                child: const Text("Login"),
+                              ),
+                        const SizedBox(height: 15),
+
+                        // Footer
+                        LoginFooter(
+                          onLogin: () {
+                            Navigator.pushReplacementNamed(
+                              context,
+                              '/register',
                             );
-                          }
-                        },
-                        isLoading: state is AuthLoading,
-                      ),
-                    ],
+                          },
+                          isLoading: state is AuthLoading,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),

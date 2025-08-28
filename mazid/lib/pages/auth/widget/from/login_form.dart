@@ -5,7 +5,6 @@ class LoginFormFields extends StatelessWidget {
   final TextEditingController passwordController;
   final bool obscurePassword;
   final VoidCallback onTogglePassword;
-  final String? Function(String?) validateEmail;
 
   const LoginFormFields({
     super.key,
@@ -13,8 +12,17 @@ class LoginFormFields extends StatelessWidget {
     required this.passwordController,
     required this.obscurePassword,
     required this.onTogglePassword,
-    required this.validateEmail,
+    required String? Function(String? value) validateEmail,
   });
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Enter your email";
+    } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+      return "Enter a valid email";
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +32,14 @@ class LoginFormFields extends StatelessWidget {
         TextFormField(
           controller: emailController,
           keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(
+          textInputAction: TextInputAction.next,
+          decoration: InputDecoration(
             labelText: "Email",
             filled: true,
             fillColor: Colors.white,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
-          validator: validateEmail,
+          validator: _validateEmail,
         ),
         const SizedBox(height: 15),
 
@@ -37,10 +47,12 @@ class LoginFormFields extends StatelessWidget {
         TextFormField(
           controller: passwordController,
           obscureText: obscurePassword,
+          textInputAction: TextInputAction.done,
           decoration: InputDecoration(
             labelText: "Password",
             filled: true,
             fillColor: Colors.white,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             suffixIcon: IconButton(
               icon: Icon(
                 obscurePassword ? Icons.visibility_off : Icons.visibility,

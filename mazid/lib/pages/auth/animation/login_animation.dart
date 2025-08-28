@@ -1,8 +1,5 @@
 // ignore_for_file: deprecated_member_use
-
-import 'dart:math' as math show pi;
-import 'dart:nativewrappers/_internal/vm/lib/math_patch.dart' show sin, cos;
-
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class BackgroundAnimation extends StatefulWidget {
@@ -16,7 +13,10 @@ class BackgroundAnimation extends StatefulWidget {
   const BackgroundAnimation({
     super.key,
     required this.child,
-    this.colors = const [Color(0xFF00C6A2), Color(0xFF007C91)],
+    this.colors = const [
+      Color.fromARGB(255, 0, 0, 0),
+      Color.fromARGB(255, 65, 75, 77),
+    ],
     this.circleOpacity1 = 0.08,
     this.circleOpacity2 = 0.12,
     this.circleRadius = 160,
@@ -102,11 +102,11 @@ class _BackgroundPainter extends CustomPainter {
     final dy2 = size.height * 0.78;
 
     final offset1 = Offset(
-      dx + (size.shortestSide * 0.06) * (1 - cos(progress * 2 * math.pi)),
+      dx + (size.shortestSide * 0.06) * (1 - math.cos(progress * 2 * math.pi)),
       dy1,
     );
     final offset2 = Offset(
-      dx + (size.shortestSide * 0.06) * sin(progress * 2 * math.pi),
+      dx + (size.shortestSide * 0.06) * math.sin(progress * 2 * math.pi),
       dy2,
     );
 
