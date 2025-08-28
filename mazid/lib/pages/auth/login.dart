@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
 import 'package:mazid/core/cubit/auth/auth_state.dart';
+import 'package:mazid/core/data/admin_data.dart';
 import 'package:mazid/pages/auth/animation/login_animation.dart';
 import 'package:mazid/pages/auth/widget/from/login_form.dart';
 import 'package:mazid/pages/auth/widget/header/login_header.dart';
 import 'package:mazid/pages/auth/widget/login_footer.dart';
+import 'package:mazid/pages/home/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -31,6 +33,26 @@ class _LoginPageState extends State<LoginPage> {
       return "Invalid email format";
     }
     return null;
+  }
+
+  void _login() {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email == AdminData.email && password == AdminData.password) {
+      _hideKeyboard();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomePage()),
+      );
+      return;
+    }
+
+    // إذا مش Admin استخدم الـ AuthCubit
+    if (_formKey.currentState!.validate()) {
+      _hideKeyboard();
+      context.read<AuthCubit>().login(email: email, password: password);
+    }
   }
 
   @override
@@ -62,7 +84,6 @@ class _LoginPageState extends State<LoginPage> {
                         const SizedBox(height: 50),
                         const LoginHeader(),
                         const SizedBox(height: 30),
-
                         LoginFormFields(
                           emailController: emailController,
                           passwordController: passwordController,
@@ -75,20 +96,10 @@ class _LoginPageState extends State<LoginPage> {
                           validateEmail: _validateEmail,
                         ),
                         const SizedBox(height: 20),
-
-                        // Login button + loading state
                         state is AuthLoading
                             ? const Center(child: CircularProgressIndicator())
                             : ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    _hideKeyboard();
-                                    context.read<AuthCubit>().login(
-                                      email: emailController.text.trim(),
-                                      password: passwordController.text.trim(),
-                                    );
-                                  }
-                                },
+                                onPressed: _login,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: theme.primaryColor,
                                   foregroundColor: Colors.white,
@@ -100,9 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                                 child: const Text("Login"),
                               ),
                         const SizedBox(height: 15),
-
-                        // Footer
-                        LoginFooter(),
+                        const LoginFooter(),
                       ],
                     ),
                   ),

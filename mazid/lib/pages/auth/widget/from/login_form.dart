@@ -28,34 +28,40 @@ class LoginFormFields extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        const SizedBox(height: 10),
         // Email
         TextFormField(
           controller: emailController,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             labelText: "Email",
+            labelStyle: const TextStyle(color: Colors.white70),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: const Color(0xFF2C2C2C), // خلفية داكنة
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
           validator: _validateEmail,
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 40),
 
         // Password
         TextFormField(
           controller: passwordController,
           obscureText: obscurePassword,
           textInputAction: TextInputAction.done,
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             labelText: "Password",
+            labelStyle: const TextStyle(color: Colors.white70),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: const Color(0xFF2C2C2C), // خلفية داكنة
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             suffixIcon: IconButton(
               icon: Icon(
                 obscurePassword ? Icons.visibility_off : Icons.visibility,
+                color: Colors.white70,
               ),
               onPressed: onTogglePassword,
             ),

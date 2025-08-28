@@ -36,6 +36,18 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Name
+        TextFormField(
+          controller: widget.nameController,
+          decoration: const InputDecoration(
+            labelText: "Full Name ",
+            filled: true,
+          ),
+          validator: (value) =>
+              value == null || value.isEmpty ? "Enter your name" : null,
+        ),
+        const SizedBox(height: 15),
+
         // Phone
         TextFormField(
           controller: widget.phoneController,
@@ -45,16 +57,6 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
               value == null || value.isEmpty ? "Enter your phone number" : null,
         ),
         const SizedBox(height: 15),
-
-        // Name
-        TextFormField(
-          controller: widget.nameController,
-          decoration: const InputDecoration(labelText: "Name", filled: true),
-          validator: (value) =>
-              value == null || value.isEmpty ? "Enter your name" : null,
-        ),
-        const SizedBox(height: 15),
-
         // Email
         TextFormField(
           controller: widget.emailController,
