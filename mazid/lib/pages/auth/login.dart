@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
 import 'package:mazid/core/cubit/auth/auth_state.dart';
 import 'package:mazid/core/data/admin_data.dart';
+import 'package:mazid/pages/auth/OTP/Otp_Verification_Page.dart';
 import 'package:mazid/pages/auth/animation/login_animation.dart';
 import 'package:mazid/pages/auth/widget/from/login_form.dart';
 import 'package:mazid/pages/auth/widget/header/login_header.dart';
@@ -18,12 +21,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final identifierController = TextEditingController(); // الإيميل أو الهاتف
+  final identifierController = TextEditingController();
   final passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   void _hideKeyboard() => FocusScope.of(context).unfocus();
-
   void _login() {
     final identifier = identifierController.text.trim();
     final password = passwordController.text.trim();
@@ -38,16 +40,36 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    // تسجيل دخول مستخدم عادي
     if (_formKey.currentState!.validate()) {
       _hideKeyboard();
 
       final isEmail = identifier.contains('@');
 
       if (isEmail) {
-        context.read<AuthCubit>().login(email: identifier, password: password);
+        // تسجيل الدخول عبر البريد
+        context.read<AuthCubit>().loginWithEmail(
+          email: identifier,
+          password: password,
+        );
       } else {
-        context.read<AuthCubit>().login(phone: identifier, password: password);
+        // تسجيل الدخول عبر الهاتف
+        context.read<AuthCubit>().loginWithPhone(identifier);
+
+        // الاستماع لحالة AuthOtpSent للتوجه لشاشة إدخال الكود
+        context.read<AuthCubit>().stream.listen((state) {
+          if (state is AuthOtpSent) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => OtpVerificationPage(phone: state.phone),
+              ),
+            );
+          } else if (state is AuthFailure) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        });
       }
     }
   }

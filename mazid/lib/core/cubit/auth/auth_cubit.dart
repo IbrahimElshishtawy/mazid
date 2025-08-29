@@ -7,6 +7,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit({required this.authService}) : super(AuthInitial());
 
+  /// تسجيل مستخدم جديد
   Future<void> register({
     required String name,
     String? email,
@@ -32,16 +33,15 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> login({
-    String? email,
-    String? phone,
+  /// تسجيل الدخول بالبريد
+  Future<void> loginWithEmail({
+    required String email,
     required String password,
   }) async {
     emit(AuthLoading());
     try {
-      final user = await authService.login(
-        email: email ?? '',
-        phone: phone ?? '',
+      final user = await authService.loginWithEmail(
+        email: email,
         password: password,
       );
 
@@ -55,6 +55,36 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  /// إرسال OTP للهاتف
+  Future<void> loginWithPhone(String phone) async {
+    emit(AuthLoading());
+    try {
+      await authService.loginWithPhone(phone);
+      emit(AuthOtpSent(phone));
+    } catch (e) {
+      emit(AuthFailure(message: e.toString()));
+    }
+  }
+
+  /// التحقق من OTP
+  Future<void> verifyPhoneOtp({
+    required String phone,
+    required String otp,
+  }) async {
+    emit(AuthLoading());
+    try {
+      final user = await authService.verifyPhoneOtp(phone: phone, otp: otp);
+      if (user != null) {
+        emit(Authenticated(user.id));
+      } else {
+        emit(AuthFailure(message: "OTP verification failed"));
+      }
+    } catch (e) {
+      emit(AuthFailure(message: e.toString()));
+    }
+  }
+
+  /// تسجيل الخروج
   Future<void> logout() async {
     try {
       await authService.logout();
@@ -64,6 +94,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  /// التحقق من حالة المصادقة
   Future<void> checkAuthStatus() async {
     final user = authService.currentUser();
     if (user != null) {

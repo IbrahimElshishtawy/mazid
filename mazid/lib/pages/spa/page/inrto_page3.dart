@@ -17,7 +17,7 @@ class _IntroPage3State extends State<IntroPage3> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       setState(() {
         _visible = true;
       });
@@ -43,7 +43,7 @@ class _IntroPage3State extends State<IntroPage3> {
                   const Spacer(flex: 1),
                   AnimatedOpacity(
                     opacity: _visible ? 1.0 : 0.0,
-                    duration: const Duration(milliseconds: 800),
+                    duration: const Duration(milliseconds: 100),
                     child: AnimatedTextKit(
                       totalRepeatCount: 1,
                       pause: Duration.zero,

@@ -22,8 +22,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final phoneController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final phoneController = TextEditingController();
 
   bool agreeTerms = false;
 
@@ -32,10 +32,12 @@ class _RegisterPageState extends State<RegisterPage> {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
-    phoneController.dispose();
     confirmPasswordController.dispose();
+    phoneController.dispose();
     super.dispose();
   }
+
+  void _hideKeyboard() => FocusScope.of(context).unfocus();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,7 @@ class _RegisterPageState extends State<RegisterPage> {
             padding: const EdgeInsets.all(20),
             child: BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
-                if (state is AuthSuccess) {
+                if (state is Authenticated) {
                   Navigator.pushReplacementNamed(context, '/home');
                 } else if (state is AuthFailure) {
                   ScaffoldMessenger.of(
@@ -69,8 +71,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         nameController: nameController,
                         emailController: emailController,
                         passwordController: passwordController,
-                        phoneController: phoneController,
                         confirmPasswordController: confirmPasswordController,
+                        phoneController: phoneController,
                       ),
                       const SizedBox(height: 10),
                       RegisterTerms(
@@ -86,7 +88,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           ? const Center(child: CircularProgressIndicator())
                           : ElevatedButton(
                               onPressed: () {
+                                _hideKeyboard();
                                 if (!_formKey.currentState!.validate()) return;
+
                                 if (!agreeTerms) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
@@ -95,9 +99,21 @@ class _RegisterPageState extends State<RegisterPage> {
                                   );
                                   return;
                                 }
+
+                                if (passwordController.text.trim() !=
+                                    confirmPasswordController.text.trim()) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Passwords do not match"),
+                                    ),
+                                  );
+                                  return;
+                                }
+
                                 context.read<AuthCubit>().register(
                                   name: nameController.text.trim(),
                                   email: emailController.text.trim(),
+                                  phone: phoneController.text.trim(),
                                   password: passwordController.text.trim(),
                                 );
                               },

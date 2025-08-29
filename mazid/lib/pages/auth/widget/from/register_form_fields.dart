@@ -51,7 +51,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
           validator: (value) =>
               value == null || value.isEmpty ? "Enter your name" : null,
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 30),
 
         // Phone
         IntlPhoneField(

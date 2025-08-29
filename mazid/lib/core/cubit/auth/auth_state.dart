@@ -9,31 +9,28 @@ class AuthInitial extends AuthState {}
 
 class AuthLoading extends AuthState {}
 
-class AuthSuccess extends AuthState {}
-
 class Authenticated extends AuthState {
   final String userId;
-
   Authenticated(this.userId);
 
   @override
   List<Object?> get props => [userId];
 }
 
-class Unauthenticated extends AuthState {
-  final String? message;
+class Unauthenticated extends AuthState {}
 
-  Unauthenticated({this.message});
+class AuthFailure extends AuthState {
+  final String message;
+  AuthFailure({required this.message});
 
   @override
   List<Object?> get props => [message];
 }
 
-class AuthFailure extends AuthState {
-  final String message;
-
-  AuthFailure({required this.message});
+class AuthOtpSent extends AuthState {
+  final String phone;
+  AuthOtpSent(this.phone);
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [phone];
 }
