@@ -51,7 +51,45 @@ class _RegisterPageState extends State<RegisterPage> {
             child: BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
                 if (state is Authenticated) {
-                  Navigator.pushReplacementNamed(context, '/home');
+                  _hideKeyboard();
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => AlertDialog(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: const [
+                          Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                            size: 80,
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            "Account created successfully!",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(context, '/home');
+                          },
+                          child: Text("Continue"),
+                        ),
+                      ],
+                    ),
+                  );
                 } else if (state is AuthFailure) {
                   ScaffoldMessenger.of(
                     context,
