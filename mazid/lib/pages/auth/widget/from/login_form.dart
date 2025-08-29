@@ -1,25 +1,34 @@
 import 'package:flutter/material.dart';
 
 class LoginFormFields extends StatelessWidget {
-  final TextEditingController emailController;
+  final TextEditingController identifierController; // للإيميل أو الهاتف
   final TextEditingController passwordController;
   final bool obscurePassword;
   final VoidCallback onTogglePassword;
 
   const LoginFormFields({
     super.key,
-    required this.emailController,
+    required this.identifierController,
     required this.passwordController,
     required this.obscurePassword,
     required this.onTogglePassword,
-    required String? Function(String? value) validateEmail,
   });
 
-  String? _validateEmail(String? value) {
+  String? _validateIdentifier(String? value) {
     if (value == null || value.isEmpty) {
-      return "Enter your email";
-    } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-      return "Enter a valid email";
+      return "Enter your email or phone number";
+    }
+
+    if (value.contains('@')) {
+      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+      if (!emailRegex.hasMatch(value)) {
+        return "Enter a valid email";
+      }
+    } else {
+      final phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
+      if (!phoneRegex.hasMatch(value)) {
+        return "Enter a valid phone number";
+      }
     }
     return null;
   }
@@ -29,20 +38,20 @@ class LoginFormFields extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 10),
-        // Email
+        // Email or Phone
         TextFormField(
-          controller: emailController,
+          controller: identifierController,
           keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
-            labelText: "Email",
+            labelText: "Email or Phone",
             labelStyle: const TextStyle(color: Colors.white70),
             filled: true,
-            fillColor: const Color(0xFF2C2C2C), // خلفية داكنة
+            fillColor: const Color(0xFF2C2C2C),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
-          validator: _validateEmail,
+          validator: _validateIdentifier,
         ),
         const SizedBox(height: 40),
 
@@ -56,7 +65,7 @@ class LoginFormFields extends StatelessWidget {
             labelText: "Password",
             labelStyle: const TextStyle(color: Colors.white70),
             filled: true,
-            fillColor: const Color(0xFF2C2C2C), // خلفية داكنة
+            fillColor: const Color(0xFF2C2C2C),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             suffixIcon: IconButton(
               icon: Icon(

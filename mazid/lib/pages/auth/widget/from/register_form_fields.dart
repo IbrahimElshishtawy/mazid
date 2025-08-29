@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/user_model.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class RegisterFormFields extends StatefulWidget {
   final TextEditingController emailController;
@@ -52,12 +54,25 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
         const SizedBox(height: 20),
 
         // Phone
-        TextFormField(
+        IntlPhoneField(
           controller: widget.phoneController,
-          keyboardType: TextInputType.phone,
-          decoration: const InputDecoration(labelText: "Phone", filled: true),
-          validator: (value) =>
-              value == null || value.isEmpty ? "Enter your phone number" : null,
+          decoration: const InputDecoration(
+            labelText: 'Phone',
+            border: OutlineInputBorder(),
+            filled: true,
+          ),
+          initialCountryCode: 'EG', // الدولة الافتراضية، ممكن تغيرها
+          onChanged: (phone) {
+            if (kDebugMode) {
+              print(phone.completeNumber);
+            } // الرقم كامل مع كود الدولة
+          },
+          validator: (value) {
+            if (value == null || value.number.isEmpty) {
+              return 'Enter your phone number';
+            }
+            return null;
+          },
         ),
         const SizedBox(height: 20),
 

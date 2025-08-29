@@ -42,6 +42,7 @@ class AuthService {
   Future<UserModel?> login({
     required String email,
     required String password,
+    required String phone,
   }) async {
     final response = await supabase.auth.signInWithPassword(
       email: email,

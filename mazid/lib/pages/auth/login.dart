@@ -18,28 +18,18 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
+  final identifierController = TextEditingController(); // الإيميل أو الهاتف
   final passwordController = TextEditingController();
   bool _obscurePassword = true;
 
   void _hideKeyboard() => FocusScope.of(context).unfocus();
 
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return "Please enter your email";
-    }
-    final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
-    if (!emailRegex.hasMatch(value)) {
-      return "Invalid email format";
-    }
-    return null;
-  }
-
   void _login() {
-    final email = emailController.text.trim();
+    final identifier = identifierController.text.trim();
     final password = passwordController.text.trim();
 
-    if (email == AdminData.email && password == AdminData.password) {
+    // تسجيل دخول Admin
+    if (identifier == AdminData.email && password == AdminData.password) {
       _hideKeyboard();
       Navigator.pushReplacement(
         context,
@@ -48,10 +38,17 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    // إذا مش Admin استخدم الـ AuthCubit
+    // تسجيل دخول مستخدم عادي
     if (_formKey.currentState!.validate()) {
       _hideKeyboard();
-      context.read<AuthCubit>().login(email: email, password: password);
+
+      final isEmail = identifier.contains('@');
+
+      if (isEmail) {
+        context.read<AuthCubit>().login(email: identifier, password: password);
+      } else {
+        context.read<AuthCubit>().login(phone: identifier, password: password);
+      }
     }
   }
 
@@ -66,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
           child: SafeArea(
             child: BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
-                if (state is AuthSuccess) {
+                if (state is Authenticated) {
                   Navigator.pushReplacementNamed(context, '/home');
                 } else if (state is AuthFailure) {
                   ScaffoldMessenger.of(
@@ -85,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                         const LoginHeader(),
                         const SizedBox(height: 30),
                         LoginFormFields(
-                          emailController: emailController,
+                          identifierController: identifierController,
                           passwordController: passwordController,
                           obscurePassword: _obscurePassword,
                           onTogglePassword: () {
@@ -93,7 +90,6 @@ class _LoginPageState extends State<LoginPage> {
                               _obscurePassword = !_obscurePassword;
                             });
                           },
-                          validateEmail: _validateEmail,
                         ),
                         const SizedBox(height: 20),
                         state is AuthLoading

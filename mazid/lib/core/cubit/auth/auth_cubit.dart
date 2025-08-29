@@ -7,17 +7,18 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit({required this.authService}) : super(AuthInitial());
 
-  // تسجيل مستخدم جديد
   Future<void> register({
     required String name,
-    required String email,
+    String? email,
+    String? phone,
     required String password,
   }) async {
     emit(AuthLoading());
     try {
       final user = await authService.register(
         name: name,
-        email: email,
+        email: email ?? '',
+        phone: phone ?? '',
         password: password,
       );
 
@@ -31,11 +32,18 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // تسجيل الدخول
-  Future<void> login({required String email, required String password}) async {
+  Future<void> login({
+    String? email,
+    String? phone,
+    required String password,
+  }) async {
     emit(AuthLoading());
     try {
-      final user = await authService.login(email: email, password: password);
+      final user = await authService.login(
+        email: email ?? '',
+        phone: phone ?? '',
+        password: password,
+      );
 
       if (user != null) {
         emit(Authenticated(user.id));
@@ -47,7 +55,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // تسجيل الخروج
   Future<void> logout() async {
     try {
       await authService.logout();
@@ -57,7 +64,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  // التأكد من حالة المستخدم الحالي
   Future<void> checkAuthStatus() async {
     final user = authService.currentUser();
     if (user != null) {
@@ -66,6 +72,4 @@ class AuthCubit extends Cubit<AuthState> {
       emit(Unauthenticated());
     }
   }
-
-  void signIn(String trim, String trim2) {}
 }
