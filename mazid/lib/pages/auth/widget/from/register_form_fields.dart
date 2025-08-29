@@ -22,6 +22,9 @@ class RegisterFormFields extends StatefulWidget {
 }
 
 class _RegisterFormFieldsState extends State<RegisterFormFields> {
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
   UserModel getUserModel() {
     return UserModel(
       id: UniqueKey().toString(),
@@ -57,6 +60,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
               value == null || value.isEmpty ? "Enter your phone number" : null,
         ),
         const SizedBox(height: 15),
+
         // Email
         TextFormField(
           controller: widget.emailController,
@@ -74,11 +78,21 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
         // Password
         TextFormField(
           controller: widget.passwordController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: "Password",
             filled: true,
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscurePassword ? Icons.visibility : Icons.visibility_off,
+              ),
+              onPressed: () {
+                setState(() {
+                  _obscurePassword = !_obscurePassword;
+                });
+              },
+            ),
           ),
-          obscureText: true,
+          obscureText: _obscurePassword,
           validator: (value) =>
               value == null || value.isEmpty ? "Enter your password" : null,
         ),
@@ -87,11 +101,23 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
         // Confirm Password
         TextFormField(
           controller: widget.confirmPasswordController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             labelText: "Confirm Password",
             filled: true,
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscureConfirmPassword
+                    ? Icons.visibility
+                    : Icons.visibility_off,
+              ),
+              onPressed: () {
+                setState(() {
+                  _obscureConfirmPassword = !_obscureConfirmPassword;
+                });
+              },
+            ),
           ),
-          obscureText: true,
+          obscureText: _obscureConfirmPassword,
           validator: (value) {
             if (value == null || value.isEmpty) return "Confirm your password";
             if (value != widget.passwordController.text) {

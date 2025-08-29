@@ -11,25 +11,40 @@ class IntroPage1 extends StatefulWidget {
   State<IntroPage1> createState() => _IntroPage1State();
 }
 
-class _IntroPage1State extends State<IntroPage1> {
+class _IntroPage1State extends State<IntroPage1> with WidgetsBindingObserver {
   late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset('asset/video/intro1.mp4');
-    _controller.initialize().then((_) {
-      _controller.setLooping(true);
-      _controller.setVolume(0.0);
-      _controller.play();
-      setState(() {});
-    });
+    WidgetsBinding.instance.addObserver(this);
+
+    _controller = VideoPlayerController.asset('asset/video/intro1.mp4')
+      ..initialize().then((_) {
+        _controller.setLooping(true);
+        _controller.setVolume(0.0);
+        _controller.play();
+        setState(() {});
+      });
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _controller.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_controller.value.isInitialized) {
+      if (state == AppLifecycleState.resumed) {
+        _controller.play();
+      } else if (state == AppLifecycleState.paused) {
+        _controller.pause();
+      }
+    }
+    super.didChangeAppLifecycleState(state);
   }
 
   @override
@@ -53,6 +68,7 @@ class _IntroPage1State extends State<IntroPage1> {
           Column(
             children: [
               const Spacer(flex: 3),
+
               Container(
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
@@ -74,7 +90,9 @@ class _IntroPage1State extends State<IntroPage1> {
                   ),
                 ),
               ),
+
               const SizedBox(height: 40),
+
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
@@ -94,7 +112,10 @@ class _IntroPage1State extends State<IntroPage1> {
                   textAlign: TextAlign.center,
                 ),
               ),
+
               const SizedBox(height: 12),
+
+              // النص الفرعي
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
@@ -114,6 +135,7 @@ class _IntroPage1State extends State<IntroPage1> {
                   textAlign: TextAlign.center,
                 ),
               ),
+
               const Spacer(flex: 3),
             ],
           ),
