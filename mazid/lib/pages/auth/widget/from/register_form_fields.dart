@@ -49,7 +49,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
           validator: (value) =>
               value == null || value.isEmpty ? "Enter your name" : null,
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 20),
 
         // Phone
         TextFormField(
@@ -59,7 +59,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
           validator: (value) =>
               value == null || value.isEmpty ? "Enter your phone number" : null,
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 20),
 
         // Email
         TextFormField(
@@ -73,7 +73,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             return null;
           },
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 20),
 
         // Password
         TextFormField(
@@ -96,7 +96,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
           validator: (value) =>
               value == null || value.isEmpty ? "Enter your password" : null,
         ),
-        const SizedBox(height: 15),
+        const SizedBox(height: 20),
 
         // Confirm Password
         TextFormField(

@@ -3,10 +3,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
   final supabase = Supabase.instance.client;
+
   Future<UserModel?> register({
     required String name,
     required String email,
     required String password,
+    String phone = '',
   }) async {
     final response = await supabase.auth.signUp(
       email: email,
@@ -14,28 +16,29 @@ class AuthService {
     );
 
     if (response.user != null) {
-      final user = UserModel(
-        id: response.user!.id,
-        name: name,
-        email: email,
-        avatar: '',
-        phone: '',
-      );
+      final userId = response.user!.id;
 
       await supabase.from('users').insert({
-        'id': user.id,
-        'name': user.name,
-        'email': user.email,
-        'avatar': user.avatar,
-        'phone': user.phone,
+        'id': userId,
+        'name': name.trim(),
+        'email': email.trim(),
+        'phone': phone.trim(),
+        'avatar': '',
+        'created_at': DateTime.now().toUtc(),
       });
 
-      return user;
+      return UserModel(
+        id: userId,
+        name: name.trim(),
+        email: email.trim(),
+        avatar: '',
+        phone: phone.trim(),
+      );
     }
+
     return null;
   }
 
-  // تسجيل الدخول
   Future<UserModel?> login({
     required String email,
     required String password,
@@ -56,6 +59,7 @@ class AuthService {
         return UserModel.fromJson(data);
       }
     }
+
     return null;
   }
 

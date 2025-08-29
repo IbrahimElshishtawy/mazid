@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     padding: const EdgeInsets.only(bottom: 20),
                     children: [
                       const RegisterHeader(),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
                       RegisterFormFields(
                         nameController: nameController,
                         emailController: emailController,

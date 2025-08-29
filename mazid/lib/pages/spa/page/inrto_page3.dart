@@ -63,7 +63,7 @@ class _IntroPage3State extends State<IntroPage3> {
                               ),
                             ],
                           ),
-                          speed: const Duration(milliseconds: 80),
+                          speed: const Duration(milliseconds: 200),
                         ),
                       ],
                     ),
