@@ -56,7 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     context: context,
                     barrierDismissible: false,
                     builder: (context) => AlertDialog(
-                      backgroundColor: Colors.white,
+                      backgroundColor: const Color.fromARGB(255, 4, 3, 3),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
@@ -75,6 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 254, 254, 255),
                             ),
                           ),
                         ],
@@ -85,7 +86,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             Navigator.pop(context);
                             Navigator.pushReplacementNamed(context, '/home');
                           },
-                          child: Text("Continue"),
+                          child: Text(
+                            "Continue",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ],
                     ),
@@ -104,7 +108,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     padding: const EdgeInsets.only(bottom: 20),
                     children: [
                       const RegisterHeader(),
-                      const SizedBox(height: 10),
+
                       RegisterFormFields(
                         nameController: nameController,
                         emailController: emailController,

@@ -1,11 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
 import 'package:mazid/core/cubit/auth/auth_state.dart';
 import 'package:mazid/core/data/admin_data.dart';
 import 'package:mazid/pages/auth/OTP/Otp_Verification_Page.dart';
+import 'package:mazid/pages/auth/animation/animated_login_button.dart';
 import 'package:mazid/pages/auth/animation/login_animation.dart';
 import 'package:mazid/pages/auth/widget/from/login_form.dart';
 import 'package:mazid/pages/auth/widget/header/login_header.dart';
@@ -19,13 +19,35 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final identifierController = TextEditingController();
   final passwordController = TextEditingController();
   bool _obscurePassword = true;
 
+  // Animation Controller
+  late AnimationController _animController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    identifierController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   void _hideKeyboard() => FocusScope.of(context).unfocus();
+
   void _login() {
     final identifier = identifierController.text.trim();
     final password = passwordController.text.trim();
@@ -44,18 +66,16 @@ class _LoginPageState extends State<LoginPage> {
       _hideKeyboard();
 
       final isEmail = identifier.contains('@');
+      _animController.forward();
 
       if (isEmail) {
-        // تسجيل الدخول عبر البريد
         context.read<AuthCubit>().loginWithEmail(
           email: identifier,
           password: password,
         );
       } else {
-        // تسجيل الدخول عبر الهاتف
         context.read<AuthCubit>().loginWithPhone(identifier);
 
-        // الاستماع لحالة AuthOtpSent للتوجه لشاشة إدخال الكود
         context.read<AuthCubit>().stream.listen((state) {
           if (state is AuthOtpSent) {
             Navigator.push(
@@ -86,8 +106,13 @@ class _LoginPageState extends State<LoginPage> {
             child: BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) {
                 if (state is Authenticated) {
-                  Navigator.pushReplacementNamed(context, '/home');
+                  _animController.reverse();
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const HomePage()),
+                  );
                 } else if (state is AuthFailure) {
+                  _animController.reverse();
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(SnackBar(content: Text(state.message)));
@@ -114,20 +139,13 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        state is AuthLoading
-                            ? const Center(child: CircularProgressIndicator())
-                            : ElevatedButton(
-                                onPressed: _login,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: theme.primaryColor,
-                                  foregroundColor: Colors.white,
-                                  minimumSize: const Size(double.infinity, 50),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                child: const Text("Login"),
-                              ),
+
+                        AnimatedLoginButton(
+                          animController: _animController,
+                          onPressed: _login,
+                          isLoading: state is AuthLoading,
+                          theme: theme,
+                        ),
                         const SizedBox(height: 15),
                         const LoginFooter(),
                       ],

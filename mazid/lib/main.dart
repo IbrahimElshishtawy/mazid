@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mazid/core/cubit/auth/auth_state.dart';
 import 'package:mazid/pages/auth/Register_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supa;
 
@@ -36,18 +37,32 @@ class MyApp extends StatelessWidget {
               AuthCubit(authService: AuthService())..checkAuthStatus(),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: "Mazid",
-        theme: ThemeData.dark(),
-        home: const IntroPage(),
-        routes: {
-          '/intro': (_) => const IntroPage(),
-          '/login': (_) => const LoginPage(),
-          '/register': (_) => const RegisterPage(),
-          '/home': (_) => const HomePage(),
+      child: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: "Mazid",
+            theme: ThemeData.dark(),
+            home: _buildHome(state),
+            routes: {
+              '/intro': (_) => const IntroPage(),
+              '/login': (_) => const LoginPage(),
+              '/register': (_) => const RegisterPage(),
+              '/home': (_) => const HomePage(),
+            },
+          );
         },
       ),
     );
+  }
+
+  Widget _buildHome(AuthState state) {
+    if (state is AuthLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else if (state is Authenticated) {
+      return const HomePage();
+    } else {
+      return const IntroPage();
+    }
   }
 }
