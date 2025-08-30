@@ -48,48 +48,32 @@ class _LoginPageState extends State<LoginPage>
 
   void _hideKeyboard() => FocusScope.of(context).unfocus();
 
+  bool _isAdminLogin(String identifier, String password) {
+    return identifier == AdminData.email && password == AdminData.password;
+  }
+
   void _login() {
     final identifier = identifierController.text.trim();
     final password = passwordController.text.trim();
 
-    // تسجيل دخول Admin
-    if (identifier == AdminData.email && password == AdminData.password) {
-      _hideKeyboard();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomePage()),
-      );
-      return;
-    }
-
     if (_formKey.currentState!.validate()) {
       _hideKeyboard();
-
-      final isEmail = identifier.contains('@');
       _animController.forward();
 
-      if (isEmail) {
+      if (_isAdminLogin(identifier, password)) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage()),
+        );
+      } else if (identifier.contains('@')) {
+        // Email login
         context.read<AuthCubit>().loginWithEmail(
           email: identifier,
           password: password,
         );
       } else {
+        // Phone login
         context.read<AuthCubit>().loginWithPhone(identifier);
-
-        context.read<AuthCubit>().stream.listen((state) {
-          if (state is AuthOtpSent) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => OtpVerificationPage(phone: state.phone),
-              ),
-            );
-          } else if (state is AuthFailure) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
-          }
-        });
       }
     }
   }
@@ -111,6 +95,14 @@ class _LoginPageState extends State<LoginPage>
                     context,
                     MaterialPageRoute(builder: (_) => const HomePage()),
                   );
+                } else if (state is AuthOtpSent) {
+                  _animController.reverse();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => OtpVerificationPage(phone: state.phone),
+                    ),
+                  );
                 } else if (state is AuthFailure) {
                   _animController.reverse();
                   ScaffoldMessenger.of(
@@ -128,6 +120,8 @@ class _LoginPageState extends State<LoginPage>
                         const SizedBox(height: 50),
                         const LoginHeader(),
                         const SizedBox(height: 30),
+
+                        // حقول الإدخال
                         LoginFormFields(
                           identifierController: identifierController,
                           passwordController: passwordController,
@@ -138,14 +132,17 @@ class _LoginPageState extends State<LoginPage>
                             });
                           },
                         ),
+
                         const SizedBox(height: 20),
 
+                        // زر الدخول المتحرك
                         AnimatedLoginButton(
                           animController: _animController,
                           onPressed: _login,
                           isLoading: state is AuthLoading,
                           theme: theme,
                         ),
+
                         const SizedBox(height: 15),
                         const LoginFooter(),
                       ],

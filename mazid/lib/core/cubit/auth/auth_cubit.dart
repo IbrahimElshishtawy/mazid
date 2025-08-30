@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import 'auth_state.dart';
 import 'auth_service.dart';
 
@@ -26,10 +27,12 @@ class AuthCubit extends Cubit<AuthState> {
       if (user != null) {
         emit(Authenticated(user.id));
       } else {
-        emit(AuthFailure(message: "Registration failed"));
+        emit(AuthFailure(message: "فشل إنشاء الحساب، حاول مرة أخرى"));
       }
+    } on AuthException catch (e) {
+      emit(AuthFailure(message: e.message)); // رسالة واضحة من السيرفر
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
+      emit(AuthFailure(message: "حدث خطأ غير متوقع أثناء التسجيل"));
     }
   }
 
@@ -48,10 +51,16 @@ class AuthCubit extends Cubit<AuthState> {
       if (user != null) {
         emit(Authenticated(user.id));
       } else {
-        emit(AuthFailure(message: "Login failed"));
+        emit(
+          AuthFailure(message: "البريد الإلكتروني أو كلمة المرور غير صحيحة"),
+        );
       }
+    } on AuthException catch (e) {
+      emit(AuthFailure(message: e.message));
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
+      emit(
+        AuthFailure(message: "تعذر تسجيل الدخول، تحقق من الشبكة وحاول مجددًا"),
+      );
     }
   }
 
@@ -61,8 +70,10 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       await authService.loginWithPhone(phone);
       emit(AuthOtpSent(phone));
+    } on AuthException catch (e) {
+      emit(AuthFailure(message: e.message));
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
+      emit(AuthFailure(message: "فشل إرسال رمز التحقق، حاول مرة أخرى"));
     }
   }
 
@@ -77,10 +88,12 @@ class AuthCubit extends Cubit<AuthState> {
       if (user != null) {
         emit(Authenticated(user.id));
       } else {
-        emit(AuthFailure(message: "OTP verification failed"));
+        emit(AuthFailure(message: "رمز التحقق غير صحيح"));
       }
+    } on AuthException catch (e) {
+      emit(AuthFailure(message: e.message));
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
+      emit(AuthFailure(message: "حدث خطأ أثناء التحقق من الرمز"));
     }
   }
 
@@ -90,7 +103,7 @@ class AuthCubit extends Cubit<AuthState> {
       await authService.logout();
       emit(Unauthenticated());
     } catch (e) {
-      emit(AuthFailure(message: e.toString()));
+      emit(AuthFailure(message: "تعذر تسجيل الخروج"));
     }
   }
 

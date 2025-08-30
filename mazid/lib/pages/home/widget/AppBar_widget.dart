@@ -7,7 +7,9 @@ class AppbarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: true,
-      title: const Text("Mazid Store", style: TextStyle(color: Colors.white)),
+      title: Center(
+        child: Text("Mazid Store", style: TextStyle(color: Colors.white)),
+      ),
       backgroundColor: Colors.black,
       iconTheme: const IconThemeData(color: Colors.white),
       actions: const [

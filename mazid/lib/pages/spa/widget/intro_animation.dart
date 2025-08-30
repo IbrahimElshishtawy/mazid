@@ -47,7 +47,7 @@ class _IntroAnimationState extends State<IntroAnimation> {
     _bubbleColor = pagesData[0].textColor;
     _bubbles = BubbleHelper.createBubbles(_bubbleColor);
 
-    _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+    _timer = Timer.periodic(const Duration(milliseconds: 200), (timer) {
       if (!mounted) return;
       setState(() => _bubbles.shuffle());
     });
