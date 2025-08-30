@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:mazid/pages/home/ui/home_page.dart';
 
 class BottomNavigationbarWidget extends StatefulWidget {
   const BottomNavigationbarWidget({super.key});
@@ -10,8 +13,7 @@ class BottomNavigationbarWidget extends StatefulWidget {
 }
 
 class _BottomNavigationbarWidgetState extends State<BottomNavigationbarWidget> {
-  int _selectedIndex = 0;
-  final PageController _pageController = PageController();
+  int _selectedIndex = 2;
 
   final List<Widget> _pages = const [
     Center(
@@ -20,12 +22,7 @@ class _BottomNavigationbarWidgetState extends State<BottomNavigationbarWidget> {
     Center(
       child: Text("مزاد", style: TextStyle(color: Colors.white, fontSize: 22)),
     ),
-    Center(
-      child: Text(
-        "الرئيسية",
-        style: TextStyle(color: Colors.white, fontSize: 22),
-      ),
-    ),
+    HomePage(),
     Center(
       child: Text(
         "استبدال",
@@ -44,17 +41,9 @@ class _BottomNavigationbarWidgetState extends State<BottomNavigationbarWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        children: _pages,
+      body: SafeArea(
+        child: IndexedStack(index: _selectedIndex, children: _pages),
       ),
-
       bottomNavigationBar: CurvedNavigationBar(
         index: _selectedIndex,
         height: 60,
@@ -71,14 +60,7 @@ class _BottomNavigationbarWidgetState extends State<BottomNavigationbarWidget> {
           Icon(Icons.person, size: 28, color: Colors.white),
         ],
         onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOut,
-          );
+          setState(() => _selectedIndex = index);
         },
       ),
     );

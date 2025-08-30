@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
 
   Widget _buildHome(AuthState state) {
     if (state is AuthLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     } else if (state is Authenticated) {
       return const HomePage();
     } else {

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:mazid/core/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -12,7 +14,6 @@ class AuthException implements Exception {
 class AuthService {
   final supabase = Supabase.instance.client;
 
-  /// تسجيل مستخدم جديد
   Future<UserModel?> register({
     required String name,
     required String email,
@@ -144,7 +145,6 @@ class AuthService {
     return supabase.auth.currentUser;
   }
 
-  /// تسجيل الدخول (إما إيميل أو هاتف)
   Future<UserModel?> login({
     String? email,
     String? phone,
@@ -154,7 +154,7 @@ class AuthService {
       return await loginWithEmail(email: email, password: password);
     } else if (phone != null && phone.isNotEmpty) {
       await loginWithPhone(phone);
-      return null; // لأنه OTP
+      return null;
     } else {
       throw AuthException("يجب إدخال البريد وكلمة المرور أو رقم الهاتف");
     }
