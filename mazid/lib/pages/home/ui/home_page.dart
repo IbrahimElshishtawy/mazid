@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mazid/pages/home/widget/banner.dart';
+import 'package:mazid/pages/home/widget/category.dart';
+import 'package:mazid/pages/home/widget/product_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -8,7 +11,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        automaticallyImplyLeading: true, // علشان يظهر زر المنيو تلقائي
+        automaticallyImplyLeading: true,
         title: const Text("Mazid Store", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -18,13 +21,12 @@ class HomePage extends StatelessWidget {
         ],
       ),
 
-      // 🔹 Drawer
       drawer: Drawer(
         backgroundColor: Colors.black,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
+            DrawerHeader(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.orange, Colors.deepOrange],
@@ -84,10 +86,10 @@ class HomePage extends StatelessWidget {
           SizedBox(
             height: 150,
             child: PageView(
-              children: [
-                banner("🔥 Sale up to 50%"),
-                banner("🐶 New Pets Collection"),
-                banner("💻 Latest Electronics"),
+              children: const [
+                BannerWidget("🔥 Sale up to 50%"),
+                BannerWidget("🐶 New Pets Collection"),
+                BannerWidget("💻 Latest Electronics"),
               ],
             ),
           ),
@@ -99,12 +101,12 @@ class HomePage extends StatelessWidget {
             height: 90,
             child: ListView(
               scrollDirection: Axis.horizontal,
-              children: [
-                category(Icons.pets, "Pets"),
-                category(Icons.shopping_bag, "Clothes"),
-                category(Icons.laptop, "Laptops"),
-                category(Icons.devices_other, "Electronics"),
-                category(Icons.watch, "Accessories"),
+              children: const [
+                CategoryWidget(Icons.pets, "Pets"),
+                CategoryWidget(Icons.shopping_bag, "Clothes"),
+                CategoryWidget(Icons.laptop, "Laptops"),
+                CategoryWidget(Icons.devices_other, "Electronics"),
+                CategoryWidget(Icons.watch, "Accessories"),
               ],
             ),
           ),
@@ -125,10 +127,10 @@ class HomePage extends StatelessWidget {
                 childAspectRatio: 0.7,
               ),
               itemBuilder: (context, index) {
-                return productCard(
-                  "Product ${index + 1}",
-                  "assets/product.png",
-                  150 + index * 20,
+                return ProductCard(
+                  title: "Product ${index + 1}",
+                  image: "assets/product.png",
+                  price: 150 + index * 20,
                 );
               },
             ),
@@ -148,89 +150,6 @@ class HomePage extends StatelessWidget {
             label: "Cart",
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
-    );
-  }
-
-  Widget banner(String text) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        gradient: const LinearGradient(
-          colors: [Colors.orange, Colors.deepOrange],
-        ),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget category(IconData icon, String title) {
-    return Container(
-      width: 80,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        color: Colors.orange.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.orange, size: 30),
-          const SizedBox(height: 5),
-          Text(title, style: const TextStyle(color: Colors.white)),
-        ],
-      ),
-    );
-  }
-
-  Widget productCard(String title, String image, double price) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                image: DecorationImage(
-                  image: AssetImage(image),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              "\$$price",
-              style: const TextStyle(color: Colors.orange, fontSize: 16),
-            ),
-          ),
         ],
       ),
     );
