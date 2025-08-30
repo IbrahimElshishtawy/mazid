@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/home/widget/AppBar_widget.dart';
+import 'package:mazid/pages/home/widget/Appbar_widget.dart';
 import 'package:mazid/pages/home/widget/banner.dart';
 import 'package:mazid/pages/home/widget/bottom_NavigationBar.dart';
 import 'package:mazid/pages/home/widget/category.dart';
@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppbarWidget(),
+      appBar: const AppbarWidget(),
       drawer: const DrawerMenu(),
       body: ListView(
         children: [
@@ -72,7 +72,6 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-
       bottomNavigationBar: const BottomNavigationbarWidget(),
     );
   }

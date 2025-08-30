@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mazid/core/cubit/auth/auth_state.dart';
-import 'package:mazid/pages/auth/Register_page.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' as supa;
-
-// Cubit & Service
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
+import 'package:mazid/core/cubit/auth/auth_state.dart';
 import 'package:mazid/core/cubit/auth/auth_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' as supa;
 
 // Pages
 import 'package:mazid/pages/auth/login.dart';
+import 'package:mazid/pages/auth/Register_page.dart';
 import 'package:mazid/pages/spa/intro_page.dart';
 import 'package:mazid/pages/home/ui/home_page.dart';
 
@@ -30,15 +28,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<AuthCubit>(
-      create: (_) => AuthCubit(authService: AuthService())..checkAuthStatus(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthCubit>(
+          create: (_) =>
+              AuthCubit(authService: AuthService())..checkAuthStatus(),
+        ),
+      ],
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: "Mazid",
             theme: ThemeData.dark(),
-            home: _getInitialPage(state),
+            home: _buildHome(state),
             routes: {
               '/intro': (_) => const IntroPage(),
               '/login': (_) => const LoginPage(),
@@ -51,16 +54,13 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Widget _getInitialPage(AuthState state) {
+  Widget _buildHome(AuthState state) {
     if (state is AuthLoading) {
-      // شاشة تحميل أثناء التحقق
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     } else if (state is Authenticated) {
-      // المستخدم مسجل الدخول → مباشرة HomePage
       return const HomePage();
     } else {
-      // غير مسجل → صفحة Intro
-      return const IntroPage();
+      return const LoginPage();
     }
   }
 }

@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage>
   final passwordController = TextEditingController();
   bool _obscurePassword = true;
 
-  late AnimationController _animController;
+  late final AnimationController _animController;
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage>
     return identifier == AdminData.email && password == AdminData.password;
   }
 
-  void _login() async {
+  Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
 
     _hideKeyboard();
@@ -62,29 +62,40 @@ class _LoginPageState extends State<LoginPage>
 
     try {
       if (_isAdminLogin(identifier, password)) {
-        _animController.reverse();
-        if (!mounted) return;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomePage()),
-        );
+        await _loginAsAdmin();
       } else if (identifier.contains('@')) {
-        // Email login
-        context.read<AuthCubit>().loginWithEmail(
-          email: identifier,
-          password: password,
-        );
+        await _loginWithEmail(identifier, password);
       } else {
-        // Phone login (OTP)
-        context.read<AuthCubit>().loginWithPhone(identifier);
+        await _loginWithPhone(identifier);
       }
     } catch (e) {
       _animController.reverse();
       if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("حدث خطأ أثناء تسجيل الدخول: $e")));
+      _showError("حدث خطأ أثناء تسجيل الدخول: $e");
     }
+  }
+
+  Future<void> _loginAsAdmin() async {
+    _animController.reverse();
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const HomePage()),
+    );
+  }
+
+  Future<void> _loginWithEmail(String email, String password) async {
+    context.read<AuthCubit>().loginWithEmail(email: email, password: password);
+  }
+
+  Future<void> _loginWithPhone(String phone) async {
+    context.read<AuthCubit>().loginWithPhone(phone);
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -98,16 +109,16 @@ class _LoginPageState extends State<LoginPage>
           child: SafeArea(
             child: BlocConsumer<AuthCubit, AuthState>(
               listener: (context, state) async {
+                _animController.reverse();
+
+                if (!mounted) return;
+
                 if (state is Authenticated) {
-                  _animController.reverse();
-                  if (!mounted) return;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (_) => const HomePage()),
                   );
                 } else if (state is AuthOtpSent) {
-                  _animController.reverse();
-                  if (!mounted) return;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -115,11 +126,7 @@ class _LoginPageState extends State<LoginPage>
                     ),
                   );
                 } else if (state is AuthFailure) {
-                  _animController.reverse();
-                  if (!mounted) return;
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(state.message)));
+                  _showError(state.message);
                 }
               },
               builder: (context, state) {
@@ -133,29 +140,23 @@ class _LoginPageState extends State<LoginPage>
                         const SizedBox(height: 50),
                         const LoginHeader(),
                         const SizedBox(height: 30),
-
-                        // حقول الإدخال
                         LoginFormFields(
                           identifierController: identifierController,
                           passwordController: passwordController,
                           obscurePassword: _obscurePassword,
                           onTogglePassword: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
+                            setState(
+                              () => _obscurePassword = !_obscurePassword,
+                            );
                           },
                         ),
-
                         const SizedBox(height: 20),
-
-                        // زر الدخول المتحرك
                         AnimatedLoginButton(
                           animController: _animController,
-                          onPressed: _login,
+                          onPressed: _handleLogin,
                           isLoading: state is AuthLoading,
                           theme: theme,
                         ),
-
                         const SizedBox(height: 15),
                         const LoginFooter(),
                       ],

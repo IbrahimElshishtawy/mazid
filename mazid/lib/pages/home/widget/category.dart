@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 
 class CategoryWidget extends StatelessWidget {
@@ -10,19 +8,25 @@ class CategoryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 80,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        color: Colors.orange.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(12),
-      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, color: Colors.orange, size: 30),
           const SizedBox(height: 5),
-          Text(title, style: const TextStyle(color: Colors.white)),
+          Flexible(
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14, // قللنا حجم الخط لتناسب Container
+              ),
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis, // يمنع Overflow
+              maxLines: 2, // لمنع النص الطويل من الخروج
+            ),
+          ),
         ],
       ),
     );

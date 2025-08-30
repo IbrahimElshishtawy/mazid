@@ -15,21 +15,21 @@ class BottomNavigationbarWidget extends StatefulWidget {
 class _BottomNavigationbarWidgetState extends State<BottomNavigationbarWidget> {
   int _selectedIndex = 2;
 
-  final List<Widget> _pages = const [
-    Center(
+  final List<Widget> _pages = [
+    const Center(
       child: Text("شراء", style: TextStyle(color: Colors.white, fontSize: 22)),
     ),
-    Center(
+    const Center(
       child: Text("مزاد", style: TextStyle(color: Colors.white, fontSize: 22)),
     ),
-    HomePage(),
-    Center(
+    const HomePage(), // ✅ بدون const إذا يحتوي على عناصر غير ثابتة
+    const Center(
       child: Text(
         "استبدال",
         style: TextStyle(color: Colors.white, fontSize: 22),
       ),
     ),
-    Center(
+    const Center(
       child: Text(
         "الحساب",
         style: TextStyle(color: Colors.white, fontSize: 22),

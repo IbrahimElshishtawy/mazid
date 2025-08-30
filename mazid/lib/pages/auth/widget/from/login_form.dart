@@ -15,9 +15,8 @@ class LoginFormFields extends StatelessWidget {
   });
 
   String? _validateIdentifier(String? value) {
-    if (value == null || value.isEmpty) {
+    if (value == null || value.isEmpty)
       return "Enter your email or phone number";
-    }
 
     if (value.contains('@')) {
       final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
@@ -44,23 +43,28 @@ class LoginFormFields extends StatelessWidget {
       labelStyle: const TextStyle(color: Colors.white70),
     );
 
+    final isEmail = identifierController.text.contains('@');
+    final keyboardType = isEmail
+        ? TextInputType.emailAddress
+        : TextInputType.phone;
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 10),
 
         // Email or Phone
         TextFormField(
           controller: identifierController,
-          keyboardType: identifierController.text.contains('@')
-              ? TextInputType.emailAddress
-              : TextInputType.phone,
+          keyboardType: keyboardType,
           textInputAction: TextInputAction.next,
           style: const TextStyle(color: Colors.white),
           decoration: inputDecoration.copyWith(labelText: "Email or Phone"),
           validator: _validateIdentifier,
           autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
-        const SizedBox(height: 40),
+
+        const SizedBox(height: 20),
 
         // Password
         TextFormField(
