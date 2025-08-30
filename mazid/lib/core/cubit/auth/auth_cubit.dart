@@ -1,5 +1,5 @@
+// ignore_for_file: avoid_print
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 import 'auth_state.dart';
 import 'auth_service.dart';
 
@@ -16,6 +16,8 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
   }) async {
     emit(AuthLoading());
+    print("🔄 [AuthCubit] Registering user: $email | phone: $phone");
+
     try {
       final user = await authService.register(
         name: name,
@@ -25,13 +27,14 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       if (user != null) {
-        emit(Authenticated(user.id));
+        print("✅ [AuthCubit] User registered: ${user.id}");
+        emit(Authenticated(user));
       } else {
+        print("❌ [AuthCubit] Register failed");
         emit(AuthFailure(message: "فشل إنشاء الحساب، حاول مرة أخرى"));
       }
-    } on AuthException catch (e) {
-      emit(AuthFailure(message: e.message)); // رسالة واضحة من السيرفر
     } catch (e) {
+      print("🔥 [AuthCubit] Unexpected error: $e");
       emit(AuthFailure(message: "حدث خطأ غير متوقع أثناء التسجيل"));
     }
   }
@@ -42,6 +45,8 @@ class AuthCubit extends Cubit<AuthState> {
     required String password,
   }) async {
     emit(AuthLoading());
+    print("🔄 [AuthCubit] Login with email: $email");
+
     try {
       final user = await authService.loginWithEmail(
         email: email,
@@ -49,15 +54,16 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       if (user != null) {
-        emit(Authenticated(user.id));
+        print("✅ [AuthCubit] Login success: ${user.id}");
+        emit(Authenticated(user));
       } else {
+        print("❌ [AuthCubit] Invalid email or password");
         emit(
           AuthFailure(message: "البريد الإلكتروني أو كلمة المرور غير صحيحة"),
         );
       }
-    } on AuthException catch (e) {
-      emit(AuthFailure(message: e.message));
     } catch (e) {
+      print("🔥 [AuthCubit] Login error: $e");
       emit(
         AuthFailure(message: "تعذر تسجيل الدخول، تحقق من الشبكة وحاول مجددًا"),
       );
@@ -67,12 +73,14 @@ class AuthCubit extends Cubit<AuthState> {
   /// إرسال OTP للهاتف
   Future<void> loginWithPhone(String phone) async {
     emit(AuthLoading());
+    print("🔄 [AuthCubit] Sending OTP to phone: $phone");
+
     try {
       await authService.loginWithPhone(phone);
+      print("✅ [AuthCubit] OTP sent to $phone");
       emit(AuthOtpSent(phone));
-    } on AuthException catch (e) {
-      emit(AuthFailure(message: e.message));
     } catch (e) {
+      print("🔥 [AuthCubit] OTP error: $e");
       emit(AuthFailure(message: "فشل إرسال رمز التحقق، حاول مرة أخرى"));
     }
   }
@@ -83,36 +91,45 @@ class AuthCubit extends Cubit<AuthState> {
     required String otp,
   }) async {
     emit(AuthLoading());
+    print("🔄 [AuthCubit] Verifying OTP for $phone | Code: $otp");
+
     try {
       final user = await authService.verifyPhoneOtp(phone: phone, otp: otp);
       if (user != null) {
-        emit(Authenticated(user.id));
+        print("✅ [AuthCubit] OTP verified for user: ${user.id}");
+        emit(Authenticated(user));
       } else {
+        print("❌ [AuthCubit] OTP verification failed");
         emit(AuthFailure(message: "رمز التحقق غير صحيح"));
       }
-    } on AuthException catch (e) {
-      emit(AuthFailure(message: e.message));
     } catch (e) {
+      print("🔥 [AuthCubit] OTP verification error: $e");
       emit(AuthFailure(message: "حدث خطأ أثناء التحقق من الرمز"));
     }
   }
 
   /// تسجيل الخروج
   Future<void> logout() async {
+    print("🔄 [AuthCubit] Logging out...");
     try {
       await authService.logout();
+      print("✅ [AuthCubit] Logout success");
       emit(Unauthenticated());
     } catch (e) {
+      print("🔥 [AuthCubit] Logout error: $e");
       emit(AuthFailure(message: "تعذر تسجيل الخروج"));
     }
   }
 
   /// التحقق من حالة المصادقة
   Future<void> checkAuthStatus() async {
-    final user = authService.currentUser();
+    print("🔄 [AuthCubit] Checking auth status...");
+    final user = await authService.currentUser();
     if (user != null) {
-      emit(Authenticated(user.id));
+      print("✅ [AuthCubit] User already authenticated: ${user.id}");
+      emit(Authenticated(user));
     } else {
+      print("❌ [AuthCubit] No user logged in");
       emit(Unauthenticated());
     }
   }

@@ -13,7 +13,7 @@ class LoginFooter extends StatelessWidget {
           children: [
             const Text(
               "Don't have an account? ",
-              style: TextStyle(color: Colors.black87),
+              style: TextStyle(color: Color.fromARGB(221, 255, 255, 255)),
             ),
             GestureDetector(
               onTap: () {
@@ -22,7 +22,7 @@ class LoginFooter extends StatelessWidget {
               child: const Text(
                 "Join us",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 255, 255, 255),
                   fontWeight: FontWeight.bold,
                   decoration: TextDecoration.underline,
                 ),

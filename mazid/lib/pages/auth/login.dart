@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage>
   final passwordController = TextEditingController();
   bool _obscurePassword = true;
 
-  // Animation Controller
   late AnimationController _animController;
 
   @override
@@ -52,15 +51,19 @@ class _LoginPageState extends State<LoginPage>
     return identifier == AdminData.email && password == AdminData.password;
   }
 
-  void _login() {
+  void _login() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    _hideKeyboard();
+    _animController.forward();
+
     final identifier = identifierController.text.trim();
     final password = passwordController.text.trim();
 
-    if (_formKey.currentState!.validate()) {
-      _hideKeyboard();
-      _animController.forward();
-
+    try {
       if (_isAdminLogin(identifier, password)) {
+        _animController.reverse();
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const HomePage()),
@@ -72,9 +75,15 @@ class _LoginPageState extends State<LoginPage>
           password: password,
         );
       } else {
-        // Phone login
+        // Phone login (OTP)
         context.read<AuthCubit>().loginWithPhone(identifier);
       }
+    } catch (e) {
+      _animController.reverse();
+      if (!mounted) return;
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("حدث خطأ أثناء تسجيل الدخول: $e")));
     }
   }
 
@@ -88,15 +97,17 @@ class _LoginPageState extends State<LoginPage>
         child: BackgroundAnimation(
           child: SafeArea(
             child: BlocConsumer<AuthCubit, AuthState>(
-              listener: (context, state) {
+              listener: (context, state) async {
                 if (state is Authenticated) {
                   _animController.reverse();
+                  if (!mounted) return;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (_) => const HomePage()),
                   );
                 } else if (state is AuthOtpSent) {
                   _animController.reverse();
+                  if (!mounted) return;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -105,6 +116,7 @@ class _LoginPageState extends State<LoginPage>
                   );
                 } else if (state is AuthFailure) {
                   _animController.reverse();
+                  if (!mounted) return;
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(SnackBar(content: Text(state.message)));
@@ -115,6 +127,7 @@ class _LoginPageState extends State<LoginPage>
                   padding: const EdgeInsets.all(20),
                   child: Form(
                     key: _formKey,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     child: ListView(
                       children: [
                         const SizedBox(height: 50),

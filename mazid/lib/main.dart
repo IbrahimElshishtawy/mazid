@@ -60,8 +60,10 @@ class MyApp extends StatelessWidget {
     if (state is AuthLoading) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     } else if (state is Authenticated) {
+      // لو المستخدم لوجد إن يروح على HomePage
       return const HomePage();
     } else {
+      // لو لأ يروح على صفحة الـ Intro
       return const IntroPage();
     }
   }

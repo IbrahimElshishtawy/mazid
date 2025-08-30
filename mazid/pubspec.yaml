@@ -47,6 +47,7 @@ dependencies:
   animated_text_kit: ^4.2.3
   intl_phone_field: ^3.2.0
   curved_navigation_bar: ^1.0.6
+  meta: ^1.16.0
 
 dev_dependencies:
   flutter_test:

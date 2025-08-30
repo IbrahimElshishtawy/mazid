@@ -21,37 +21,44 @@ class LoginFormFields extends StatelessWidget {
 
     if (value.contains('@')) {
       final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-      if (!emailRegex.hasMatch(value)) {
-        return "Enter a valid email";
-      }
+      if (!emailRegex.hasMatch(value)) return "Enter a valid email";
     } else {
       final phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
-      if (!phoneRegex.hasMatch(value)) {
-        return "Enter a valid phone number";
-      }
+      if (!phoneRegex.hasMatch(value)) return "Enter a valid phone number";
     }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) return "Enter your password";
+    if (value.length < 6) return "Password must be at least 6 characters";
     return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    final inputDecoration = InputDecoration(
+      filled: true,
+      fillColor: const Color(0xFF2C2C2C),
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      labelStyle: const TextStyle(color: Colors.white70),
+    );
+
     return Column(
       children: [
         const SizedBox(height: 10),
+
         // Email or Phone
         TextFormField(
           controller: identifierController,
-          keyboardType: TextInputType.emailAddress,
+          keyboardType: identifierController.text.contains('@')
+              ? TextInputType.emailAddress
+              : TextInputType.phone,
           textInputAction: TextInputAction.next,
           style: const TextStyle(color: Colors.white),
-          decoration: InputDecoration(
-            labelText: "Email or Phone",
-            labelStyle: const TextStyle(color: Colors.white70),
-            filled: true,
-            fillColor: const Color(0xFF2C2C2C),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
+          decoration: inputDecoration.copyWith(labelText: "Email or Phone"),
           validator: _validateIdentifier,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
         const SizedBox(height: 40),
 
@@ -61,12 +68,8 @@ class LoginFormFields extends StatelessWidget {
           obscureText: obscurePassword,
           textInputAction: TextInputAction.done,
           style: const TextStyle(color: Colors.white),
-          decoration: InputDecoration(
+          decoration: inputDecoration.copyWith(
             labelText: "Password",
-            labelStyle: const TextStyle(color: Colors.white70),
-            filled: true,
-            fillColor: const Color(0xFF2C2C2C),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             suffixIcon: IconButton(
               icon: Icon(
                 obscurePassword ? Icons.visibility_off : Icons.visibility,
@@ -75,14 +78,8 @@ class LoginFormFields extends StatelessWidget {
               onPressed: onTogglePassword,
             ),
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Enter your password";
-            } else if (value.length < 6) {
-              return "Password must be at least 6 characters";
-            }
-            return null;
-          },
+          validator: _validatePassword,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:mazid/core/models/user_model.dart';
 
 abstract class AuthState extends Equatable {
   @override
@@ -10,11 +11,11 @@ class AuthInitial extends AuthState {}
 class AuthLoading extends AuthState {}
 
 class Authenticated extends AuthState {
-  final String userId;
-  Authenticated(this.userId);
+  final UserModel user;
+  Authenticated(this.user);
 
   @override
-  List<Object?> get props => [userId];
+  List<Object?> get props => [user.id, user.email];
 }
 
 class Unauthenticated extends AuthState {}
