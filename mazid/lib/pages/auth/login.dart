@@ -10,7 +10,7 @@ import 'package:mazid/pages/auth/animation/login_animation.dart';
 import 'package:mazid/pages/auth/widget/from/login_form.dart';
 import 'package:mazid/pages/auth/widget/header/login_header.dart';
 import 'package:mazid/pages/auth/widget/login_footer.dart';
-import 'package:mazid/pages/home/home_page.dart';
+import 'package:mazid/pages/home/ui/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

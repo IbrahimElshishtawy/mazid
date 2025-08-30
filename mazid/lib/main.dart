@@ -11,7 +11,7 @@ import 'package:mazid/core/cubit/auth/auth_service.dart';
 // Pages
 import 'package:mazid/pages/auth/login.dart';
 import 'package:mazid/pages/spa/intro_page.dart';
-import 'package:mazid/pages/home/home_page.dart';
+import 'package:mazid/pages/home/ui/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

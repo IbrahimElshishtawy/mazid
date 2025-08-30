@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
 import 'package:mazid/core/cubit/auth/auth_state.dart';
-import 'package:mazid/pages/home/home_page.dart';
+import 'package:mazid/pages/home/ui/home_page.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   final String phone;

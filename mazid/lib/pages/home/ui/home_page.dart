@@ -8,10 +8,76 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text("Mazid Store"),
+        automaticallyImplyLeading: true, // علشان يظهر زر المنيو تلقائي
+        title: const Text("Mazid Store", style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.black,
-        actions: const [Icon(Icons.shopping_cart), SizedBox(width: 16)],
+        iconTheme: const IconThemeData(color: Colors.white),
+        actions: const [
+          Icon(Icons.shopping_cart, color: Colors.white),
+          SizedBox(width: 16),
+        ],
       ),
+
+      // 🔹 Drawer
+      drawer: Drawer(
+        backgroundColor: Colors.black,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.orange, Colors.deepOrange],
+                ),
+              ),
+              child: Text(
+                "Mazid Menu",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.home, color: Colors.orange),
+              title: const Text("Home", style: TextStyle(color: Colors.white)),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.search, color: Colors.orange),
+              title: const Text(
+                "Search",
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.shopping_cart, color: Colors.orange),
+              title: const Text("Cart", style: TextStyle(color: Colors.white)),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: const Icon(Icons.person, color: Colors.orange),
+              title: const Text(
+                "Profile",
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {},
+            ),
+            const Divider(color: Colors.white24),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text(
+                "Logout",
+                style: TextStyle(color: Colors.white),
+              ),
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+
       body: ListView(
         children: [
           // 🔹 Banner / Slider
@@ -51,7 +117,7 @@ class HomePage extends StatelessWidget {
             child: GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 6, // عدد المنتجات
+              itemCount: 6,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 12,
@@ -61,7 +127,7 @@ class HomePage extends StatelessWidget {
               itemBuilder: (context, index) {
                 return productCard(
                   "Product ${index + 1}",
-                  "assets/product.png", // صورة وهمية
+                  "assets/product.png",
                   150 + index * 20,
                 );
               },
@@ -69,6 +135,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
         selectedItemColor: Colors.orange,
