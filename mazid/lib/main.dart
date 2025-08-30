@@ -30,20 +30,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthCubit>(
-          create: (_) =>
-              AuthCubit(authService: AuthService())..checkAuthStatus(),
-        ),
-      ],
+    return BlocProvider<AuthCubit>(
+      create: (_) => AuthCubit(authService: AuthService())..checkAuthStatus(),
       child: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: "Mazid",
             theme: ThemeData.dark(),
-            home: _buildHome(state),
+            home: _getInitialPage(state),
             routes: {
               '/intro': (_) => const IntroPage(),
               '/login': (_) => const LoginPage(),
@@ -56,14 +51,15 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Widget _buildHome(AuthState state) {
+  Widget _getInitialPage(AuthState state) {
     if (state is AuthLoading) {
+      // شاشة تحميل أثناء التحقق
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     } else if (state is Authenticated) {
-      // لو المستخدم لوجد إن يروح على HomePage
+      // المستخدم مسجل الدخول → مباشرة HomePage
       return const HomePage();
     } else {
-      // لو لأ يروح على صفحة الـ Intro
+      // غير مسجل → صفحة Intro
       return const IntroPage();
     }
   }
