@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
 
 class LoginFormFields extends StatelessWidget {
-  final TextEditingController identifierController; // للإيميل أو الهاتف
+  final TextEditingController emailController; // للإيميل فقط
   final TextEditingController passwordController;
   final bool obscurePassword;
   final VoidCallback onTogglePassword;
 
   const LoginFormFields({
     super.key,
-    required this.identifierController,
+    required this.emailController,
     required this.passwordController,
     required this.obscurePassword,
     required this.onTogglePassword,
   });
 
-  String? _validateIdentifier(String? value) {
-    if (value == null || value.isEmpty)
-      return "Enter your email or phone number";
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) return "Enter your email";
 
-    if (value.contains('@')) {
-      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-      if (!emailRegex.hasMatch(value)) return "Enter a valid email";
-    } else {
-      final phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
-      if (!phoneRegex.hasMatch(value)) return "Enter a valid phone number";
-    }
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailRegex.hasMatch(value)) return "Enter a valid email";
+
     return null;
   }
 
@@ -43,24 +38,19 @@ class LoginFormFields extends StatelessWidget {
       labelStyle: const TextStyle(color: Colors.white70),
     );
 
-    final isEmail = identifierController.text.contains('@');
-    final keyboardType = isEmail
-        ? TextInputType.emailAddress
-        : TextInputType.phone;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 10),
 
-        // Email or Phone
+        // Email
         TextFormField(
-          controller: identifierController,
-          keyboardType: keyboardType,
+          controller: emailController,
+          keyboardType: TextInputType.emailAddress,
           textInputAction: TextInputAction.next,
           style: const TextStyle(color: Colors.white),
-          decoration: inputDecoration.copyWith(labelText: "Email or Phone"),
-          validator: _validateIdentifier,
+          decoration: inputDecoration.copyWith(labelText: "Email"),
+          validator: _validateEmail,
           autovalidateMode: AutovalidateMode.onUserInteraction,
         ),
 

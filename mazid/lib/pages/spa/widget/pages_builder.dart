@@ -10,7 +10,7 @@ import 'package:particles_flutter/component/particle/particle.dart';
 import 'package:particles_flutter/particles_engine.dart';
 import 'package:mazid/pages/auth/login.dart';
 
-// تعريف PageData
+/// بيانات الصفحات
 class PageData {
   final Color bgColor;
   final Color textColor;
@@ -19,7 +19,7 @@ class PageData {
   PageData(this.bgColor, this.textColor, this.type);
 }
 
-// تعريف صفحات الانترو + Login
+/// قائمة الصفحات
 final List<PageData> pagesData = [
   PageData(Colors.black, Colors.white, "intro"),
   PageData(Colors.white, Colors.black, "intro"),
@@ -39,16 +39,17 @@ class _IntroAnimationState extends State<IntroAnimation> {
   int currentPage = 0;
   int _lastPage = 0;
   List<Particle> _bubbles = [];
-  Color _bubbleColor = Colors.white;
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
-    _bubbleColor = pagesData[0].textColor;
-    _bubbles = BubbleHelper.createBubbles(_bubbleColor);
 
-    _timer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+    // إنشاء فقاعات البداية
+    _bubbles = BubbleHelper.createBubbles(Colors.white);
+
+    // حركة بسيطة للفقاعات (Shuffle)
+    _timer = Timer.periodic(const Duration(milliseconds: 600), (timer) {
       if (!mounted) return;
       setState(() => _bubbles.shuffle());
     });
@@ -60,20 +61,14 @@ class _IntroAnimationState extends State<IntroAnimation> {
     super.dispose();
   }
 
-  // دالة بناء الصفحات
+  /// بناء صفحات الانترو + اللوجين
   List<Widget> buildPages() {
-    return pagesData.map((page) {
-      switch (page.type) {
-        case "intro":
-          final index = pagesData.indexOf(page);
-          if (index == 0) return IntroPage1(textColor: page.textColor);
-          if (index == 1) return IntroPage2(textColor: page.textColor);
-          return IntroPage3(textColor: page.textColor);
-        case "login":
-        default:
-          return const LoginPage();
-      }
-    }).toList();
+    return [
+      const IntroPage1(textColor: Colors.white),
+      const IntroPage2(textColor: Color.fromARGB(255, 255, 255, 255)),
+      const IntroPage3(textColor: Colors.white),
+      const LoginPage(),
+    ];
   }
 
   @override
@@ -81,7 +76,7 @@ class _IntroAnimationState extends State<IntroAnimation> {
     final size = MediaQuery.of(context).size;
     final pages = buildPages();
 
-    // إذا وصلنا صفحة Login، اعرض Login فقط بدون أي حركة
+    // لو وصلنا Login → نعرضها مباشرة بدون تأثير
     if (currentPage == pages.length - 1) {
       return const LoginPage();
     }
@@ -89,8 +84,10 @@ class _IntroAnimationState extends State<IntroAnimation> {
     return Stack(
       alignment: Alignment.center,
       children: [
+        // الخلفية بلون الصفحة
         Container(color: pagesData[currentPage].bgColor),
 
+        // فقاعات متحركة
         IgnorePointer(
           child: Particles(
             awayRadius: 120,
@@ -98,19 +95,20 @@ class _IntroAnimationState extends State<IntroAnimation> {
             height: size.height,
             width: size.width,
             onTapAnimation: false,
-            awayAnimationDuration: const Duration(milliseconds: 200),
-            awayAnimationCurve: Curves.linear,
+            awayAnimationDuration: const Duration(milliseconds: 250),
+            awayAnimationCurve: Curves.easeOut,
             enableHover: false,
             hoverRadius: 80,
             connectDots: false,
           ),
         ),
 
+        // Liquid Swipe
         LiquidSwipe(
           pages: pages,
           liquidController: _liquidController,
           enableLoop: true,
-          fullTransitionValue: 450,
+          fullTransitionValue: 500,
           enableSideReveal: false,
           waveType: WaveType.liquidReveal,
           slideIconWidget: null,
@@ -124,18 +122,20 @@ class _IntroAnimationState extends State<IntroAnimation> {
             setState(() {
               currentPage = page;
               _lastPage = page;
-              _bubbleColor = pagesData[page].textColor;
-              _bubbles.addAll(BubbleHelper.waveBubbles(dir, _bubbleColor));
+
+              // إضافة حركة للفقاعات مع تغيير الصفحة
+              _bubbles.addAll(BubbleHelper.waveBubbles(dir, Colors.white));
             });
           },
         ),
 
+        // Page Indicator أبيض فقط
         Positioned(
           bottom: 20,
           child: PageIndicator(
             length: pages.length,
             currentPage: currentPage,
-            color: pagesData[currentPage].textColor,
+            color: Colors.white, // ثابت أبيض
           ),
         ),
       ],

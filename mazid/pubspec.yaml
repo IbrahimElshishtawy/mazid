@@ -48,6 +48,7 @@ dependencies:
   intl_phone_field: ^3.2.0
   curved_navigation_bar: ^1.0.6
   meta: ^1.16.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:
@@ -76,6 +77,7 @@ flutter:
     - asset/icon/iconimage.jpg
     - asset/video/intro1.mp4
     - asset/video/intro2.mp4
+    - asset/image/intro2.jpg
     - asset/image/intro3.jpeg
 
     

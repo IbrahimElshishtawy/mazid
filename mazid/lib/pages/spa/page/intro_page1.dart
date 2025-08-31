@@ -13,6 +13,7 @@ class IntroPage1 extends StatefulWidget {
 
 class _IntroPage1State extends State<IntroPage1> with WidgetsBindingObserver {
   late VideoPlayerController _controller;
+  bool _videoInitialized = false;
 
   @override
   void initState() {
@@ -24,7 +25,9 @@ class _IntroPage1State extends State<IntroPage1> with WidgetsBindingObserver {
         _controller.setLooping(true);
         _controller.setVolume(0.0);
         _controller.play();
-        setState(() {});
+        setState(() {
+          _videoInitialized = true;
+        });
       });
   }
 
@@ -50,97 +53,102 @@ class _IntroPage1State extends State<IntroPage1> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          SizedBox.expand(
-            child: _controller.value.isInitialized
-                ? FittedBox(
-                    fit: BoxFit.cover,
-                    child: SizedBox(
-                      width: _controller.value.size.width,
-                      height: _controller.value.size.height,
-                      child: VideoPlayer(_controller),
-                    ),
-                  )
-                : const Center(child: CircularProgressIndicator()),
-          ),
-
-          Column(
-            children: [
-              const Spacer(flex: 3),
-
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.blue.withOpacity(0.4),
-                      blurRadius: 8,
-                      offset: const Offset(2, 4),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    'asset/icon/iconimage.jpg',
-                    height: 120,
-                    fit: BoxFit.cover,
+      body: _videoInitialized
+          ? Stack(
+              children: [
+                // الفيديو مع AspectRatio لتقليل اللود
+                SizedBox.expand(
+                  child: AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 40),
+                // Overlay لتعتيم الفيديو قليلاً
+                Container(color: Colors.black.withOpacity(0.4)),
 
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  "Welcome to Mazid",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: widget.textColor.withOpacity(0.9),
-                    shadows: const [
-                      Shadow(
-                        blurRadius: 10,
-                        color: Colors.blueAccent,
-                        offset: Offset(2, 2),
+                // النصوص والعناصر الرسومية
+                SafeArea(
+                  child: Column(
+                    children: [
+                      const Spacer(flex: 3),
+
+                      // أيقونة أو صورة
+                      Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.blue.withOpacity(0.4),
+                              blurRadius: 8,
+                              offset: const Offset(2, 4),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Image.asset(
+                            'asset/icon/iconimage.jpg',
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
+
+                      const SizedBox(height: 40),
+
+                      // العنوان
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          "Welcome to Mazid",
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: widget.textColor.withOpacity(0.95),
+                            shadows: const [
+                              Shadow(
+                                blurRadius: 10,
+                                color: Colors.blueAccent,
+                                offset: Offset(2, 2),
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // النص الفرعي
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          "Discover all the new and special items",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: widget.textColor.withOpacity(0.9),
+                            shadows: const [
+                              Shadow(
+                                blurRadius: 10,
+                                color: Colors.blueAccent,
+                                offset: Offset(2, 2),
+                              ),
+                            ],
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+
+                      const Spacer(flex: 3),
                     ],
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
-
-              const SizedBox(height: 12),
-
-              // النص الفرعي
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text(
-                  "Discover all the new and special items",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: widget.textColor.withOpacity(0.9),
-                    shadows: const [
-                      Shadow(
-                        blurRadius: 10,
-                        color: Colors.blueAccent,
-                        offset: Offset(2, 2),
-                      ),
-                    ],
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-
-              const Spacer(flex: 3),
-            ],
-          ),
-        ],
-      ),
+              ],
+            )
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 }

@@ -20,9 +20,9 @@ class PageData {
 }
 
 final List<PageData> pagesData = [
-  PageData(Colors.black, Colors.white, "intro"),
-  PageData(Colors.white, Colors.black, "intro"),
-  PageData(Colors.black, Colors.white, "intro"),
+  PageData(const Color.fromARGB(255, 255, 255, 255), Colors.white, "intro"),
+  PageData(Colors.white, const Color.fromARGB(255, 255, 255, 255), "intro"),
+  PageData(const Color.fromARGB(255, 241, 241, 241), Colors.white, "intro"),
   PageData(Colors.white, Colors.black, "login"),
 ];
 

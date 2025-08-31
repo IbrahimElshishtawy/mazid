@@ -1,13 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/pages/home/widget/Appbar_widget.dart';
 import 'package:mazid/pages/home/widget/banner.dart';
-import 'package:mazid/pages/home/widget/bottom_NavigationBar.dart';
 import 'package:mazid/pages/home/widget/category.dart';
 import 'package:mazid/pages/home/widget/drawer_menu.dart';
 import 'package:mazid/pages/home/widget/product_card.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    const HomeContent(),
+    const Center(
+      child: Text("Search Page", style: TextStyle(color: Colors.white)),
+    ),
+    const Center(
+      child: Text("Cart Page", style: TextStyle(color: Colors.white)),
+    ),
+    const Center(
+      child: Text("Profile Page", style: TextStyle(color: Colors.white)),
+    ),
+  ];
+
+  void _onNavTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,10 +40,38 @@ class HomePage extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: const AppbarWidget(),
       drawer: const DrawerMenu(),
-      body: ListView(
-        children: [
-          // 🔹 Banner / Slider
-          SizedBox(
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.black,
+        selectedItemColor: Colors.orange,
+        unselectedItemColor: Colors.white70,
+        currentIndex: _selectedIndex,
+        onTap: _onNavTapped,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart),
+            label: "Cart",
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+        ],
+      ),
+    );
+  }
+}
+
+// 🌟 المحتوى الأصلي للصفحة الرئيسية
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: SizedBox(
             height: 150,
             child: PageView(
               children: const [
@@ -28,11 +81,10 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-
-          const SizedBox(height: 20),
-
-          // 🔹 Categories Horizontal
-          SizedBox(
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        SliverToBoxAdapter(
+          child: SizedBox(
             height: 90,
             child: ListView(
               scrollDirection: Axis.horizontal,
@@ -45,34 +97,28 @@ class HomePage extends StatelessWidget {
               ],
             ),
           ),
-
-          const SizedBox(height: 20),
-
-          // 🔹 Products Grid
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 6,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.7,
-              ),
-              itemBuilder: (context, index) {
-                return ProductCard(
-                  title: "Product ${index + 1}",
-                  image: "assets/product.png",
-                  price: 150 + index * 20,
-                );
-              },
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          sliver: SliverGrid(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return ProductCard(
+                title: "Product ${index + 1}",
+                image: "assets/product.png",
+                price: 150 + index * 20,
+              );
+            }, childCount: 6),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.65,
             ),
           ),
-        ],
-      ),
-      bottomNavigationBar: const BottomNavigationbarWidget(),
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+      ],
     );
   }
 }

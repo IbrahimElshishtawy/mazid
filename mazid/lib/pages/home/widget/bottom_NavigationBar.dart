@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:mazid/pages/home/ui/home_page.dart';
@@ -22,7 +20,7 @@ class _BottomNavigationbarWidgetState extends State<BottomNavigationbarWidget> {
     const Center(
       child: Text("مزاد", style: TextStyle(color: Colors.white, fontSize: 22)),
     ),
-    const HomePage(), // ✅ بدون const إذا يحتوي على عناصر غير ثابتة
+    const HomePage(), // ✅ بدون Scaffold أو AppBar هنا
     const Center(
       child: Text(
         "استبدال",
