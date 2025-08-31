@@ -1,7 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:dio/dio.dart';
-import 'package:mazid/core/API/API_Product.dart';
+import 'package:mazid/core/API/api_product.dart';
 
 class ProductService {
   late final ProductApi api;

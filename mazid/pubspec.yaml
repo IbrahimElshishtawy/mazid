@@ -62,10 +62,10 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
-  retrofit_generator: ^8.2.1
+  flutter_lints: ^6.0.0
   build_runner: ^2.4.12
-  json_serializable: ^6.9.2
+  retrofit_generator: ^10.0.2
+  json_serializable: ^6.9.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

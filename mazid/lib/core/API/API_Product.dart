@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:retrofit/retrofit.dart';
 
-part 'product_api.g.dart';
+part 'api_product.g.dart';
 
 @RestApi(baseUrl: "https://elwekala.onrender.com")
 abstract class ProductApi {

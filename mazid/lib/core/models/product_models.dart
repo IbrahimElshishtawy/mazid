@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+part 'product_models.g.dart';
+
 @JsonSerializable()
 class ProductModel {
   @JsonKey(name: '_id')
@@ -7,7 +9,10 @@ class ProductModel {
   final String status;
   final String category;
   final String name;
+
+  @JsonKey(fromJson: _toDouble)
   final double price;
+
   final String description;
   final String image;
   final List<String> images;
@@ -28,6 +33,14 @@ class ProductModel {
     required this.countInStock,
     required this.sales,
   });
+
+  /// تحويل تلقائي للـ double
+  static double _toDouble(dynamic value) {
+    if (value == null) return 0.0;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value) ?? 0.0;
+    return value as double;
+  }
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>
       _$ProductModelFromJson(json);
