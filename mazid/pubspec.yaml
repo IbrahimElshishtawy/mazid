@@ -49,6 +49,9 @@ dependencies:
   curved_navigation_bar: ^1.0.6
   meta: ^1.16.0
   shared_preferences: ^2.5.3
+  json_annotation: ^4.9.0
+  dio: ^5.9.0
+  retrofit: ^4.7.2
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +63,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  retrofit_generator: ^8.2.1
+  build_runner: ^2.4.12
+  json_serializable: ^6.9.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

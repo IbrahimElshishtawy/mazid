@@ -1,14 +1,22 @@
-import 'package:mazid/core/models/product_models.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:dio/dio.dart';
+import 'package:mazid/core/API/API_Product.dart';
 
 class ProductService {
-  final supabase = Supabase.instance.client;
+  late final ProductApi api;
 
-  Future<List<ProductModel>> getProducts() async {
-    final data = await supabase
-        .from('products')
-        .select()
-        .order('created_at', ascending: false);
-    return (data as List).map((e) => ProductModel.fromJson(e)).toList();
+  ApiService() {
+    final dio = Dio(
+      BaseOptions(
+        connectTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+      ),
+    );
+
+    // إضافه logger إذا حبيت تضيف تتبع
+    // dio.interceptors.add(LogInterceptor(responseBody: true));
+
+    api = ProductApi(dio);
   }
 }

@@ -15,9 +15,12 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage>
-    with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   late final AnimationController _animController;
+  late final AnimationController _entryController;
+  late final Animation<Offset> _slideAnimation;
+  late final Animation<double> _fadeAnimation;
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool _obscurePassword = true;
@@ -25,16 +28,36 @@ class _LoginPageState extends State<LoginPage>
   @override
   void initState() {
     super.initState();
+
     _animController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
+
+    // 🔹 دخول الشاشة (Slide + Fade)
+    _entryController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, -0.2), // ييجي من فوق
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _entryController, curve: Curves.easeOut));
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _entryController, curve: Curves.easeIn));
+
+    _entryController.forward();
     _checkLoginStatus();
   }
 
   @override
   void dispose() {
     _animController.dispose();
+    _entryController.dispose();
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -100,19 +123,30 @@ class _LoginPageState extends State<LoginPage>
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(SnackBar(content: Text(state.message)));
+
+                  // 🔹 اهتزاز (Shake) عند الخطأ
+                  _entryController.forward(from: 0.0);
                 }
               },
               builder: (context, state) {
-                return LoginFormWidget(
-                  emailController: emailController,
-                  passwordController: passwordController,
-                  obscurePassword: _obscurePassword,
-                  onTogglePassword: () {
-                    setState(() => _obscurePassword = !_obscurePassword);
-                  },
-                  onLoginPressed: () => _handleLogin(context),
-                  isLoading: state is AuthLoading,
-                  animController: _animController,
+                return Center(
+                  child: SlideTransition(
+                    position: _slideAnimation,
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: LoginFormWidget(
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        obscurePassword: _obscurePassword,
+                        onTogglePassword: () {
+                          setState(() => _obscurePassword = !_obscurePassword);
+                        },
+                        onLoginPressed: () => _handleLogin(context),
+                        isLoading: state is AuthLoading,
+                        animController: _animController,
+                      ),
+                    ),
+                  ),
                 );
               },
             ),

@@ -55,7 +55,7 @@ class _IntroPage3State extends State<IntroPage3> with TickerProviderStateMixin {
     _colorAnimation =
         ColorTween(
           begin: Colors.grey[400], // رمادي فاتح
-          end: Colors.grey[700], // رمادي غامق
+          end: const Color.fromARGB(255, 102, 101, 101), // رمادي غامق
         ).animate(
           CurvedAnimation(parent: _textController, curve: Curves.easeInOut),
         );
@@ -169,7 +169,7 @@ class _IntroPage3State extends State<IntroPage3> with TickerProviderStateMixin {
                     },
                   ),
 
-                  const Spacer(flex: 4),
+                  const Spacer(flex: 14),
                 ],
               ),
             ),
