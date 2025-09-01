@@ -18,7 +18,7 @@ class HomeContents extends StatefulWidget {
 
 class _HomeContentsState extends State<HomeContents> {
   late final Future<List<ProductModel>> _productsFuture;
-  int _currentIndex = 2; // الافتراضي على صفحة الـ Home
+  int _currentIndex = 2;
 
   @override
   void initState() {
@@ -38,7 +38,6 @@ class _HomeContentsState extends State<HomeContents> {
     }
   }
 
-  /// الصفحة الرئيسية (Home)
   Widget _buildHomePage() {
     return CustomScrollView(
       slivers: [
@@ -134,7 +133,7 @@ class _HomeContentsState extends State<HomeContents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppbarWidget(),
+      appBar: AppbarWidget(),
       backgroundColor: Colors.black,
       drawer: DrawerMenu(),
       body: _pages[_currentIndex],

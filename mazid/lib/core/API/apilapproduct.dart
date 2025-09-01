@@ -1,19 +1,27 @@
+// lib/core/API/apilapproduct.dart
 import 'package:dio/dio.dart';
-import 'package:mazid/core/Response/productresponse.dart';
 import 'package:mazid/core/models/product_models.dart';
-import 'package:retrofit/retrofit.dart';
 
-part 'apilapproduct.g.dart';
+class ApiLapProduct {
+  final Dio _dio;
 
-@RestApi(baseUrl: "https://elwekala.onrender.com/")
-abstract class ApiLapProduct {
-  factory ApiLapProduct(Dio dio, {String baseUrl}) = _ApiLapProduct;
+  ApiLapProduct(this._dio);
 
-  /// جلب كل المنتجات
-  @GET("/product")
-  Future<Productresponse> getProducts(); // ⚠️ استخدام Productresponse
+  /// جلب قائمة اللابتوبات
+  Future<List<ProductModel>> getLaptops() async {
+    try {
+      final response = await _dio.get(
+        "https://elwekala.onrender.com/product/Laptops",
+      );
 
-  /// جلب منتج واحد حسب الـ ID
-  @GET("/product/{id}")
-  Future<ProductModel> getProductById(@Path("id") String id);
+      if (response.statusCode == 200) {
+        final data = response.data as List;
+        return data.map((json) => ProductModel.fromJson(json)).toList();
+      } else {
+        throw Exception("فشل تحميل البيانات: ${response.statusCode}");
+      }
+    } catch (e) {
+      throw Exception("خطأ في الاتصال: $e");
+    }
+  }
 }

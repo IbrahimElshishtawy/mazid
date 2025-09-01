@@ -6,6 +6,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const HomeContents(); // ✅ مجرد Wrapper
+    return const HomeContents();
   }
 }

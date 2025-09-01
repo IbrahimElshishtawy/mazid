@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     if (!introSeen) {
       return const IntroPage();
     } else if (loggedIn) {
-      return const HomePage(); // ✅ مش
+      return const HomePage();
     } else {
       return const LoginPage();
     }
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
               '/intro': (_) => const IntroPage(),
               '/login': (_) => const LoginPage(),
               '/register': (_) => const RegisterPage(),
-              '/home': (_) => const HomePage(), // ✅ هنا برضه
+              '/home': (_) => const HomePage(),
             },
           );
         },
