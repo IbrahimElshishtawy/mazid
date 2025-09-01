@@ -1,70 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/home/widget/Appbar_widget.dart';
+import 'package:dio/dio.dart';
+import 'package:mazid/core/API/apilapproduct.dart';
+import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/pages/home/widget/product_card.dart';
 import 'package:mazid/pages/home/widget/banner.dart';
 import 'package:mazid/pages/home/widget/category.dart';
-import 'package:mazid/pages/home/widget/drawer_menu.dart';
-import 'package:mazid/pages/home/widget/product_card.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    const HomeContent(),
-    const Center(
-      child: Text("Search Page", style: TextStyle(color: Colors.white)),
-    ),
-    const Center(
-      child: Text("Cart Page", style: TextStyle(color: Colors.white)),
-    ),
-    const Center(
-      child: Text("Profile Page", style: TextStyle(color: Colors.white)),
-    ),
-  ];
-
-  void _onNavTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  Future<List<ProductModel>> _fetchProducts() async {
+    final dio = Dio();
+    final api = ApiLapProduct(dio);
+    return await api.getProducts(); // تأكد من اسم الميثود في API
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: const AppbarWidget(),
-      drawer: const DrawerMenu(),
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black,
-        selectedItemColor: Colors.orange,
-        unselectedItemColor: Colors.white70,
-        currentIndex: _selectedIndex,
-        onTap: _onNavTapped,
-        type: BottomNavigationBarType.fixed,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: "Cart",
-          ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-        ],
-      ),
-    );
-  }
-}
-
-// 🌟 المحتوى الأصلي للصفحة الرئيسية
-class HomeContent extends StatelessWidget {
-  const HomeContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +31,10 @@ class HomeContent extends StatelessWidget {
             ),
           ),
         ),
+
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+        // ✅ الكاتيجوري
         SliverToBoxAdapter(
           child: SizedBox(
             height: 90,
@@ -98,25 +50,55 @@ class HomeContent extends StatelessWidget {
             ),
           ),
         ),
+
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          sliver: SliverGrid(
-            delegate: SliverChildBuilderDelegate((context, index) {
-              return ProductCard(
-                title: "Product ${index + 1}",
-                image: "assets/product.png",
-                price: 150 + index * 20,
+
+        // ✅ قائمة المنتجات
+        SliverToBoxAdapter(
+          child: FutureBuilder<List<ProductModel>>(
+            future: _fetchProducts(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(color: Colors.orange),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    "Error: ${snapshot.error}",
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                );
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text(
+                    "No products found",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              }
+
+              final products = snapshot.data!;
+              return GridView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: products.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 0.65,
+                ),
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return ProductCard(product: product); // ⚡ هنا تمرر المنتج
+                },
               );
-            }, childCount: 6),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.65,
-            ),
+            },
           ),
         ),
+
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
       ],
     );

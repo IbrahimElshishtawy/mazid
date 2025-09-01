@@ -1,12 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:dio/dio.dart';
-import 'package:mazid/core/API/api_product.dart';
+import 'package:mazid/core/API/apilapproduct.dart';
 
 class ProductService {
-  late final ProductApi api;
+  late final ApiLapProduct api;
 
-  ApiService() {
+  void ApiService() {
     final dio = Dio(
       BaseOptions(
         connectTimeout: const Duration(seconds: 10),
@@ -17,6 +17,6 @@ class ProductService {
     // إضافه logger إذا حبيت تضيف تتبع
     // dio.interceptors.add(LogInterceptor(responseBody: true));
 
-    api = ProductApi(dio);
+    api = ApiLapProduct(dio);
   }
 }
