@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
 import 'package:mazid/core/cubit/auth/auth_service.dart';
-import 'package:mazid/pages/home/widget/bottom_NavigationBar.dart';
+import 'package:mazid/pages/home/ui/home_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supa;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
     if (!introSeen) {
       return const IntroPage();
     } else if (loggedIn) {
-      return const BottomNavigationbarWidget(); // ✅ مش HomePage
+      return const HomePage(); // ✅ مش
     } else {
       return const LoginPage();
     }
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
               '/intro': (_) => const IntroPage(),
               '/login': (_) => const LoginPage(),
               '/register': (_) => const RegisterPage(),
-              '/home': (_) => const BottomNavigationbarWidget(), // ✅ هنا برضه
+              '/home': (_) => const HomePage(), // ✅ هنا برضه
             },
           );
         },
