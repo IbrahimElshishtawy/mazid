@@ -18,8 +18,10 @@ class ProductModel {
   final List<String> images;
   final String company;
   final int countInStock;
-  final int sales;
 
+  @JsonKey(name: '__v')
+  final int v;
+  final int sales;
   ProductModel({
     required this.id,
     required this.status,
@@ -31,10 +33,10 @@ class ProductModel {
     required this.images,
     required this.company,
     required this.countInStock,
+    required this.v,
     required this.sales,
   });
 
-  /// تحويل تلقائي للـ double
   static double _toDouble(dynamic value) {
     if (value == null) return 0.0;
     if (value is int) return value.toDouble();

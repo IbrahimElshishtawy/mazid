@@ -9,10 +9,10 @@ import 'package:mazid/pages/home/widget/category.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
-  Future<List<ProductModel>> _fetchProducts() async {
+  Future<ProductModel> _fetchProducts() async {
     final dio = Dio();
     final api = ApiLapProduct(dio);
-    return await api.getProducts(); // تأكد من اسم الميثود في API
+    return await api.getProductById();
   }
 
   @override
