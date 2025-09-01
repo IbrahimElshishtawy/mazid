@@ -1,8 +1,7 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:mazid/pages/home/ui/home_page.dart';
+import 'package:mazid/pages/home/widget/AppBar_widget.dart';
 
 class BottomNavigationbarWidget extends StatefulWidget {
   const BottomNavigationbarWidget({super.key});
@@ -22,7 +21,7 @@ class _BottomNavigationbarWidgetState extends State<BottomNavigationbarWidget> {
     const Center(
       child: Text("مزاد", style: TextStyle(color: Colors.white, fontSize: 22)),
     ),
-    const HomePage(), // ✅ بدون Scaffold أو AppBar هنا
+    const HomePage(),
     const Center(
       child: Text(
         "استبدال",
@@ -41,6 +40,15 @@ class _BottomNavigationbarWidgetState extends State<BottomNavigationbarWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: _selectedIndex == 2
+          ? AppbarWidget(
+              onCartPressed: () {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text("Go to Cart")));
+              },
+            )
+          : null, // ✅ يظهر AppBar بس في الهوم
       body: SafeArea(
         child: IndexedStack(index: _selectedIndex, children: _pages),
       ),

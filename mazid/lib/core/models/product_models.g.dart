@@ -17,6 +17,7 @@ ProductModel _$ProductModelFromJson(Map<String, dynamic> json) => ProductModel(
   images: (json['images'] as List<dynamic>).map((e) => e as String).toList(),
   company: json['company'] as String,
   countInStock: (json['countInStock'] as num).toInt(),
+  v: (json['__v'] as num).toInt(),
   sales: (json['sales'] as num).toInt(),
 );
 
@@ -32,5 +33,6 @@ Map<String, dynamic> _$ProductModelToJson(ProductModel instance) =>
       'images': instance.images,
       'company': instance.company,
       'countInStock': instance.countInStock,
+      '__v': instance.v,
       'sales': instance.sales,
     };

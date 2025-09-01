@@ -6,19 +6,39 @@ import 'package:mazid/pages/home/widget/product_card.dart';
 import 'package:mazid/pages/home/widget/banner.dart';
 import 'package:mazid/pages/home/widget/category.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
-  Future<ProductModel> _fetchProducts() async {
-    final dio = Dio();
-    final api = ApiLapProduct(dio);
-    return await api.getProductById();
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late final Future<List<ProductModel>> _productsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _productsFuture = _fetchProducts();
+  }
+
+  Future<List<ProductModel>> _fetchProducts() async {
+    try {
+      final dio = Dio();
+      final api = ApiLapProduct(dio);
+      final response = await api.getProducts();
+      return response.product;
+    } catch (e) {
+      debugPrint("❌ Fetch products error: $e");
+      rethrow;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
+        // ✅ البانر
         SliverToBoxAdapter(
           child: SizedBox(
             height: 150,
@@ -53,14 +73,17 @@ class HomePage extends StatelessWidget {
 
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
 
-        // ✅ قائمة المنتجات
+        // ✅ المنتجات
         SliverToBoxAdapter(
           child: FutureBuilder<List<ProductModel>>(
-            future: _fetchProducts(),
+            future: _productsFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
-                  child: CircularProgressIndicator(color: Colors.orange),
+                  child: Padding(
+                    padding: EdgeInsets.all(24.0),
+                    child: CircularProgressIndicator(color: Colors.orange),
+                  ),
                 );
               } else if (snapshot.hasError) {
                 return Center(
@@ -69,7 +92,7 @@ class HomePage extends StatelessWidget {
                     style: const TextStyle(color: Colors.red),
                   ),
                 );
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              } else if (snapshot.data == null || snapshot.data!.isEmpty) {
                 return const Center(
                   child: Text(
                     "No products found",
@@ -92,7 +115,7 @@ class HomePage extends StatelessWidget {
                 ),
                 itemBuilder: (context, index) {
                   final product = products[index];
-                  return ProductCard(product: product); // ⚡ هنا تمرر المنتج
+                  return ProductCard(product: product);
                 },
               );
             },

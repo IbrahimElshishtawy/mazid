@@ -10,7 +10,7 @@ abstract class ApiLapProduct {
   factory ApiLapProduct(Dio dio, {String baseUrl}) = _ApiLapProduct;
 
   /// جلب كل المنتجات
-  @GET("/products")
+  @GET("/product")
   Future<Productresponse> getProducts(); // ⚠️ استخدام Productresponse
 
   /// جلب منتج واحد حسب الـ ID
