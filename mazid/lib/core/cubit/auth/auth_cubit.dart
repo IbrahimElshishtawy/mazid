@@ -67,40 +67,6 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  /// إرسال OTP للهاتف
-  Future<void> loginWithPhone(String phone) async {
-    emit(AuthLoading());
-    try {
-      await authService.loginWithPhone(phone);
-      print("🔄 [AuthCubit] OTP sent to: $phone");
-      emit(AuthOtpSent(phone));
-    } catch (e, st) {
-      print("❌ [AuthCubit] OTP send failed: $e\n$st");
-      emit(AuthFailure(message: "فشل إرسال رمز التحقق، حاول مرة أخرى"));
-    }
-  }
-
-  /// التحقق من OTP
-  Future<void> verifyPhoneOtp({
-    required String phone,
-    required String otp,
-  }) async {
-    emit(AuthLoading());
-    try {
-      final user = await authService.verifyPhoneOtp(phone: phone, otp: otp);
-      if (user != null) {
-        print("✅ [AuthCubit] OTP verified for: $phone");
-        emit(Authenticated(user));
-      } else {
-        print("❌ [AuthCubit] OTP invalid: $otp");
-        emit(AuthFailure(message: "رمز التحقق غير صحيح"));
-      }
-    } catch (e, st) {
-      print("❌ [AuthCubit] OTP verification exception: $e\n$st");
-      emit(AuthFailure(message: "حدث خطأ أثناء التحقق من الرمز"));
-    }
-  }
-
   /// تسجيل الخروج
   Future<void> logout() async {
     emit(AuthLoading());

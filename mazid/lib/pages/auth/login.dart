@@ -36,7 +36,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 600),
     );
 
-    // 🔹 دخول الشاشة (Slide + Fade)
     _entryController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),

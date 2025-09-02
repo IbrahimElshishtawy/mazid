@@ -1,5 +1,6 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
-import 'package:mazid/core/service/cart_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CartPage extends StatefulWidget {
@@ -10,122 +11,106 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  final CartService _cartService = CartService();
-  final userId = Supabase.instance.client.auth.currentUser?.id;
+  final supabase = Supabase.instance.client;
+  late Future<List<dynamic>> cartItemsFuture;
 
-  Future<List<Map<String, dynamic>>> _fetchCart() async {
-    if (userId == null) return [];
-    return await _cartService.getCart(userId!);
+  @override
+  void initState() {
+    super.initState();
+    cartItemsFuture = getCartItems();
+  }
+
+  /// جلب المنتجات من جدول cart للمستخدم الحالي فقط
+  Future<List<dynamic>> getCartItems() async {
+    final user = supabase.auth.currentUser;
+    if (user == null) return [];
+
+    final response = await supabase
+        .from('cart')
+        .select()
+        .eq('user_id', user.id);
+
+    return response;
+  }
+
+  /// حذف منتج من السلة
+  Future<void> removeFromCart(int id) async {
+    await supabase.from('cart').delete().eq('id', id);
+    if (!mounted) return;
+    setState(() {
+      cartItemsFuture = getCartItems();
+    });
+  }
+
+  /// إضافة منتج للسلة (مثال)
+  Future<void> addToCart(String name, double price) async {
+    final user = supabase.auth.currentUser;
+    if (user == null) return;
+
+    await supabase.from('cart').insert({
+      'user_id': user.id,
+      'name': name,
+      'price': price,
+      'quantity': 1,
+    });
+
+    if (!mounted) return;
+    setState(() {
+      cartItemsFuture = getCartItems();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("🛒 سلة المشتريات"),
+        title: const Text("🛒 Cart"),
         backgroundColor: Colors.black,
       ),
-      body: FutureBuilder(
-        future: _fetchCart(),
+      body: FutureBuilder<List<dynamic>>(
+        future: cartItemsFuture,
         builder: (context, snapshot) {
-          if (!snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          final cartItems = snapshot.data!;
-          if (cartItems.isEmpty) {
-            return const Center(child: Text("السلة فارغة"));
+          if (snapshot.hasError) {
+            return Center(child: Text("❌ Error: ${snapshot.error}"));
           }
 
-          double total = 0;
-          for (var item in cartItems) {
-            total += item['price'] * item['quantity'];
+          final items = snapshot.data ?? [];
+
+          if (items.isEmpty) {
+            return const Center(child: Text("السلة فاضية 🛒"));
           }
 
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: cartItems.length,
-                  itemBuilder: (context, index) {
-                    final item = cartItems[index];
-                    return Card(
-                      margin: const EdgeInsets.all(8),
-                      child: ListTile(
-                        leading: Image.network(
-                          item['image_url'],
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        ),
-                        title: Text(item['name']),
-                        subtitle: Text(
-                          "السعر: ${item['price']} × ${item['quantity']}",
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.remove_circle),
-                              onPressed: () async {
-                                await _cartService.updateQuantity(
-                                  item['id'],
-                                  item['quantity'] - 1,
-                                );
-                                setState(() {});
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.add_circle),
-                              onPressed: () async {
-                                await _cartService.updateQuantity(
-                                  item['id'],
-                                  item['quantity'] + 1,
-                                );
-                                setState(() {});
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () async {
-                                await _cartService.deleteItem(item['id']);
-                                setState(() {});
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+          return ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              final item = items[index];
+              return Card(
+                margin: const EdgeInsets.all(10),
+                child: ListTile(
+                  leading: const Icon(Icons.shopping_bag),
+                  title: Text(item['name'] ?? 'No name'),
+                  subtitle: Text(
+                    "Price: ${item['price']} | Qty: ${item['quantity']}",
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () => removeFromCart(item['id']),
+                  ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(16),
-                color: Colors.black12,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "الإجمالي: $total",
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // TODO: إضافة عملية الطلب
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("تم تنفيذ الطلب ✅")),
-                        );
-                      },
-                      child: const Text("تنفيذ الطلب"),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              );
+            },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await addToCart("New Product", 99.9);
+        },
+        backgroundColor: Colors.black,
+        child: const Icon(Icons.add),
       ),
     );
   }

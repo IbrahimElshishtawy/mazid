@@ -15,6 +15,7 @@ class AuthService {
     print("🔄 [AuthService] Registering: $email");
 
     try {
+      // تسجيل المستخدم في Supabase Auth
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
@@ -25,17 +26,16 @@ class AuthService {
       if (response.user != null) {
         final userId = response.user!.id;
 
-        // إضافة المستخدم لجدول 'users'
-        await supabase.from('users').insert({
-          'id': userId,
+        final insertResponse = await supabase.from('users').insert({
+          'id': response.user!.id, // يجب أن يكون نفس UUID Auth
           'name': name.trim(),
           'email': email.trim(),
           'phone': phone.trim(),
           'avatar': '',
           'created_at': DateTime.now().toUtc().toIso8601String(),
-        });
+        }).select();
 
-        print("✅ [AuthService] User inserted in DB: $userId");
+        print("✅ [AuthService] User inserted in DB: $insertResponse");
 
         return UserModel(
           id: userId,
@@ -81,7 +81,10 @@ class AuthService {
         if (data != null) {
           return UserModel.fromJson(data);
         } else {
-          print("❌ [AuthService] User not found in 'users' table");
+          print(
+            "❌ [AuthService] User not found in 'users' table. "
+            "تأكد من سياسة RLS على جدول users",
+          );
           return null;
         }
       } else {
@@ -90,54 +93,6 @@ class AuthService {
       }
     } catch (e, st) {
       print("🔥 [AuthService] Login exception: $e\n$st");
-      return null;
-    }
-  }
-
-  /// إرسال OTP للهاتف
-  Future<void> loginWithPhone(String phone) async {
-    print("🔄 [AuthService] Sending OTP to: $phone");
-    try {
-      await supabase.auth.signInWithOtp(phone: phone);
-      print("✅ [AuthService] OTP sent to $phone");
-    } catch (e, st) {
-      print("❌ [AuthService] OTP send failed: $e\n$st");
-      rethrow;
-    }
-  }
-
-  /// التحقق من OTP
-  Future<UserModel?> verifyPhoneOtp({
-    required String phone,
-    required String otp,
-  }) async {
-    print("🔄 [AuthService] Verifying OTP for: $phone");
-
-    try {
-      final response = await supabase.auth.verifyOTP(
-        phone: phone,
-        token: otp,
-        type: OtpType.sms,
-      );
-
-      print("🟢 [AuthService] verifyOTP response: $response");
-
-      if (response.user != null) {
-        final data = await supabase
-            .from('users')
-            .select()
-            .eq('id', response.user!.id)
-            .maybeSingle();
-
-        if (data != null) {
-          return UserModel.fromJson(data);
-        }
-      }
-
-      print("❌ [AuthService] OTP verification failed for $phone");
-      return null;
-    } catch (e, st) {
-      print("🔥 [AuthService] OTP verification exception: $e\n$st");
       return null;
     }
   }
@@ -181,19 +136,11 @@ class AuthService {
     return null;
   }
 
-  /// تسجيل دخول شامل (بريد أو هاتف)
+  /// تسجيل دخول شامل (بريد)
   Future<UserModel?> login({
-    String? email,
-    String? phone,
-    String? password,
+    required String email,
+    required String password,
   }) async {
-    if (email != null && email.isNotEmpty && password != null) {
-      return await loginWithEmail(email: email, password: password);
-    } else if (phone != null && phone.isNotEmpty) {
-      await loginWithPhone(phone);
-      return null;
-    } else {
-      throw Exception("Either email/password or phone must be provided");
-    }
+    return await loginWithEmail(email: email, password: password);
   }
 }

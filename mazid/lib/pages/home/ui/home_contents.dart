@@ -1,13 +1,18 @@
 // lib/pages/home/home_contents.dart
 import 'package:flutter/material.dart';
+import 'package:gotrue/src/types/user.dart';
+import 'package:mazid/core/cubit/auth/auth_Excption.dart';
 import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/core/models/user_model.dart';
 import 'package:mazid/core/service/product_service.dart';
+
 import 'package:mazid/pages/home/section/banner_section.dart';
 import 'package:mazid/pages/home/section/categories_section.dart';
 import 'package:mazid/pages/home/section/products_grid.dart';
 import 'package:mazid/pages/home/widget/AppBar_widget.dart';
 import 'package:mazid/pages/home/widget/bottom_NavigationBar.dart';
 import 'package:mazid/pages/home/widget/drawer_menu.dart';
+import 'package:mazid/pages/profile/Profile_Page.dart';
 
 class HomeContents extends StatefulWidget {
   const HomeContents({super.key});
@@ -18,6 +23,8 @@ class HomeContents extends StatefulWidget {
 
 class _HomeContentsState extends State<HomeContents> {
   final ProductService _productService = ProductService();
+  final AuthService _authService = AuthService();
+
   int _currentIndex = 2;
 
   List<ProductModel> _allProducts = [];
@@ -26,12 +33,22 @@ class _HomeContentsState extends State<HomeContents> {
   String _errorMessage = '';
   String _selectedCategory = "All";
 
+  // بيانات المستخدم
+  UserModel? _currentUser;
+  int totalSales = 0;
+  int totalPurchases = 0;
+  int totalAuctions = 0;
+  double totalSpent = 0.0;
+  double totalEarned = 0.0;
+
   @override
   void initState() {
     super.initState();
     _loadProducts();
+    _loadUserData();
   }
 
+  /// جلب المنتجات من API
   void _loadProducts() async {
     try {
       final products = await _productService.fetchAllProducts();
@@ -46,6 +63,32 @@ class _HomeContentsState extends State<HomeContents> {
       setState(() {
         _errorMessage = e.toString();
         _isLoading = false;
+      });
+    }
+  }
+
+  /// جلب بيانات المستخدم الحقيقية من Supabase أو Admin
+  void _loadUserData() async {
+    final user = _authService.currentUser(); // جلب المستخدم الحالي
+    if (!mounted) return;
+
+    if (user != null) {
+      setState(() {
+        // تحويل User إلى UserModel
+        _currentUser = UserModel(
+          id: user.id,
+          name: user.id,
+          email: user.email ?? '',
+          avatar: user.avatarUrl ?? '',
+          phone: user.phone ?? '',
+        );
+
+        // مثال: تحصيل إحصائيات من API أو Firestore
+        totalSales = 15;
+        totalPurchases = 23;
+        totalAuctions = 5;
+        totalSpent = 1200.50;
+        totalEarned = 980.75;
       });
     }
   }
@@ -120,7 +163,7 @@ class _HomeContentsState extends State<HomeContents> {
         SliverToBoxAdapter(
           child: CategoriesSection(
             selectedCategory: _selectedCategory,
-            onCategorySelected: _filterByCategory, // ✅ هنا بيعمل فلترة مظبوطة
+            onCategorySelected: _filterByCategory,
           ),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
@@ -138,13 +181,27 @@ class _HomeContentsState extends State<HomeContents> {
     );
   }
 
-  /// الصفحات الخاصة بالـ BottomNavigationBar
   List<Widget> get _pages => [
     const Text("CartPage"), // index 0
     const Text("OrdersPage"), // index 1
-    _buildHomePage(), // ✅ هنا الـ HomePage اللي فيها الفلترة
+    _buildHomePage(), // index 2
     const Text("text"), // index 3
-    const Text("profile"), // index 4
+    ProfilePage(
+      user:
+          _currentUser ??
+          UserModel(
+            id: '0',
+            name: 'Loading...',
+            email: '',
+            avatar: '',
+            phone: '',
+          ),
+      totalSales: totalSales,
+      totalPurchases: totalPurchases,
+      totalAuctions: totalAuctions,
+      totalSpent: totalSpent,
+      totalEarned: totalEarned,
+    ),
   ];
 
   @override
@@ -163,4 +220,8 @@ class _HomeContentsState extends State<HomeContents> {
       ),
     );
   }
+}
+
+extension on User {
+  get avatarUrl => null;
 }

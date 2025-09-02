@@ -3,6 +3,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/core/service/cart_service.dart';
 import 'package:mazid/pages/home/Details/Product_Details_Page.dart';
 import 'package:mazid/pages/home/widget/StarRating.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -149,41 +150,41 @@ class ProductCard extends StatelessWidget {
                       color: Colors.orange.withOpacity(0.3),
                       child: InkWell(
                         onTap: () async {
-                          try {
-                            final supabase = Supabase.instance.client;
+                          final user =
+                              Supabase.instance.client.auth.currentUser;
+                          if (user == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("⚠️ لازم تسجيل الدخول أولاً"),
+                              ),
+                            );
+                            return;
+                          }
 
-                            // هنا حط بيانات المنتج اللي هتجيلك من الموديل
-                            final response = await supabase.from('cart').insert(
-                              {
-                                'product_id': product.id, // ID المنتج
-                                'name': product.name, // اسم المنتج
-                                'price': product.price, // سعر المنتج
-                                'quantity': 1, // الكمية الافتراضية
-                                'user_id': supabase
-                                    .auth
-                                    .currentUser
-                                    ?.id, // ID المستخدم الحالي
-                              },
+                          try {
+                            // إضافة المنتج للسلة
+                            await CartService().addToCart(
+                              userId: user.id,
+                              productId: int.parse(
+                                product.id,
+                              ), // تحويل من String إلى int
+                              name: product.name,
+                              price: product.price,
+                              imageUrl: product.image.isNotEmpty
+                                  ? product.image
+                                  : '',
                             );
 
-                            if (response.error == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("تمت إضافة المنتج إلى السلة ✅"),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "خطأ: ${response.error!.message}",
-                                  ),
-                                ),
-                              );
-                            }
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("✅ تمت إضافة المنتج إلى السلة"),
+                              ),
+                            );
+
+                            // لا حاجة لاستخدام setState هنا لأن StatelessWidget لا تدعمه
                           } catch (e) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("حصل خطأ: $e")),
+                              SnackBar(content: Text("❌ حصل خطأ: $e")),
                             );
                           }
                         },

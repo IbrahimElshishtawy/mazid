@@ -28,21 +28,41 @@ class _AppbarWidgetState extends State<AppbarWidget> {
     super.initState();
     _fetchCartCount();
 
-    // 📡 متابعة التغيرات في جدول cart (Realtime)
-    supabase.from('cart').stream(primaryKey: ['id']).listen((event) {
-      _fetchCartCount();
-    });
+    // 📡 متابعة التغيرات في جدول cart (Realtime) الحديثة
+    final user = supabase.auth.currentUser;
+    if (user != null) {
+      supabase.from('cart').stream(primaryKey: ['id']).listen((event) {
+        if (mounted) _fetchCartCount();
+      });
+    }
   }
 
   Future<void> _fetchCartCount() async {
     try {
-      final response = await supabase.from('cart').select();
-      setState(() {
-        _cartCount = response.length;
-      });
+      final user = supabase.auth.currentUser;
+      if (user == null) {
+        if (mounted) setState(() => _cartCount = 0);
+        return;
+      }
+
+      final response = await supabase
+          .from('cart')
+          .select()
+          .eq('user_id', user.id);
+      if (mounted) {
+        setState(() {
+          _cartCount = response.length;
+        });
+      }
     } catch (e) {
       print("❌ Error fetching cart count: $e");
     }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
