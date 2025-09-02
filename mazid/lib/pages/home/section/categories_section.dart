@@ -1,4 +1,6 @@
 // lib/pages/home/widget/categories_section.dart
+// ignore_for_file: unnecessary_underscores
+
 import 'package:flutter/material.dart';
 import 'package:mazid/pages/home/widget/CategoryProductsPage.dart';
 

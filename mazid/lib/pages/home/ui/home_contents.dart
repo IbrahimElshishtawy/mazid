@@ -75,7 +75,7 @@ class _HomeContentsState extends State<HomeContents> {
         _filteredProducts = _allProducts;
       } else {
         _filteredProducts = _allProducts.where((p) {
-          final productCategory = (p.category ?? "").toLowerCase();
+          final productCategory = (p.category).toLowerCase();
           return productCategory.contains(category.toLowerCase());
         }).toList();
       }

@@ -1,4 +1,6 @@
 // ignore: file_names
+// ignore_for_file: file_names, duplicate_ignore
+
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';

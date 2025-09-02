@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import, deprecated_member_use
+
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/product_models.dart';
