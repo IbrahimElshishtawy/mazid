@@ -1,7 +1,8 @@
-// product_card.dart
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/pages/home/Details/Product_Details_Page.dart';
+import 'package:mazid/pages/home/widget/StarRating.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -12,20 +13,28 @@ class ProductCard extends StatelessWidget {
     super.key,
     required this.product,
     this.imageHeight = 160,
-    this.cardWidth = 90,
+    this.cardWidth = 120,
   });
+
+  String _shortenText(String? text, {int maxLength = 18}) {
+    if (text == null || text.isEmpty) return "No Name";
+    return text.length > maxLength ? '${text.substring(0, maxLength)}…' : text;
+  }
 
   @override
   Widget build(BuildContext context) {
-    String displayName = (product.title.isNotEmpty)
-        ? (product.title.length > 14
-              ? product.title.substring(0, 14) + '…'
-              : product.title)
-        : product.name;
+    final String displayName = product.title.isNotEmpty
+        ? _shortenText(product.title, maxLength: 14)
+        : _shortenText(product.name, maxLength: 14);
+
+    final String imageUrl = (product.images.isNotEmpty)
+        ? product.images.first
+        : (product.image.isNotEmpty
+              ? product.image
+              : 'https://via.placeholder.com/150');
 
     return GestureDetector(
       onTap: () {
-        // التنقل إلى صفحة تفاصيل المنتج مع تمرير المنتج
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -37,7 +46,7 @@ class ProductCard extends StatelessWidget {
         width: cardWidth,
         margin: const EdgeInsets.all(0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
             colors: [Colors.grey.shade900, Colors.grey.shade800],
             begin: Alignment.topLeft,
@@ -45,9 +54,9 @@ class ProductCard extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -57,73 +66,65 @@ class ProductCard extends StatelessWidget {
             // الصورة
             ClipRRect(
               borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
+                top: Radius.circular(12),
               ),
-              child: Image.network(
-                product.image,
-                height: imageHeight,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, progress) {
-                  if (progress == null) return child;
-                  return SizedBox(
-                    height: imageHeight,
-                    child: const Center(
+              child: AspectRatio(
+                aspectRatio: 1, // يحافظ على الشكل مربع
+                child: Image.network(
+                  imageUrl,
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, progress) {
+                    if (progress == null) return child;
+                    return const Center(
                       child: CircularProgressIndicator(color: Colors.orange),
-                    ),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: imageHeight,
-                    color: Colors.grey[700],
-                    child: const Icon(Icons.error, color: Colors.red),
-                  );
-                },
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[700],
+                      child: const Center(
+                        child: Icon(
+                          Icons.broken_image,
+                          color: Colors.white70,
+                          size: 40,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
 
-            const SizedBox(height: 1),
+            const SizedBox(height: 6),
 
             // الاسم
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
                 displayName,
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
+                  fontSize: 14,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
 
-            const SizedBox(height: 1),
+            const SizedBox(height: 4),
 
             // التقييم (نجوم)
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Row(
-                children: List.generate(5, (index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 2),
-                    child: Icon(
-                      index < 4 ? Icons.star : Icons.star_border,
-                      color: Colors.orangeAccent,
-                      size: 14,
-                    ),
-                  );
-                }),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: StarRating(rating: product.rating),
             ),
 
-            const SizedBox(height: 1),
+            const Spacer(),
 
             // السعر + زر الإضافة
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -132,29 +133,35 @@ class ProductCard extends StatelessWidget {
                       "\$${product.price.toStringAsFixed(2)}",
                       style: const TextStyle(
                         color: Colors.orangeAccent,
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: FontWeight.bold,
                       ),
                       overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                     ),
                   ),
-                  CircleAvatar(
-                    backgroundColor: Colors.orange,
-                    radius: 18,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.add_shopping_cart,
-                        color: Colors.white,
-                        size: 18,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(50),
+                    child: Material(
+                      color: Colors.orange.withOpacity(0.3),
+                      child: InkWell(
+                        onTap: () {
+                          // إضافة المنتج للسلة
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(6),
+                          child: Icon(
+                            Icons.add_shopping_cart,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                        ),
                       ),
-                      onPressed: () {},
                     ),
                   ),
                 ],
               ),
             ),
-
-            const SizedBox(height: 14),
           ],
         ),
       ),

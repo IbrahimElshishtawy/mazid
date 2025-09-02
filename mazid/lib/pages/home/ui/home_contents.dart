@@ -1,12 +1,13 @@
+// lib/pages/home/home_contents.dart
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/core/service/product_service.dart';
+import 'package:mazid/pages/home/section/banner_section.dart';
+import 'package:mazid/pages/home/section/categories_section.dart';
+import 'package:mazid/pages/home/section/products_grid.dart';
 import 'package:mazid/pages/home/widget/AppBar_widget.dart';
 import 'package:mazid/pages/home/widget/bottom_NavigationBar.dart';
 import 'package:mazid/pages/home/widget/drawer_menu.dart';
-import 'package:mazid/pages/home/widget/product_card.dart';
-import 'package:mazid/pages/home/widget/banner.dart';
-import 'package:mazid/pages/home/widget/category.dart';
 
 class HomeContents extends StatefulWidget {
   const HomeContents({super.key});
@@ -23,6 +24,7 @@ class _HomeContentsState extends State<HomeContents> {
   List<ProductModel> _filteredProducts = [];
   bool _isLoading = true;
   String _errorMessage = '';
+  String _selectedCategory = "All";
 
   @override
   void initState() {
@@ -46,6 +48,7 @@ class _HomeContentsState extends State<HomeContents> {
     }
   }
 
+  /// فلترة حسب البحث
   void _onSearchChanged(String query) {
     setState(() {
       if (query.isEmpty) {
@@ -58,6 +61,23 @@ class _HomeContentsState extends State<HomeContents> {
                   p.title.toLowerCase().contains(query.toLowerCase()),
             )
             .toList();
+      }
+      _selectedCategory = "All";
+    });
+  }
+
+  /// فلترة حسب الفئة
+  void _filterByCategory(String category) {
+    setState(() {
+      _selectedCategory = category;
+
+      if (category == "All") {
+        _filteredProducts = _allProducts;
+      } else {
+        _filteredProducts = _allProducts.where((p) {
+          final productCategory = (p.category ?? "").toLowerCase();
+          return productCategory.contains(category.toLowerCase());
+        }).toList();
       }
     });
   }
@@ -86,59 +106,16 @@ class _HomeContentsState extends State<HomeContents> {
 
     return CustomScrollView(
       slivers: [
-        // Banner
+        const SliverToBoxAdapter(child: BannerSection()),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
         SliverToBoxAdapter(
-          child: SizedBox(
-            height: 150,
-            child: PageView(
-              children: const [
-                BannerWidget("🔥 Sale up to 50%"),
-                BannerWidget("🐶 New Pets Collection"),
-                BannerWidget("💻 Latest Electronics"),
-              ],
-            ),
+          child: CategoriesSection(
+            selectedCategory: _selectedCategory,
+            onCategorySelected: _filterByCategory,
           ),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
-
-        // Categories
-        SliverToBoxAdapter(
-          child: SizedBox(
-            height: 90,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: const [
-                CategoryWidget(Icons.pets, "Pets"),
-                CategoryWidget(Icons.shopping_bag, "Clothes"),
-                CategoryWidget(Icons.laptop, "Laptops"),
-                CategoryWidget(Icons.devices_other, "Electronics"),
-                CategoryWidget(Icons.watch, "Accessories"),
-              ],
-            ),
-          ),
-        ),
-        const SliverToBoxAdapter(child: SizedBox(height: 20)),
-
-        // Products Grid
-        SliverToBoxAdapter(
-          child: GridView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: _filteredProducts.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.65,
-            ),
-            itemBuilder: (context, index) {
-              final product = _filteredProducts[index];
-              return ProductCard(product: product);
-            },
-          ),
-        ),
-        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        SliverToBoxAdapter(child: ProductsGrid(products: _filteredProducts)),
       ],
     );
   }
