@@ -1,6 +1,5 @@
 // lib/pages/home/home_contents.dart
 import 'package:flutter/material.dart';
-import 'package:gotrue/src/types/user.dart';
 import 'package:mazid/core/cubit/auth/auth_Excption.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/core/models/user_model.dart';
@@ -12,7 +11,7 @@ import 'package:mazid/pages/home/section/products_grid.dart';
 import 'package:mazid/pages/home/widget/AppBar_widget.dart';
 import 'package:mazid/pages/home/widget/bottom_NavigationBar.dart';
 import 'package:mazid/pages/home/widget/drawer_menu.dart';
-import 'package:mazid/pages/profile/Profile_Page.dart';
+import 'package:mazid/pages/profile/ui/Profile_Page.dart';
 
 class HomeContents extends StatefulWidget {
   const HomeContents({super.key});
@@ -67,29 +66,28 @@ class _HomeContentsState extends State<HomeContents> {
     }
   }
 
-  /// جلب بيانات المستخدم الحقيقية من Supabase أو Admin
+  /// جلب بيانات المستخدم الحقيقية من Supabase
   void _loadUserData() async {
-    final user = _authService.currentUser(); // جلب المستخدم الحالي
+    final user = _authService.currentUser(); // يجب استخدام await
     if (!mounted) return;
 
     if (user != null) {
-      setState(() {
-        // تحويل User إلى UserModel
-        _currentUser = UserModel(
-          id: user.id,
-          name: user.id,
-          email: user.email ?? '',
-          avatar: user.avatarUrl ?? '',
-          phone: user.phone ?? '',
-        );
+      final AuthService _authService = AuthService();
 
-        // مثال: تحصيل إحصائيات من API أو Firestore
-        totalSales = 15;
-        totalPurchases = 23;
-        totalAuctions = 5;
-        totalSpent = 1200.50;
-        totalEarned = 980.75;
-      });
+      final userData = await _authService.getUserData(user.id);
+
+      if (userData != null && mounted) {
+        setState(() {
+          _currentUser = userData;
+
+          // القيم الافتراضية أو يمكن جلبها من userData إذا كانت موجودة
+          totalSales = 0;
+          totalPurchases = 0;
+          totalAuctions = 0;
+          totalSpent = 0.0;
+          totalEarned = 0.0;
+        });
+      }
     }
   }
 
@@ -201,6 +199,7 @@ class _HomeContentsState extends State<HomeContents> {
       totalAuctions: totalAuctions,
       totalSpent: totalSpent,
       totalEarned: totalEarned,
+      walletBalance: 0,
     ),
   ];
 
@@ -220,8 +219,4 @@ class _HomeContentsState extends State<HomeContents> {
       ),
     );
   }
-}
-
-extension on User {
-  get avatarUrl => null;
 }

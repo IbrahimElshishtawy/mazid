@@ -159,4 +159,6 @@ class AuthService {
       throw AuthException("يجب إدخال البريد وكلمة المرور أو رقم الهاتف");
     }
   }
+
+  Future getUserData(String id) async {}
 }

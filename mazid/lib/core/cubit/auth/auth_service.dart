@@ -1,3 +1,4 @@
+// lib/core/service/auth_service.dart
 // ignore_for_file: avoid_print
 import 'package:mazid/core/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -15,7 +16,6 @@ class AuthService {
     print("🔄 [AuthService] Registering: $email");
 
     try {
-      // تسجيل المستخدم في Supabase Auth
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
@@ -27,7 +27,7 @@ class AuthService {
         final userId = response.user!.id;
 
         final insertResponse = await supabase.from('users').insert({
-          'id': response.user!.id, // يجب أن يكون نفس UUID Auth
+          'id': userId,
           'name': name.trim(),
           'email': email.trim(),
           'phone': phone.trim(),
@@ -54,7 +54,7 @@ class AuthService {
     }
   }
 
-  /// تسجيل الدخول بالبريد مع التحقق من البريد المؤكد
+  /// تسجيل الدخول بالبريد
   Future<UserModel?> loginWithEmail({
     required String email,
     required String password,
@@ -134,6 +134,28 @@ class AuthService {
 
     print("❌ [AuthService] No user logged in");
     return null;
+  }
+
+  /// جلب بيانات أي مستخدم بواسطة userId
+  Future<UserModel?> getUserData(String userId) async {
+    try {
+      final data = await supabase
+          .from('users')
+          .select()
+          .eq('id', userId)
+          .maybeSingle();
+
+      if (data != null) {
+        print("🟢 [AuthService] Fetched user data for $userId: $data");
+        return UserModel.fromJson(data);
+      } else {
+        print("❌ [AuthService] User with id $userId not found");
+        return null;
+      }
+    } catch (e, st) {
+      print("🔥 [AuthService] getUserData exception: $e\n$st");
+      return null;
+    }
   }
 
   /// تسجيل دخول شامل (بريد)
