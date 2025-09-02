@@ -1,5 +1,6 @@
 // lib/core/services/product_service.dart
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import 'package:mazid/core/models/product_models.dart';
 
@@ -19,7 +20,9 @@ class ProductService {
         throw Exception("API response is not a List or is null");
       }
     } catch (e) {
-      print("❌ Fetch products error: $e");
+      if (kDebugMode) {
+        print("❌ Fetch products error: $e");
+      }
       rethrow;
     }
   }

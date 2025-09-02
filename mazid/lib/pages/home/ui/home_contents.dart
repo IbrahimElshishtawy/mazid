@@ -16,19 +16,77 @@ class HomeContents extends StatefulWidget {
 }
 
 class _HomeContentsState extends State<HomeContents> {
-  late final Future<List<ProductModel>> _productsFuture;
   final ProductService _productService = ProductService();
   int _currentIndex = 2;
+
+  List<ProductModel> _allProducts = [];
+  List<ProductModel> _filteredProducts = [];
+  bool _isLoading = true;
+  String _errorMessage = '';
 
   @override
   void initState() {
     super.initState();
-    _productsFuture = _productService.fetchAllProducts(); // يجلب كل المنتجات
+    _loadProducts();
+  }
+
+  void _loadProducts() async {
+    try {
+      final products = await _productService.fetchAllProducts();
+      setState(() {
+        _allProducts = products;
+        _filteredProducts = products;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = e.toString();
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _onSearchChanged(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        _filteredProducts = _allProducts;
+      } else {
+        _filteredProducts = _allProducts
+            .where(
+              (p) =>
+                  p.name.toLowerCase().contains(query.toLowerCase()) ||
+                  p.title.toLowerCase().contains(query.toLowerCase()),
+            )
+            .toList();
+      }
+    });
   }
 
   Widget _buildHomePage() {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.orange),
+      );
+    }
+
+    if (_errorMessage.isNotEmpty) {
+      return Center(
+        child: Text(
+          "Error: $_errorMessage",
+          style: const TextStyle(color: Colors.red),
+        ),
+      );
+    }
+
+    if (_filteredProducts.isEmpty) {
+      return const Center(
+        child: Text("No products found", style: TextStyle(color: Colors.white)),
+      );
+    }
+
     return CustomScrollView(
       slivers: [
+        // Banner
         SliverToBoxAdapter(
           child: SizedBox(
             height: 150,
@@ -42,6 +100,8 @@ class _HomeContentsState extends State<HomeContents> {
           ),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+        // Categories
         SliverToBoxAdapter(
           child: SizedBox(
             height: 90,
@@ -58,50 +118,23 @@ class _HomeContentsState extends State<HomeContents> {
           ),
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
-        SliverToBoxAdapter(
-          child: FutureBuilder<List<ProductModel>>(
-            future: _productsFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(24.0),
-                    child: CircularProgressIndicator(color: Colors.orange),
-                  ),
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    "Error: ${snapshot.error}",
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                );
-              } else if (snapshot.data == null || snapshot.data!.isEmpty) {
-                return const Center(
-                  child: Text(
-                    "No products found",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              }
 
-              final products = snapshot.data!;
-              return GridView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: products.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 0.65,
-                ),
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  return ProductCard(product: product);
-                },
-              );
+        // Products Grid
+        SliverToBoxAdapter(
+          child: GridView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: _filteredProducts.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+              childAspectRatio: 0.65,
+            ),
+            itemBuilder: (context, index) {
+              final product = _filteredProducts[index];
+              return ProductCard(product: product);
             },
           ),
         ),
@@ -121,7 +154,7 @@ class _HomeContentsState extends State<HomeContents> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarWidget(),
+      appBar: AppbarWidget(onSearchChanged: _onSearchChanged),
       backgroundColor: Colors.black,
       drawer: DrawerMenu(),
       body: _pages[_currentIndex],

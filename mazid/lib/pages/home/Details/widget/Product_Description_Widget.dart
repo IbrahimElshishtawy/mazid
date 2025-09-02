@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/pages/home/Details/widget/Expandable_Text.dart';
