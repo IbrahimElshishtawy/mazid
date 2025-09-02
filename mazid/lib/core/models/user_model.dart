@@ -1,3 +1,5 @@
+import 'package:postgrest/src/types.dart';
+
 class UserModel {
   final String id;
   final String name;
@@ -53,5 +55,21 @@ class UserModel {
       'total_spent': totalSpent,
       'total_earned': totalEarned,
     };
+  }
+
+  /// تحويل من Map الناتج من Supabase/PostgREST
+  static UserModel fromMap(PostgrestMap map) {
+    return UserModel(
+      id: map['id'] as String,
+      name: map['name'] as String,
+      email: map['email'] as String,
+      avatar: map['avatar'] as String? ?? '',
+      phone: map['phone'] as String? ?? '',
+      totalSales: map['total_sales'] as int? ?? 0,
+      totalPurchases: map['total_purchases'] as int? ?? 0,
+      totalAuctions: map['total_auctions'] as int? ?? 0,
+      totalSpent: (map['total_spent'] as num?)?.toDouble() ?? 0.0,
+      totalEarned: (map['total_earned'] as num?)?.toDouble() ?? 0.0,
+    );
   }
 }

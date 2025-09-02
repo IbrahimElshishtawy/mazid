@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/user_model.dart';
-import '../widgets/user_card.dart';
-import '../widgets/wallet_section.dart';
-import '../widgets/stats_grid.dart';
-import '../data/profile_data.dart';
+import 'package:mazid/pages/profile/data/profile_data.dart';
+import 'package:mazid/pages/profile/widget/stats_grid.dart';
+import 'package:mazid/pages/profile/widget/user_card.dart';
+import 'package:mazid/pages/profile/widget/wallet_section.dart';
 
 class ProfilePage extends StatelessWidget {
   final String userId;

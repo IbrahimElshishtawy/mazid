@@ -4,6 +4,7 @@ import 'package:mazid/core/cubit/auth/auth_Excption.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/core/models/user_model.dart';
 import 'package:mazid/core/service/product_service.dart';
+import 'package:mazid/pages/Swap/ui/SwapRequestPage.dart';
 
 import 'package:mazid/pages/home/section/banner_section.dart';
 import 'package:mazid/pages/home/section/categories_section.dart';
@@ -34,11 +35,6 @@ class _HomeContentsState extends State<HomeContents> {
 
   // بيانات المستخدم
   UserModel? _currentUser;
-  int totalSales = 0;
-  int totalPurchases = 0;
-  int totalAuctions = 0;
-  double totalSpent = 0.0;
-  double totalEarned = 0.0;
 
   @override
   void initState() {
@@ -68,24 +64,15 @@ class _HomeContentsState extends State<HomeContents> {
 
   /// جلب بيانات المستخدم الحقيقية من Supabase
   void _loadUserData() async {
-    final user = _authService.currentUser(); // يجب استخدام await
+    final user = await _authService.currentUser(); // await مهم
     if (!mounted) return;
 
     if (user != null) {
-      final AuthService _authService = AuthService();
-
       final userData = await _authService.getUserData(user.id);
 
       if (userData != null && mounted) {
         setState(() {
           _currentUser = userData;
-
-          // القيم الافتراضية أو يمكن جلبها من userData إذا كانت موجودة
-          totalSales = 0;
-          totalPurchases = 0;
-          totalAuctions = 0;
-          totalSpent = 0.0;
-          totalEarned = 0.0;
         });
       }
     }
@@ -183,24 +170,13 @@ class _HomeContentsState extends State<HomeContents> {
     const Text("CartPage"), // index 0
     const Text("OrdersPage"), // index 1
     _buildHomePage(), // index 2
-    const Text("text"), // index 3
-    ProfilePage(
-      user:
-          _currentUser ??
-          UserModel(
-            id: '0',
-            name: 'Loading...',
-            email: '',
-            avatar: '',
-            phone: '',
-          ),
-      totalSales: totalSales,
-      totalPurchases: totalPurchases,
-      totalAuctions: totalAuctions,
-      totalSpent: totalSpent,
-      totalEarned: totalEarned,
-      walletBalance: 0,
-    ),
+    const SwapFlowDetailPage(product: ),
+    if (_currentUser != null)
+      ProfilePage(userId: _currentUser!.id) // index 4
+    else
+      const Center(
+        child: CircularProgressIndicator(color: Colors.orangeAccent),
+      ),
   ];
 
   @override
