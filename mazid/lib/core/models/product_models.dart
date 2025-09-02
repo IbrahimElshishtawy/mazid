@@ -1,8 +1,10 @@
+// product_model.dart
 class ProductModel {
   final String id;
   final String status;
   final String category;
   final String name;
+  final String title;
   final double price;
   final String description;
   final String image;
@@ -17,6 +19,7 @@ class ProductModel {
     required this.status,
     required this.category,
     required this.name,
+    required this.title,
     required this.price,
     required this.description,
     required this.image,
@@ -28,17 +31,24 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
+    String safeString(dynamic value) {
+      if (value == null) return '';
+      if (value is String) return value;
+      return value.toString();
+    }
+
     return ProductModel(
-      id: json['_id'] ?? '',
-      status: json['status'] ?? '',
-      category: json['category'] ?? '',
-      name: json['name'] ?? '',
+      id: safeString(json['_id']),
+      status: safeString(json['status']),
+      category: safeString(json['category']),
+      name: safeString(json['name']),
+      title: safeString(json['title']),
       price: _toDouble(json['price']),
-      description: json['description'] ?? '',
-      image: json['image'] ?? '',
+      description: safeString(json['description']),
+      image: safeString(json['image']),
       images:
-          (json['images'] as List?)?.map((e) => e.toString()).toList() ?? [],
-      company: json['company'] ?? '',
+          (json['images'] as List?)?.map((e) => safeString(e)).toList() ?? [],
+      company: safeString(json['company']),
       countInStock: json['countInStock'] ?? 0,
       v: json['__v'] ?? 0,
       sales: json['sales'] ?? 0,
@@ -51,6 +61,7 @@ class ProductModel {
       'status': status,
       'category': category,
       'name': name,
+      'title': title,
       'price': price,
       'description': description,
       'image': image,

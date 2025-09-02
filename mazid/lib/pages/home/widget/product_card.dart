@@ -1,172 +1,148 @@
-// ignore_for_file: sized_box_for_whitespace
-
+// product_card.dart
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/product_models.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
-  final double imageHeight; // <-- التحكم في ارتفاع الصورة
-  final double borderRadius; // <-- التحكم في نصف قطر البطاقة
+  final double imageHeight;
+  final double cardWidth;
 
   const ProductCard({
     super.key,
     required this.product,
-    this.imageHeight = 180,
-    this.borderRadius = 12,
+    this.imageHeight = 160,
+    this.cardWidth = 90,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // فتح صفحة التفاصيل
-      },
-      child: Container(
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(borderRadius),
-          gradient: LinearGradient(
-            colors: [Colors.grey.shade900, Colors.grey.shade800],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              blurRadius: 15,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // الصورة
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(borderRadius),
-              ),
-              child: Stack(
-                children: [
-                  Container(
-                    height: imageHeight,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.4),
-                          blurRadius: 10,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
-                    ),
-                    child: Image.network(
-                      product.image,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, progress) {
-                        if (progress == null) return child;
-                        return const Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.orange,
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          color: Colors.grey[700],
-                          child: const Icon(Icons.error, color: Colors.red),
-                        );
-                      },
-                    ),
-                  ),
-                  // أيقونة القلب
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: CircleAvatar(
-                      backgroundColor: Colors.black54,
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.favorite_border,
-                          color: Colors.red,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+    String displayName = (product.title.isNotEmpty)
+        ? (product.title.length > 14
+              ? product.title.substring(0, 14) + '…'
+              : product.title)
+        : product.name;
 
-            // تفاصيل المنتج
-            Container(
-              transform: Matrix4.translationValues(
-                0,
-                -30,
-                0,
-              ), // رفع التفاصيل فوق قليل
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    maxLines: 1,
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: List.generate(5, (index) {
-                      return Icon(
-                        index < 4 ? Icons.star : Icons.star_border,
-                        color: Colors.orangeAccent,
-                        size: 16,
-                      );
-                    }),
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "\$${product.price.toStringAsFixed(2)}",
-                        style: const TextStyle(
-                          color: Colors.orangeAccent,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          shadows: [
-                            Shadow(
-                              color: Colors.black54,
-                              offset: Offset(1, 1),
-                              blurRadius: 3,
-                            ),
-                          ],
-                        ),
-                      ),
-                      CircleAvatar(
-                        backgroundColor: Colors.orange,
-                        radius: 20,
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.add_shopping_cart,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
+    return Container(
+      width: cardWidth,
+      margin: const EdgeInsets.all(0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        gradient: LinearGradient(
+          colors: [Colors.grey.shade900, Colors.grey.shade800],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // الصورة
+          ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: Image.network(
+              product.image,
+              height: imageHeight,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              loadingBuilder: (context, child, progress) {
+                if (progress == null) return child;
+                return SizedBox(
+                  height: imageHeight,
+                  child: const Center(
+                    child: CircularProgressIndicator(color: Colors.orange),
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: imageHeight,
+                  color: Colors.grey[700],
+                  child: const Icon(Icons.error, color: Colors.red),
+                );
+              },
+            ),
+          ),
+
+          const SizedBox(height: 1),
+
+          // الاسم
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              displayName,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+
+          const SizedBox(height: 1),
+
+          // التقييم (نجوم)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: List.generate(5, (index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 2),
+                  child: Icon(
+                    index < 4 ? Icons.star : Icons.star_border,
+                    color: Colors.orangeAccent,
+                    size: 14,
+                  ),
+                );
+              }),
+            ),
+          ),
+
+          const SizedBox(height: 1),
+
+          // السعر + زر الإضافة
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    "\$${product.price.toStringAsFixed(2)}",
+                    style: const TextStyle(
+                      color: Colors.orangeAccent,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                CircleAvatar(
+                  backgroundColor: Colors.orange,
+                  radius: 18,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.add_shopping_cart,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                    onPressed: () {},
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 14),
+        ],
       ),
     );
   }
