@@ -2,7 +2,6 @@
 // ignore_for_file: unnecessary_underscores
 
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/home/widget/CategoryProductsPage.dart';
 
 class CategoriesSection extends StatelessWidget {
   final String selectedCategory;
@@ -18,7 +17,7 @@ class CategoriesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final categories = [
       {"icon": Icons.all_inclusive, "title": "All"},
-      {"icon": Icons.pets, "title": "Pets"},
+      {"icon": Icons.brush, "title": "Cosmetic"},
       {"icon": Icons.shopping_bag, "title": "Clothes"},
       {"icon": Icons.laptop, "title": "Laptops"},
       {"icon": Icons.devices_other, "title": "Electronics"},
@@ -33,11 +32,34 @@ class CategoriesSection extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final cat = categories[index];
-          return CategoryWidget(
-            cat["icon"] as IconData,
-            cat["title"] as String,
-            isSelected: selectedCategory == cat["title"],
+          return GestureDetector(
             onTap: () => onCategorySelected(cat["title"] as String),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 28,
+                  backgroundColor: selectedCategory == cat["title"]
+                      ? Colors.orange
+                      : Colors.grey[800],
+                  child: Icon(
+                    cat["icon"] as IconData,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  cat["title"] as String,
+                  style: TextStyle(
+                    color: selectedCategory == cat["title"]
+                        ? Colors.orange
+                        : Colors.white,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
           );
         },
       ),

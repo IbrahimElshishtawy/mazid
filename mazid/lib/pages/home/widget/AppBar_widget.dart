@@ -1,6 +1,8 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:mazid/pages/home/cart/cart_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AppbarWidget extends StatefulWidget implements PreferredSizeWidget {
   final ValueChanged<String>? onSearchChanged;
@@ -17,6 +19,31 @@ class AppbarWidget extends StatefulWidget implements PreferredSizeWidget {
 class _AppbarWidgetState extends State<AppbarWidget> {
   bool _isSearching = false;
   final TextEditingController _controller = TextEditingController();
+
+  final supabase = Supabase.instance.client;
+  int _cartCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCartCount();
+
+    // 📡 متابعة التغيرات في جدول cart (Realtime)
+    supabase.from('cart').stream(primaryKey: ['id']).listen((event) {
+      _fetchCartCount();
+    });
+  }
+
+  Future<void> _fetchCartCount() async {
+    try {
+      final response = await supabase.from('cart').select();
+      setState(() {
+        _cartCount = response.length;
+      });
+    } catch (e) {
+      print("❌ Error fetching cart count: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +79,42 @@ class _AppbarWidgetState extends State<AppbarWidget> {
             });
           },
         ),
-        IconButton(
-          icon: const Icon(Icons.shopify_sharp, color: Colors.white),
-          onPressed: () {
-            // cart action
-          },
+
+        // 🛒 زر السلة + Badge
+        Stack(
+          children: [
+            IconButton(
+              icon: const Icon(Icons.shopify_sharp, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CartPage()),
+                );
+              },
+            ),
+            if (_cartCount > 0)
+              Positioned(
+                right: 6,
+                top: 6,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    '$_cartCount',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
+
         const SizedBox(width: 8),
       ],
     );

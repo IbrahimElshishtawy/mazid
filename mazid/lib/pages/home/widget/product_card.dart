@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/pages/home/Details/Product_Details_Page.dart';
 import 'package:mazid/pages/home/widget/StarRating.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
@@ -147,8 +148,44 @@ class ProductCard extends StatelessWidget {
                     child: Material(
                       color: Colors.orange.withOpacity(0.3),
                       child: InkWell(
-                        onTap: () {
-                          // إضافة المنتج للسلة
+                        onTap: () async {
+                          try {
+                            final supabase = Supabase.instance.client;
+
+                            // هنا حط بيانات المنتج اللي هتجيلك من الموديل
+                            final response = await supabase.from('cart').insert(
+                              {
+                                'product_id': product.id, // ID المنتج
+                                'name': product.name, // اسم المنتج
+                                'price': product.price, // سعر المنتج
+                                'quantity': 1, // الكمية الافتراضية
+                                'user_id': supabase
+                                    .auth
+                                    .currentUser
+                                    ?.id, // ID المستخدم الحالي
+                              },
+                            );
+
+                            if (response.error == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text("تمت إضافة المنتج إلى السلة ✅"),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "خطأ: ${response.error!.message}",
+                                  ),
+                                ),
+                              );
+                            }
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("حصل خطأ: $e")),
+                            );
+                          }
                         },
                         child: const Padding(
                           padding: EdgeInsets.all(6),
