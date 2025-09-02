@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:mazid/core/API/apilapproduct.dart';
 import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/core/service/product_service.dart';
 import 'package:mazid/pages/home/widget/AppBar_widget.dart';
 import 'package:mazid/pages/home/widget/bottom_NavigationBar.dart';
 import 'package:mazid/pages/home/widget/drawer_menu.dart';
@@ -18,24 +17,13 @@ class HomeContents extends StatefulWidget {
 
 class _HomeContentsState extends State<HomeContents> {
   late final Future<List<ProductModel>> _productsFuture;
+  final ProductService _productService = ProductService();
   int _currentIndex = 2;
 
   @override
   void initState() {
     super.initState();
-    _productsFuture = _fetchProducts();
-  }
-
-  Future<List<ProductModel>> _fetchProducts() async {
-    try {
-      final dio = Dio();
-      final api = ApiLapProduct(dio);
-      final response = await api.getProducts();
-      return response.product;
-    } catch (e) {
-      debugPrint("❌ Fetch products error: $e");
-      rethrow;
-    }
+    _productsFuture = _productService.fetchAllProducts(); // يجلب كل المنتجات
   }
 
   Widget _buildHomePage() {
@@ -85,7 +73,7 @@ class _HomeContentsState extends State<HomeContents> {
                 return Center(
                   child: Text(
                     "Error: ${snapshot.error}",
-                    style: TextStyle(color: Colors.red),
+                    style: const TextStyle(color: Colors.red),
                   ),
                 );
               } else if (snapshot.data == null || snapshot.data!.isEmpty) {
@@ -123,11 +111,11 @@ class _HomeContentsState extends State<HomeContents> {
   }
 
   List<Widget> get _pages => [
-    Text(" CartPage"), // index 0
-    Text("OrdersPage"), // index 1
+    const Text("CartPage"), // index 0
+    const Text("OrdersPage"), // index 1
     _buildHomePage(), // index 2
-    Text("text"), //
-    Text("profile"), // index 4
+    const Text("text"), // index 3
+    const Text("profile"), // index 4
   ];
 
   @override

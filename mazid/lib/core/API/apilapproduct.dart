@@ -1,27 +1,26 @@
-// lib/core/API/apilapproduct.dart
 import 'package:dio/dio.dart';
 import 'package:mazid/core/models/product_models.dart';
 
 class ApiLapProduct {
-  final Dio _dio;
-
-  ApiLapProduct(this._dio);
-
-  /// جلب قائمة اللابتوبات
+  final Dio dio;
+  ApiLapProduct(this.dio);
   Future<List<ProductModel>> getLaptops() async {
-    try {
-      final response = await _dio.get(
-        "https://elwekala.onrender.com/product/Laptops",
-      );
+    final response = await dio.get(
+      "https://elwekala.onrender.com/product/Laptops",
+    );
 
-      if (response.statusCode == 200) {
-        final data = response.data as List;
-        return data.map((json) => ProductModel.fromJson(json)).toList();
+    if (response.statusCode == 200) {
+      final data = response.data;
+
+      if (data != null && data["product"] is List) {
+        return (data["product"] as List)
+            .map((item) => ProductModel.fromJson(item))
+            .toList();
       } else {
-        throw Exception("فشل تحميل البيانات: ${response.statusCode}");
+        throw Exception("⚠️ API response 'product' is not a List or is null");
       }
-    } catch (e) {
-      throw Exception("خطأ في الاتصال: $e");
+    } else {
+      throw Exception("⚠️ Failed with status code: ${response.statusCode}");
     }
   }
 }

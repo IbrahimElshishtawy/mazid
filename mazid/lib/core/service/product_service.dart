@@ -1,29 +1,58 @@
 // lib/core/services/product_service.dart
-// ignore_for_file: non_constant_identifier_names
-
 import 'package:dio/dio.dart';
-import 'package:mazid/core/API/apilapproduct.dart';
 import 'package:mazid/core/models/product_models.dart';
 
 class ProductService {
-  late final ApiLapProduct api;
+  final Dio _dio = Dio();
 
-  ProductService() {
-    final dio = Dio(
-      BaseOptions(
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 10),
-      ),
-    );
+  // روابط الـ APIs
+  final String elWekalaUrl = "https://elwekala.onrender.com/product/Laptops";
+  final String fakeStoreUrl = "https://fakestoreapi.com/products";
 
-    // لو حابب تتبع الطلبات في debug
-    // dio.interceptors.add(LogInterceptor(responseBody: true));
+  /// جلب منتجات ElWekala
+  Future<List<ProductModel>> fetchElWekalaLaptops() async {
+    try {
+      final response = await _dio.get(elWekalaUrl);
 
-    api = ApiLapProduct(dio);
+      if (response.statusCode == 200) {
+        final data = response.data;
+        if (data != null && data["product"] is List) {
+          return (data["product"] as List)
+              .map((item) => ProductModel.fromJson(item))
+              .toList();
+        } else {
+          throw Exception("⚠️ API response 'product' is not a List or is null");
+        }
+      } else {
+        throw Exception("⚠️ Failed with status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("❌ Fetch ElWekala laptops error: $e");
+      return [];
+    }
   }
 
-  /// دالة عامة تجيب كل اللابتوبات
-  Future<List<ProductModel>> fetchLaptops() async {
-    return await api.getLaptops();
+  /// جلب منتجات FakeStore
+  Future<List<ProductModel>> fetchFakeStoreProducts() async {
+    try {
+      final response = await _dio.get(fakeStoreUrl);
+
+      if (response.statusCode == 200 && response.data is List) {
+        final List data = response.data;
+        return data.map((json) => ProductModel.fromJson(json)).toList();
+      } else {
+        throw Exception("⚠️ API response is not a List or is null");
+      }
+    } catch (e) {
+      print("❌ Fetch FakeStore products error: $e");
+      return [];
+    }
+  }
+
+  /// دمج كل المنتجات معًا
+  Future<List<ProductModel>> fetchAllProducts() async {
+    final elWekala = await fetchElWekalaLaptops();
+    final fakeStore = await fetchFakeStoreProducts();
+    return [...elWekala, ...fakeStore];
   }
 }
