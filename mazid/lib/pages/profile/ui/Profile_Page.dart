@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/user_model.dart';
 import 'package:mazid/pages/profile/data/profile_data.dart';

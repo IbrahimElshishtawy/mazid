@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:mazid/core/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -42,7 +43,9 @@ class ProfileData {
 
       return user;
     } catch (e) {
-      print("❌ Error fetching user data: $e");
+      if (kDebugMode) {
+        print("❌ Error fetching user data: $e");
+      }
       return null;
     }
   }

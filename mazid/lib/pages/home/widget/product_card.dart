@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, deprecated_member_use
+// ignore_for_file: unused_import, deprecated_member_use, use_build_context_synchronously
 
 import 'dart:math';
 import 'package:flutter/material.dart';

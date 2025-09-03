@@ -5,6 +5,7 @@ import 'package:mazid/pages/home/section/banner_section.dart';
 import 'package:mazid/pages/home/section/categories_section.dart';
 import 'package:mazid/pages/home/section/products_grid.dart';
 import 'package:mazid/pages/profile/ui/Profile_Page.dart';
+import 'package:mazid/pages/Auction/ui/auction_list_page.dart';
 
 class HomeUI extends StatelessWidget {
   final HomeController controller;
@@ -14,7 +15,7 @@ class HomeUI extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> pages = [
       const Center(child: Text("CartPage")),
-      const Center(child: Text("OrdersPage")),
+      const AuctionListPage(),
       _buildHomePage(),
       if (controller.currentUser != null)
         SwapRequestPage(
@@ -25,6 +26,7 @@ class HomeUI extends StatelessWidget {
         const Center(
           child: CircularProgressIndicator(color: Colors.orangeAccent),
         ),
+
       if (controller.currentUser != null)
         ProfilePage(userId: controller.currentUser!.id)
       else

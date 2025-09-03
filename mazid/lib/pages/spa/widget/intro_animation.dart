@@ -8,7 +8,7 @@ import 'package:mazid/pages/spa/widget/bubbles.dart';
 import 'package:mazid/pages/spa/widget/page_indicator.dart';
 import 'package:particles_flutter/component/particle/particle.dart';
 import 'package:particles_flutter/particles_engine.dart';
-import 'package:mazid/pages/auth/login.dart';
+import 'package:mazid/pages/auth/ui/login.dart';
 
 // تعريف class PageData
 class PageData {
