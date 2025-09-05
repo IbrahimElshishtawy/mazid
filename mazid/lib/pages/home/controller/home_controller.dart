@@ -1,5 +1,3 @@
-// ignore_for_file: await_only_futures
-
 import 'package:flutter/material.dart';
 import 'package:mazid/core/cubit/auth/auth_Excption.dart';
 import 'package:mazid/core/models/product_models.dart';
@@ -7,7 +5,7 @@ import 'package:mazid/core/models/user_model.dart';
 import 'package:mazid/core/service/product_service.dart';
 import 'package:mazid/core/service/swap_service.dart';
 
-class HomeController {
+class HomeController extends ChangeNotifier {
   final ProductService _productService = ProductService();
   final AuthService _authService = AuthService();
   final SwapService swapService = SwapService();
@@ -16,6 +14,7 @@ class HomeController {
   List<ProductModel> allProducts = [];
   List<ProductModel> filteredProducts = [];
   bool isLoading = true;
+  bool isUserLoading = true;
   String errorMessage = '';
   String selectedCategory = "All";
 
@@ -32,9 +31,11 @@ class HomeController {
       allProducts = products;
       filteredProducts = products;
       isLoading = false;
+      notifyListeners();
     } catch (e) {
       errorMessage = e.toString();
       isLoading = false;
+      notifyListeners();
     }
   }
 
@@ -46,6 +47,8 @@ class HomeController {
         currentUser = userData;
       }
     }
+    isUserLoading = false;
+    notifyListeners();
   }
 
   void onSearchChanged(String query) {
@@ -61,6 +64,7 @@ class HomeController {
           .toList();
     }
     selectedCategory = "All";
+    notifyListeners();
   }
 
   void filterByCategory(String category) {
@@ -83,5 +87,11 @@ class HomeController {
           .where((p) => p.category.toLowerCase().contains(apiCategory))
           .toList();
     }
+    notifyListeners();
+  }
+
+  void changeTab(int index) {
+    currentIndex = index;
+    notifyListeners();
   }
 }

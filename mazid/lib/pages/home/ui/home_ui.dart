@@ -1,44 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/Swap/ui/SwapRequestPage.dart';
+import 'package:mazid/pages/Swap/ui/swap_home.dart';
 import 'package:mazid/pages/home/controller/home_controller.dart';
 import 'package:mazid/pages/home/section/banner_section.dart';
 import 'package:mazid/pages/home/section/categories_section.dart';
 import 'package:mazid/pages/home/section/products_grid.dart';
 import 'package:mazid/pages/profile/ui/Profile_Page.dart';
 import 'package:mazid/pages/Auction/ui/auction_list_page.dart';
+import 'package:provider/provider.dart';
 
 class HomeUI extends StatelessWidget {
-  final HomeController controller;
-  const HomeUI({super.key, required this.controller});
+  const HomeUI({super.key, required HomeController controller});
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> pages = [
-      const Center(child: Text("CartPage")),
-      const AuctionListPage(),
-      _buildHomePage(),
-      if (controller.currentUser != null)
-        SwapRequestPage(
-          swapService: controller.swapService,
-          currentUserId: controller.currentUser!.id,
-        )
-      else
-        const Center(
-          child: CircularProgressIndicator(color: Colors.orangeAccent),
-        ),
+    final controller = Provider.of<HomeController>(context);
 
-      if (controller.currentUser != null)
-        ProfilePage(userId: controller.currentUser!.id)
-      else
-        const Center(
-          child: CircularProgressIndicator(color: Colors.orangeAccent),
-        ),
+    List<Widget> pages = [
+      const Center(
+        child: Text("CartPage", style: TextStyle(color: Colors.white)),
+      ),
+      const AuctionListPage(),
+      _buildHomePage(controller),
+      _buildSwapPage(controller),
+      _buildProfilePage(controller),
     ];
 
-    return pages[controller.currentIndex];
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: pages[controller.currentIndex],
+    );
   }
 
-  Widget _buildHomePage() {
+  Widget _buildHomePage(HomeController controller) {
     if (controller.isLoading) {
       return const Center(
         child: CircularProgressIndicator(color: Colors.orange),
@@ -75,6 +68,28 @@ class HomeUI extends StatelessWidget {
               : ProductsGrid(products: controller.filteredProducts),
         ),
       ],
+    );
+  }
+
+  Widget _buildSwapPage(HomeController controller) {
+    if (controller.isUserLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.orangeAccent),
+      );
+    }
+    return const SwapHome(); // يعرض SwapHome على طول
+  }
+
+  Widget _buildProfilePage(HomeController controller) {
+    if (controller.isUserLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.orangeAccent),
+      );
+    }
+    return ProfilePage(
+      userId:
+          controller.currentUser?.id ??
+          "guest", // fallback لو المستخدم مش لوج ان
     );
   }
 }
