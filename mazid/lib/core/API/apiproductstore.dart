@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:mazid/core/models/product_models.dart';
 
-class ProductService {
+class Apiproductstore {
   final Dio _dio = Dio();
 
   final String baseUrl = "https://fakestoreapi.com";

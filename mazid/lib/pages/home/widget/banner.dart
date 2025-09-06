@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 class BannerWidget extends StatelessWidget {
   final String text;
+  final String imageUrl;
   final double height;
   final double width;
 
   const BannerWidget(
     this.text, {
     super.key,
+    required this.imageUrl,
     this.height = 100,
     this.width = double.infinity,
   });
@@ -18,11 +20,15 @@ class BannerWidget extends StatelessWidget {
       height: height,
       width: width,
       margin: const EdgeInsets.symmetric(horizontal: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        gradient: const LinearGradient(
-          colors: [Colors.orange, Colors.deepOrange],
+        image: DecorationImage(
+          image: NetworkImage(imageUrl),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.4),
+            BlendMode.darken,
+          ),
         ),
       ),
       alignment: Alignment.center,
@@ -30,7 +36,7 @@ class BannerWidget extends StatelessWidget {
         text,
         style: const TextStyle(
           color: Colors.white,
-          fontSize: 20,
+          fontSize: 22,
           fontWeight: FontWeight.bold,
         ),
       ),

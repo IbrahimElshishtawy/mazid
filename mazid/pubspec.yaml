@@ -91,6 +91,9 @@ flutter:
     - asset/video/intro2.mp4
     - asset/image/intro2.jpg
     - asset/image/intro3.jpeg
+    - asset/image/sell-used-electronics.jpg
+    - asset/image/offer50.png
+    - asset/image/download.jpg
 
     
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/Swap/ui/ProductDetailPage%D8%B2.dart';
-import 'package:mazid/pages/Swap/widgets/custom_product_card.dart';
+import 'package:mazid/pages/Swap/widgets/productlistsection.dart';
+import 'package:mazid/pages/Swap/widgets/swaptabar.dart';
 
 class SwapHome extends StatelessWidget {
   const SwapHome({super.key});
 
-  // بيانات تجريبية (دي المفروض تيجي من Firebase بعدين)
+  // بيانات تجريبية (ممكن تيجي من Firebase بعدين)
   final List<Map<String, dynamic>> myProducts = const [
     {
       "imageUrl": "https://res.cloudinary.com/.../hp.png",
@@ -40,73 +40,52 @@ class SwapHome extends StatelessWidget {
     },
   ];
 
+  final List<Map<String, dynamic>> approvedByMe = const [
+    {
+      "imageUrl": "https://res.cloudinary.com/.../hp.png",
+      "name": "لابتوب Lenovo i5",
+    },
+    {
+      "imageUrl": "https://res.cloudinary.com/.../watch.png",
+      "name": "ساعة ذكية",
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Column(
           children: [
-            const SafeArea(
-              child: TabBar(
-                indicatorColor: Colors.deepOrange,
-                labelColor: Colors.deepOrange,
-                unselectedLabelColor: Colors.grey,
-                tabs: [
-                  Tab(icon: Icon(Icons.inventory)), // منتجاتي
-                  Tab(icon: Icon(Icons.check_circle)), // مقبولة
-                  Tab(icon: Icon(Icons.hourglass_bottom)), // قيد الانتظار
-                  Tab(icon: Icon(Icons.history)), // كل الطلبات
-                ],
-              ),
-            ),
+            const SafeArea(child: SwapTabBar()), // 🔹 الTabs
             Expanded(
               child: TabBarView(
                 children: [
-                  _buildProductList(context, myProducts, "منتجاتي"),
-                  _buildProductList(context, acceptedRequests, "مقبولة"),
-                  _buildProductList(context, pendingRequests, "قيد الانتظار"),
-                  _buildProductList(context, completedRequests, "كل الطلبات"),
+                  ProductListSection(products: myProducts, type: "منتجاتي"),
+                  ProductListSection(
+                    products: acceptedRequests,
+                    type: "مقبولة",
+                  ),
+                  ProductListSection(
+                    products: pendingRequests,
+                    type: "قيد الانتظار",
+                  ),
+                  ProductListSection(
+                    products: completedRequests,
+                    type: "كل الطلبات",
+                  ),
+                  ProductListSection(
+                    products: approvedByMe,
+                    type: "موافق عليهم",
+                  ),
                 ],
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  static Widget _buildProductList(
-    BuildContext context,
-    List<Map<String, dynamic>> products,
-    String type,
-  ) {
-    if (products.isEmpty) {
-      return const Center(
-        child: Text("لا توجد منتجات", style: TextStyle(color: Colors.white)),
-      );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        final product = products[index];
-        return ProductCardswap(
-          imageUrl: product["imageUrl"],
-          name: product["name"],
-          rating: product["rating"] ?? 0,
-          onSwapRequest: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ProductDetailPage(product: product, type: type),
-              ),
-            );
-          },
-        );
-      },
     );
   }
 }

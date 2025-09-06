@@ -1,8 +1,11 @@
+// lib/core/controllers/home_controller.dart
+
 import 'package:flutter/material.dart';
+import 'package:mazid/core/API/api_product_dummyjson.dart';
+
 import 'package:mazid/core/cubit/auth/auth_Excption.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/core/models/user_model.dart';
-import 'package:mazid/core/service/product_service.dart';
 import 'package:mazid/core/service/swap_service.dart';
 
 class HomeController extends ChangeNotifier {
@@ -20,25 +23,30 @@ class HomeController extends ChangeNotifier {
 
   UserModel? currentUser;
 
+  bool _isDisposed = false; // ✅ فلاغ لمعرفة لو اتعمل dispose
+
+  /// بدء تحميل البيانات
   void init(BuildContext context) {
     _loadProducts();
     _loadUserData();
   }
 
+  /// تحميل المنتجات
   void _loadProducts() async {
     try {
       final products = await _productService.fetchAllProducts();
       allProducts = products;
       filteredProducts = products;
       isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners(); // ✅
     } catch (e) {
       errorMessage = e.toString();
       isLoading = false;
-      notifyListeners();
+      _safeNotifyListeners(); // ✅
     }
   }
 
+  /// تحميل بيانات المستخدم
   void _loadUserData() async {
     final user = await _authService.currentUser();
     if (user != null) {
@@ -48,9 +56,10 @@ class HomeController extends ChangeNotifier {
       }
     }
     isUserLoading = false;
-    notifyListeners();
+    _safeNotifyListeners(); // ✅
   }
 
+  /// البحث في المنتجات
   void onSearchChanged(String query) {
     if (query.isEmpty) {
       filteredProducts = allProducts;
@@ -64,9 +73,10 @@ class HomeController extends ChangeNotifier {
           .toList();
     }
     selectedCategory = "All";
-    notifyListeners();
+    _safeNotifyListeners(); // ✅
   }
 
+  /// الفلترة حسب التصنيف
   void filterByCategory(String category) {
     final Map<String, String> apiCategories = {
       "All": "all",
@@ -87,11 +97,25 @@ class HomeController extends ChangeNotifier {
           .where((p) => p.category.toLowerCase().contains(apiCategory))
           .toList();
     }
-    notifyListeners();
+    _safeNotifyListeners(); // ✅
   }
 
+  /// تغيير التاب
   void changeTab(int index) {
     currentIndex = index;
-    notifyListeners();
+    _safeNotifyListeners(); // ✅
+  }
+
+  /// دالة آمنة للتأكد أن الكنترولر ما اتعملوش dispose
+  void _safeNotifyListeners() {
+    if (!_isDisposed) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  void dispose() {
+    _isDisposed = true; // نخلي الفلاغ true
+    super.dispose();
   }
 }
