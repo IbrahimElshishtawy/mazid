@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/pages/Swap/ui/ProductDetailPageswap.dart';
-import 'package:mazid/pages/Swap/widgets/custom_product_card.dart';
+import 'package:mazid/pages/Swap/widgets/widget%20bottom/custom_product_card.dart';
 
 class ProductListSection extends StatelessWidget {
   final List<Map<String, dynamic>> products;
