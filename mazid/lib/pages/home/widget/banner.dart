@@ -10,7 +10,7 @@ class BannerWidget extends StatelessWidget {
     this.text, {
     super.key,
     required this.imageUrl,
-    this.height = 100,
+    this.height = 150,
     this.width = double.infinity,
   });
 
@@ -23,21 +23,25 @@ class BannerWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(
-          image: NetworkImage(imageUrl),
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.4),
-            BlendMode.darken,
-          ),
+          image: AssetImage(imageUrl), // هنا لو الصورة محلية
+          // image: NetworkImage(imageUrl), // هنا لو الصورة من الإنترنت
+          fit: BoxFit.cover, // عشان الصورة تملأ البانر كله
         ),
       ),
-      alignment: Alignment.center,
-      child: Text(
-        text,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 22,
-          fontWeight: FontWeight.bold,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: Colors.black.withOpacity(0.4), // طبقة شفافة غامقة فوق الصورة
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.center,
         ),
       ),
     );

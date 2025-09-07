@@ -12,8 +12,8 @@ class ProductModel {
   final int countInStock;
   final int v;
   final int sales;
-  final double rating; // التقييم
-  final int ratingCount; // عدد المراجعات
+  final double rating;
+  final int ratingCount;
 
   const ProductModel({
     required this.id,
@@ -33,19 +33,16 @@ class ProductModel {
     this.ratingCount = 0,
   });
 
-  /// getter يرجع أول صورة أو placeholder
   String get firstImage => (images.isNotEmpty && images.first.isNotEmpty)
       ? images.first
       : 'https://via.placeholder.com/150';
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    // التعامل مع rating (ممكن يكون double أو Map)
     double rate = 0.0;
     int count = 0;
 
     if (json['rating'] != null) {
       if (json['rating'] is num) {
-        // لو رجع 4 أو 4.5
         rate = (json['rating'] as num).toDouble();
       } else if (json['rating'] is String) {
         rate = double.tryParse(json['rating']) ?? 0.0;
@@ -62,17 +59,28 @@ class ProductModel {
 
     return ProductModel(
       id: _safeString(json['_id'] ?? json['id']),
-      status: _safeString(json['status']),
+      status: _safeString(
+        json['status'] ?? '',
+      ), // DummyJSON و FakeStore مفيهمش status
       category: _safeString(json['category']),
-      name: _safeString(json['name']),
-      title: _safeString(json['title']),
+      name: _safeString(
+        json['name'] ?? json['title'],
+      ), // DummyJSON و FakeStore عندهم title
+      title: _safeString(json['title'] ?? json['name']),
       price: _toDouble(json['price']),
       description: _safeString(json['description']),
-      image: _safeString(json['image']),
+      image: _safeString(
+        json['image'] ?? json['thumbnail'],
+      ), // DummyJSON عنده thumbnail
       images:
           (json['images'] as List?)?.map((e) => _safeString(e)).toList() ?? [],
-      company: _safeString(json['company']),
-      countInStock: (json['countInStock'] as num?)?.toInt() ?? 0,
+      company: _safeString(
+        json['company'] ?? json['brand'],
+      ), // DummyJSON عنده brand
+      countInStock:
+          (json['countInStock'] as num?)?.toInt() ??
+          (json['stock'] as num?)?.toInt() ??
+          0,
       v: (json['__v'] as num?)?.toInt() ?? 0,
       sales: (json['sales'] as num?)?.toInt() ?? 0,
       rating: rate,
