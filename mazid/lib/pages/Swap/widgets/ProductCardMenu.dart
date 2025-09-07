@@ -1,25 +1,37 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/swap_request_model.dart';
 import 'package:mazid/core/service/swap_service.dart';
 
+/// Widget عبارة عن قائمة منبثقة (Popup Menu) خاصة بكارت المنتج.
+/// - بتظهر على شكل أيقونة (⋮) في الكارت.
+/// - المستخدم يقدر يختار منها عمليات زي:
+///   1. عرض تفاصيل المنتج.
+///   2. إضافة المنتج إلى السلة.
+///   3. إزالة المنتج.
+///
+/// بتستخدم `SwapRequestModel` و `SwapService` عشان تتعامل مع تفاصيل الطلب لو متوفرة.
 class ProductCardMenu extends StatelessWidget {
-  final SwapRequestModel? swapRequest;
-  final SwapService? swapService;
+  final SwapRequestModel? swapRequest; // بيانات الطلب (لو متوفرة)
+  final SwapService? swapService; // خدمة إدارة الطلبات (لو متوفرة)
 
   const ProductCardMenu({super.key, this.swapRequest, this.swapService});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      color: Colors.grey[850],
+      color: Colors.grey[850], // لون خلفية القائمة
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      icon: const Icon(Icons.more_vert, color: Colors.white),
+      icon: const Icon(Icons.more_vert, color: Colors.white), // أيقونة القائمة
+      // التعامل مع الاختيارات
       onSelected: (value) {
         switch (value) {
-          case "details":
+          case "details": // عرض التفاصيل
             if (swapRequest != null && swapService != null) {
-              // التنقل لصفحة التفاصيل
+              // 🔹 هنا ممكن تروح لصفحة تفاصيل المنتج
             } else {
+              // لو مفيش بيانات متاحة
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("لا توجد تفاصيل متاحة لهذا المنتج"),
@@ -27,18 +39,22 @@ class ProductCardMenu extends StatelessWidget {
               );
             }
             break;
-          case "cart":
+
+          case "cart": // إضافة المنتج للسلة
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text("تمت إضافة المنتج إلى السلّة")),
             );
             break;
-          case "remove":
+
+          case "remove": // إزالة المنتج
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(const SnackBar(content: Text("تمت إزالة المنتج")));
             break;
         }
       },
+
+      // العناصر اللي بتظهر في القائمة
       itemBuilder: (context) => const [
         PopupMenuItem(
           value: "details",

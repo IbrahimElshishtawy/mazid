@@ -2,10 +2,16 @@
 
 import 'package:flutter/material.dart';
 
+/// زر مخصص (Button) بيظهر تحت كارت المنتج
+/// - بيغيّر شكله ونصه حسب نوع الصفحة (pageType)
+/// - لو "منتجاتي" → يظهر زر ثابت يقول "هذا منتجك"
+/// - لو "accepted" → يظهر زر أخضر مكتوب "تم القبول"
+/// - لو "pending" → يظهر زر برتقالي مكتوب "قيد الانتظار"
+/// - غير كده → يظهر زر افتراضي للتبديل (Swap) أو "قيد الانتظار" لو الضغط تم
 class ProductCardButton extends StatelessWidget {
-  final String pageType;
-  final bool isPending;
-  final VoidCallback onPressed;
+  final String pageType; // نوع الصفحة اللي بيحدد شكل الزر
+  final bool isPending; // هل الطلب في حالة انتظار ولا لأ
+  final VoidCallback onPressed; // الحدث اللي يحصل لما المستخدم يضغط الزر
 
   const ProductCardButton({
     super.key,
@@ -17,6 +23,7 @@ class ProductCardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (pageType) {
+      // لو المنتج من منتجات المستخدم
       case "myProducts":
         return ElevatedButton.icon(
           onPressed: () => ScaffoldMessenger.of(
@@ -32,9 +39,11 @@ class ProductCardButton extends StatelessWidget {
             ),
           ),
         );
+
+      // لو الطلب تم قبوله
       case "accepted":
         return ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: () {}, // مش بيعمل حاجة (زر ثابت)
           icon: const Icon(Icons.check, color: Colors.white),
           label: const Text("تم القبول", style: TextStyle(color: Colors.white)),
           style: ElevatedButton.styleFrom(
@@ -45,9 +54,11 @@ class ProductCardButton extends StatelessWidget {
             ),
           ),
         );
+
+      // لو الطلب لسه قيد الانتظار
       case "pending":
         return ElevatedButton.icon(
-          onPressed: () {},
+          onPressed: () {}, // برضه زر ثابت
           icon: const Icon(Icons.hourglass_bottom, color: Colors.white),
           label: const Text(
             "قيد الانتظار",
@@ -61,8 +72,11 @@ class ProductCardButton extends StatelessWidget {
             ),
           ),
         );
+
+      // الحالة الافتراضية → زر تقديم طلب تبديل
       default:
         return ElevatedButton.icon(
+          // لو الطلب في انتظار → الزر يتعطل (null)
           onPressed: isPending ? null : onPressed,
           icon: const Icon(Icons.swap_horiz, color: Colors.white),
           label: Text(

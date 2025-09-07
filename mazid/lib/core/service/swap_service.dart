@@ -1,91 +1,92 @@
 import 'package:flutter/foundation.dart';
-
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/swap_request_model.dart';
 
 class SwapService {
-  final List<SwapRequestModel> _requests = [];
+  final supabase = Supabase.instance.client;
 
-  List<SwapRequestModel> getAllRequests() => List.unmodifiable(_requests);
+  /// جلب كل الطلبات
+  Future<List<SwapRequestModel>> getAllRequests() async {
+    final response = await supabase.from('swap_requests').select();
+    return (response as List)
+        .map((json) => SwapRequestModel.fromJson(json))
+        .toList();
+  }
 
-  List<SwapRequestModel> getRequestsBySender(String senderId) =>
-      _requests.where((r) => r.senderId == senderId).toList();
+  /// جلب الطلبات المرسلة من مستخدم
+  Future<List<SwapRequestModel>> getRequestsBySender(String senderId) async {
+    final response = await supabase
+        .from('swap_requests')
+        .select()
+        .eq('sender_id', senderId);
+    return (response as List)
+        .map((json) => SwapRequestModel.fromJson(json))
+        .toList();
+  }
 
-  List<SwapRequestModel> getRequestsByReceiver(String receiverId) =>
-      _requests.where((r) => r.receiverId == receiverId).toList();
+  /// جلب الطلبات المستلمة من مستخدم
+  Future<List<SwapRequestModel>> getRequestsByReceiver(
+    String receiverId,
+  ) async {
+    final response = await supabase
+        .from('swap_requests')
+        .select()
+        .eq('receiver_id', receiverId);
+    return (response as List)
+        .map((json) => SwapRequestModel.fromJson(json))
+        .toList();
+  }
 
-  List<SwapRequestModel> getRequestsByStatus(SwapStatus status) =>
-      _requests.where((r) => r.status == status).toList();
-
-  void sendSwapRequest(SwapRequestModel request) {
-    _requests.add(request);
+  /// إرسال طلب جديد
+  Future<void> sendSwapRequest(SwapRequestModel request) async {
+    await supabase.from('swap_requests').insert(request.toJson());
     if (kDebugMode) {
       print("✅ Swap request sent: ${request.id}");
     }
   }
 
-  bool acceptRequest(String requestId) {
-    try {
-      final request = _requests.firstWhere((r) => r.id == requestId);
-      request.status = SwapStatus.accepted;
-      if (kDebugMode) {
-        print("✅ Swap request accepted: $requestId");
-      }
-      return true;
-    } catch (e) {
-      if (kDebugMode) {
-        print("❌ Accept failed: $e");
-      }
-      return false;
+  /// قبول الطلب
+  Future<void> acceptRequest(String requestId) async {
+    await supabase
+        .from('swap_requests')
+        .update({'status': 'accepted'})
+        .eq('id', requestId);
+
+    if (kDebugMode) {
+      print("✅ Swap request accepted: $requestId");
     }
   }
 
-  bool rejectRequest(String requestId) {
-    try {
-      final request = _requests.firstWhere((r) => r.id == requestId);
-      request.status = SwapStatus.rejected;
-      if (kDebugMode) {
-        print("❌ Swap request rejected: $requestId");
-      }
-      return true;
-    } catch (e) {
-      if (kDebugMode) {
-        print("❌ Reject failed: $e");
-      }
-      return false;
+  /// رفض الطلب
+  Future<void> rejectRequest(String requestId) async {
+    await supabase
+        .from('swap_requests')
+        .update({'status': 'rejected'})
+        .eq('id', requestId);
+
+    if (kDebugMode) {
+      print("❌ Swap request rejected: $requestId");
     }
   }
 
-  bool updateRequest(SwapRequestModel updatedRequest) {
-    try {
-      final index = _requests.indexWhere((r) => r.id == updatedRequest.id);
-      if (index != -1) {
-        _requests[index] = updatedRequest;
-        if (kDebugMode) {
-          print("🔄 Swap request updated: ${updatedRequest.id}");
-        }
-        return true;
-      }
-      return false;
-    } catch (e) {
-      if (kDebugMode) {
-        print("❌ Update failed: $e");
-      }
-      return false;
+  /// تحديث الطلب
+  Future<void> updateRequest(SwapRequestModel updatedRequest) async {
+    await supabase
+        .from('swap_requests')
+        .update(updatedRequest.toJson())
+        .eq('id', updatedRequest.id);
+
+    if (kDebugMode) {
+      print("🔄 Swap request updated: ${updatedRequest.id}");
     }
   }
 
-  bool deleteRequest(String requestId) {
-    try {
-      _requests.removeWhere((r) => r.id == requestId);
-      if (kDebugMode) {
-        print("🗑 Swap request deleted: $requestId");
-      }
-      return true;
-    } catch (e) {
-      if (kDebugMode) {
-        print("❌ Delete failed: $e");
-      }
-      return false;
+  /// حذف الطلب
+  Future<void> deleteRequest(String requestId) async {
+    await supabase.from('swap_requests').delete().eq('id', requestId);
+
+    if (kDebugMode) {
+      print("🗑 Swap request deleted: $requestId");
     }
   }
 }

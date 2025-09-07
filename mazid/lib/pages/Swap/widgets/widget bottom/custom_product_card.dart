@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/swap_request_model.dart';
 import 'package:mazid/core/service/swap_service.dart';
-import 'package:mazid/pages/Swap/widgets/widget%20bottom/ProductCardMenu.dart';
+import 'package:mazid/pages/Swap/widgets/ProductCardMenu.dart';
 import 'package:mazid/pages/Swap/widgets/ProductCardRating.dart';
 import 'package:mazid/pages/Swap/widgets/widget%20bottom/Product_Card_Button_swap.dart';
 
+/// Widget لعرض بطاقة منتج في نظام التبديل (Swap)
+/// تحتوي على:
+/// - صورة المنتج
+/// - اسم المنتج
+/// - تقييم المنتج
+/// - زر/إجراء لطلب التبديل
+/// - قائمة منسدلة (menu) لإدارة الطلب
 class ProductCardswap extends StatefulWidget {
   final String imageUrl;
   final String name;
