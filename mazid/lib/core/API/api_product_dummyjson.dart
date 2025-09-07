@@ -2,7 +2,7 @@
 import 'package:dio/dio.dart';
 import '../models/product_models.dart';
 
-class ProductService {
+class ApiProductDummyjson {
   final Dio _dio = Dio(
     BaseOptions(
       baseUrl: 'https://dummyjson.com',

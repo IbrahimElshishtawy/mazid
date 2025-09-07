@@ -1,11 +1,12 @@
 // lib/core/controllers/home_controller.dart
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mazid/core/API/api_product_dummyjson.dart';
 
 import 'package:mazid/core/cubit/auth/auth_Excption.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/core/models/user_model.dart';
+import 'package:mazid/core/service/product_service.dart';
 import 'package:mazid/core/service/swap_service.dart';
 
 class HomeController extends ChangeNotifier {
@@ -23,7 +24,7 @@ class HomeController extends ChangeNotifier {
 
   UserModel? currentUser;
 
-  bool _isDisposed = false; // ✅ فلاغ لمعرفة لو اتعمل dispose
+  bool _isDisposed = false;
 
   /// بدء تحميل البيانات
   void init(BuildContext context) {
@@ -35,28 +36,41 @@ class HomeController extends ChangeNotifier {
   void _loadProducts() async {
     try {
       final products = await _productService.fetchAllProducts();
+
+      debugPrint("📦 All products fetched: ${products.length}");
+
       allProducts = products;
       filteredProducts = products;
       isLoading = false;
-      _safeNotifyListeners(); // ✅
+
+      if (allProducts.isEmpty) {
+        errorMessage = "⚠️ لا توجد منتجات متاحة حالياً";
+      }
+
+      _safeNotifyListeners();
     } catch (e) {
-      errorMessage = e.toString();
+      errorMessage = "❌ خطأ أثناء تحميل المنتجات: $e";
       isLoading = false;
-      _safeNotifyListeners(); // ✅
+      _safeNotifyListeners();
     }
   }
 
   /// تحميل بيانات المستخدم
   void _loadUserData() async {
-    final user = await _authService.currentUser();
-    if (user != null) {
-      final userData = await _authService.getUserData(user.id);
-      if (userData != null) {
-        currentUser = userData;
+    try {
+      final user = await _authService.currentUser();
+      if (user != null) {
+        final userData = await _authService.getUserData(user.id);
+        if (userData != null) {
+          currentUser = userData;
+        }
       }
+    } catch (e) {
+      debugPrint("❌ خطأ أثناء تحميل بيانات المستخدم: $e");
     }
+
     isUserLoading = false;
-    _safeNotifyListeners(); // ✅
+    _safeNotifyListeners();
   }
 
   /// البحث في المنتجات
@@ -73,7 +87,7 @@ class HomeController extends ChangeNotifier {
           .toList();
     }
     selectedCategory = "All";
-    _safeNotifyListeners(); // ✅
+    _safeNotifyListeners();
   }
 
   /// الفلترة حسب التصنيف
@@ -93,17 +107,20 @@ class HomeController extends ChangeNotifier {
     } else {
       final apiCategory =
           apiCategories[category]?.toLowerCase() ?? category.toLowerCase();
+
       filteredProducts = allProducts
           .where((p) => p.category.toLowerCase().contains(apiCategory))
           .toList();
     }
-    _safeNotifyListeners(); // ✅
+
+    debugPrint("🔍 Category: $category | Products: ${filteredProducts.length}");
+    _safeNotifyListeners();
   }
 
   /// تغيير التاب
   void changeTab(int index) {
     currentIndex = index;
-    _safeNotifyListeners(); // ✅
+    _safeNotifyListeners();
   }
 
   /// دالة آمنة للتأكد أن الكنترولر ما اتعملوش dispose

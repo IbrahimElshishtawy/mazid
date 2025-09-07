@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/Swap/ui/ProductDetailPage%D8%B2.dart';
+import 'package:mazid/pages/Swap/ui/ProductDetailPageswap.dart';
 import 'package:mazid/pages/Swap/widgets/custom_product_card.dart';
 
 class ProductListSection extends StatelessWidget {
   final List<Map<String, dynamic>> products;
-  final String type;
+  final String pageType; // نوع الصفحة
 
   const ProductListSection({
     super.key,
     required this.products,
-    required this.type,
+    required this.pageType,
   });
 
   @override
@@ -39,12 +39,13 @@ class ProductListSection extends StatelessWidget {
             imageUrl: product["imageUrl"],
             name: product["name"],
             rating: product["rating"] ?? 0,
+            pageType: pageType, // تمرير نوع الصفحة
             onSwapRequest: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) =>
-                      ProductDetailPage(product: product, type: type),
+                      ProductDetailPage(product: product, type: pageType),
                 ),
               );
             },

@@ -7,6 +7,7 @@ class SwapRequestModel {
   final ProductModel senderProduct;
   final ProductModel receiverProduct;
   final String senderId;
+  final String urlimage;
   final String receiverId;
   SwapStatus status;
   final DateTime createdAt;
@@ -17,6 +18,7 @@ class SwapRequestModel {
     required this.receiverProduct,
     required this.senderId,
     required this.receiverId,
+    required this.urlimage,
     this.status = SwapStatus.pending,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
@@ -40,6 +42,7 @@ class SwapRequestModel {
       receiverProduct: ProductModel.fromJson(json['receiverProduct'] ?? {}),
       senderId: _safeString(json['senderId']),
       receiverId: _safeString(json['receiverId']),
+      urlimage: _safeString(json['image'] as String?),
       status: parseStatus(json['status'] as String?),
       createdAt:
           DateTime.tryParse(_safeString(json['createdAt'])) ?? DateTime.now(),
@@ -65,6 +68,7 @@ class SwapRequestModel {
     ProductModel? receiverProduct,
     String? senderId,
     String? receiverId,
+    String? urlimage,
     SwapStatus? status,
     DateTime? createdAt,
   }) {
@@ -75,6 +79,7 @@ class SwapRequestModel {
       senderId: senderId ?? this.senderId,
       receiverId: receiverId ?? this.receiverId,
       status: status ?? this.status,
+      urlimage: urlimage ?? this.urlimage,
       createdAt: createdAt ?? this.createdAt,
     );
   }
