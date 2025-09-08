@@ -5,6 +5,7 @@ import 'package:mazid/pages/Swap/widgets/ProductCardMenu.dart';
 import 'package:mazid/pages/Swap/widgets/custom_btn.dart';
 
 /// الكارت الرئيسي لمنتجات التبديل
+/// card view home swap[viec card product in home]
 class ProductCardswap extends StatelessWidget {
   final SwapProductModel product;
   final SwapStatus status;
