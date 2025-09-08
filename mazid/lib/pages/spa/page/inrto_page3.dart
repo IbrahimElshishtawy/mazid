@@ -17,27 +17,22 @@ class IntroPage3 extends StatefulWidget {
 class _IntroPage3State extends State<IntroPage3> {
   double x = 0.0;
   double y = 0.0;
-  StreamSubscription? _gyroscopeSubscription;
+  StreamSubscription? _accelerometerSubscription;
 
   @override
   void initState() {
     super.initState();
-
-    try {
-      _gyroscopeSubscription = accelerometerEvents.listen((event) {
-        setState(() {
-          x = (event.x / 20).clamp(-0.5, 0.5);
-          y = (event.y / 20).clamp(-0.5, 0.5);
-        });
+    _accelerometerSubscription = accelerometerEvents.listen((event) {
+      setState(() {
+        x = (event.x / 20).clamp(-0.5, 0.5);
+        y = (event.y / 20).clamp(-0.5, 0.5);
       });
-    } catch (e) {
-      debugPrint("Accelerometer not available: $e");
-    }
+    });
   }
 
   @override
   void dispose() {
-    _gyroscopeSubscription?.cancel();
+    _accelerometerSubscription?.cancel();
     super.dispose();
   }
 
@@ -46,7 +41,7 @@ class _IntroPage3State extends State<IntroPage3> {
     return Scaffold(
       body: Stack(
         children: [
-          /// خلفية موجات (بنفسجي/أزرق) تتحرك مع الجهاز
+          /// خلفية (Purple × Blue)
           Positioned.fill(
             child: WaveWidget(
               config: CustomConfig(
@@ -66,77 +61,55 @@ class _IntroPage3State extends State<IntroPage3> {
             ),
           ),
 
-          /// النصوص
           SafeArea(
             child: Column(
               children: [
-                const Spacer(flex: 4),
+                const Spacer(flex: 5),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "Your new best friend is just a swipe away!",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: widget.textColor.withOpacity(0.95),
-                      letterSpacing: 1.3,
-                      shadows: const [
-                        Shadow(
-                          blurRadius: 10,
-                          color: Colors.black87,
-                          offset: Offset(2, 2),
-                        ),
-                      ],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      height: 140,
+                      color: Colors.deepPurple, // لون الخلفية اللي انت عايزه
+                      child: Image.asset(
+                        "asset/image/intro3.png",
+                        fit: BoxFit.fill,
+                      ),
                     ),
-                    textAlign: TextAlign.center,
                   ),
+                ),
+
+                const SizedBox(height: 24),
+
+                /// النصوص
+                Text(
+                  "Start Your Journey",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: widget.textColor,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
 
                 const SizedBox(height: 16),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Find the perfect match for your lifestyle",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: widget.textColor.withOpacity(0.9),
-                          shadows: const [
-                            Shadow(
-                              blurRadius: 8,
-                              color: Colors.black54,
-                              offset: Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        "Adopt, connect, and start your journey now",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: widget.textColor.withOpacity(0.85),
-                          shadows: const [
-                            Shadow(
-                              blurRadius: 8,
-                              color: Colors.black54,
-                              offset: Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                  child: Text(
+                    "Connect, explore, and enjoy shopping like never before.",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: widget.textColor.withOpacity(0.9),
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
 
-                const Spacer(flex: 5),
+                const Spacer(flex: 4),
               ],
             ),
           ),

@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
 
-/// التاب بار الخاص بالتبديل
-class SwapTabBar extends StatelessWidget implements PreferredSizeWidget {
-  const SwapTabBar({super.key});
+class SwapTabBar extends StatelessWidget {
+  final TabController controller;
+  const SwapTabBar({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {
-    return const TabBar(
-      isScrollable: true,
-      indicatorColor: Colors.orange,
-      labelColor: Colors.orange,
-      unselectedLabelColor: Colors.grey,
-      tabs: [
-        Tab(text: "منتجاتي"),
-        Tab(text: "المقبولة"),
-        Tab(text: "المعلقة"),
-        Tab(text: "الطلبات"),
-        Tab(text: "المكتملة"),
-      ],
+    return SizedBox(
+      height: 60,
+      child: Material(
+        child: TabBar(
+          controller: controller,
+          indicatorColor: Colors.orange,
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white70,
+          tabs: const [
+            Tab(icon: Icon(Icons.shopping_bag), text: "منتجات"),
+            Tab(icon: Icon(Icons.check_circle), text: "مقبولة"),
+            Tab(icon: Icon(Icons.hourglass_bottom), text: "معلقة"),
+            Tab(icon: Icon(Icons.trolley), text: "موافقه"),
+            Tab(icon: Icon(Icons.done_all), text: "مكتملة"),
+          ],
+        ),
+      ),
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

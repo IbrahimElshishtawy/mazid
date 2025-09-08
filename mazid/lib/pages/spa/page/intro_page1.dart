@@ -22,18 +22,12 @@ class _IntroPage1State extends State<IntroPage1> {
   @override
   void initState() {
     super.initState();
-
-    try {
-      _accelerometerSubscription = accelerometerEvents.listen((event) {
-        setState(() {
-          // نخلي القيم صغيرة عشان تكون حركة ناعمة
-          x = (event.x / 20).clamp(-0.5, 0.5);
-          y = (event.y / 20).clamp(-0.5, 0.5);
-        });
+    _accelerometerSubscription = accelerometerEvents.listen((event) {
+      setState(() {
+        x = (event.x / 20).clamp(-0.5, 0.5);
+        y = (event.y / 20).clamp(-0.5, 0.5);
       });
-    } catch (e) {
-      debugPrint("Accelerometer not available: $e");
-    }
+    });
   }
 
   @override
@@ -47,7 +41,7 @@ class _IntroPage1State extends State<IntroPage1> {
     return Scaffold(
       body: Stack(
         children: [
-          /// خلفية موجات متحركة مع ألوان برتقالي وأصفر + تتحرك مع الجهاز
+          /// الخلفية (Orange × Yellow Waves)
           Positioned.fill(
             child: WaveWidget(
               config: CustomConfig(
@@ -58,7 +52,6 @@ class _IntroPage1State extends State<IntroPage1> {
                 durations: [35000, 19440],
                 heightPercentages: [0.20, 0.23],
                 blur: const MaskFilter.blur(BlurStyle.solid, 5),
-                // نخلي الجريدينت يتحرك مع الجهاز
                 gradientBegin: Alignment(-1 + x, 1 + y),
                 gradientEnd: Alignment(1 + x, -1 + y),
               ),
@@ -68,13 +61,14 @@ class _IntroPage1State extends State<IntroPage1> {
             ),
           ),
 
-          /// النصوص والعناصر
+          /// المحتوى (الصورة + النصوص)
           SafeArea(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Spacer(flex: 3),
+                SizedBox(height: 23),
 
-                // أيقونة أو صورة
+                /// صورة اللوجو
                 Container(
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
@@ -99,51 +93,39 @@ class _IntroPage1State extends State<IntroPage1> {
 
                 const SizedBox(height: 40),
 
-                // العنوان
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "Welcome to Mazid Store",
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: widget.textColor.withOpacity(0.95),
-                      shadows: const [
-                        Shadow(
-                          blurRadius: 10,
-                          color: Colors.orange,
-                          offset: Offset(2, 2),
-                        ),
-                      ],
-                    ),
-                    textAlign: TextAlign.center,
+                /// العنوان
+                Text(
+                  "Welcome to Mazid Store",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: widget.textColor,
+                    shadows: const [
+                      Shadow(
+                        blurRadius: 10,
+                        color: Colors.orange,
+                        offset: Offset(2, 2),
+                      ),
+                    ],
                   ),
+                  textAlign: TextAlign.center,
                 ),
 
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
 
-                // النص الفرعي
+                /// النص الفرعي
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    "your step one more and enjoy to pay",
+                    "Your first step into a smarter shopping experience.",
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                       color: widget.textColor.withOpacity(0.9),
-                      shadows: const [
-                        Shadow(
-                          blurRadius: 10,
-                          color: Colors.orangeAccent,
-                          offset: Offset(2, 2),
-                        ),
-                      ],
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
-
-                const Spacer(flex: 3),
               ],
             ),
           ),

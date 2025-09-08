@@ -20,7 +20,7 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
       id: "1",
       name: "موبايل سامسونج",
       description: "موبايل جديد بالكرتونة",
-      imageUrl: "https://via.placeholder.com/150",
+      imageUrl: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
       ownerId: "user1",
       status: "pending",
       createdAt: DateTime.now(),
@@ -31,7 +31,7 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
       id: "2",
       name: "لاب توب HP",
       description: "Core i7 / RAM 16GB",
-      imageUrl: "https://via.placeholder.com/150",
+      imageUrl: "https://fakestoreapi.com/img/81fPKd-2AYL._AC_SL1500_t.png",
       ownerId: "user2",
       status: "accepted",
       createdAt: DateTime.now(),
@@ -51,19 +51,21 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("التبديل"),
-          bottom: const SwapTabBar(),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: SwapTabBar(controller: _tabController), // التاب بار فوق
         ),
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            _buildProductList(SwapStatus.myProducts),
-            _buildProductList(SwapStatus.accepted),
-            _buildProductList(SwapStatus.pending),
-            _buildProductList(SwapStatus.request),
-            _buildProductList(SwapStatus.completed),
-          ],
+        body: SafeArea(
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              _buildProductList(SwapStatus.myProducts),
+              _buildProductList(SwapStatus.accepted),
+              _buildProductList(SwapStatus.pending),
+              _buildProductList(SwapStatus.request),
+              _buildProductList(SwapStatus.completed),
+            ],
+          ),
         ),
       ),
     );
@@ -88,6 +90,7 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
     }).toList();
 
     return ListView.builder(
+      padding: const EdgeInsets.all(12),
       itemCount: filtered.length,
       itemBuilder: (context, index) {
         return ProductCardswap(product: filtered[index], status: status);

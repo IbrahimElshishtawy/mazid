@@ -17,27 +17,22 @@ class IntroPage2 extends StatefulWidget {
 class _IntroPage2State extends State<IntroPage2> {
   double x = 0.0;
   double y = 0.0;
-  StreamSubscription? _gyroscopeSubscription;
+  StreamSubscription? _accelerometerSubscription;
 
   @override
   void initState() {
     super.initState();
-
-    try {
-      _gyroscopeSubscription = accelerometerEvents.listen((event) {
-        setState(() {
-          x = (event.x / 20).clamp(-0.5, 0.5);
-          y = (event.y / 20).clamp(-0.5, 0.5);
-        });
+    _accelerometerSubscription = accelerometerEvents.listen((event) {
+      setState(() {
+        x = (event.x / 20).clamp(-0.5, 0.5);
+        y = (event.y / 20).clamp(-0.5, 0.5);
       });
-    } catch (e) {
-      debugPrint("Accelerometer not available: $e");
-    }
+    });
   }
 
   @override
   void dispose() {
-    _gyroscopeSubscription?.cancel();
+    _accelerometerSubscription?.cancel();
     super.dispose();
   }
 
@@ -46,15 +41,15 @@ class _IntroPage2State extends State<IntroPage2> {
     return Scaffold(
       body: Stack(
         children: [
-          /// خلفية موجات متحركة (برتقالي + أصفر) تتحرك مع الجهاز
+          /// خلفية (Orange × Purple)
           Positioned.fill(
             child: WaveWidget(
               config: CustomConfig(
                 gradients: [
-                  [Colors.orange, Colors.yellow],
-                  [Colors.deepOrangeAccent, Colors.amber],
+                  [Colors.deepOrange, Colors.purpleAccent],
+                  [Colors.orangeAccent, Colors.deepPurple],
                 ],
-                durations: [30000, 19000],
+                durations: [25000, 18000],
                 heightPercentages: [0.20, 0.23],
                 blur: const MaskFilter.blur(BlurStyle.solid, 5),
                 gradientBegin: Alignment(-1 + x, 1 + y),
@@ -66,30 +61,35 @@ class _IntroPage2State extends State<IntroPage2> {
             ),
           ),
 
-          /// النصوص
           SafeArea(
             child: Column(
               children: [
-                const Spacer(flex: 4),
+                const Spacer(flex: 5),
 
+                /// الصورة بحواف ناعمة
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "Enjoy the Experience",
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: widget.textColor.withOpacity(0.95),
-                      shadows: const [
-                        Shadow(
-                          blurRadius: 12,
-                          color: Colors.deepOrange,
-                          offset: Offset(2, 2),
-                        ),
-                      ],
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20), // هنا الحواف
+                    child: Image.asset(
+                      "asset/image/intro2.jpg",
+                      height: 140,
+                      fit: BoxFit.cover,
                     ),
-                    textAlign: TextAlign.center,
                   ),
+                ),
+
+                const SizedBox(height: 24),
+
+                /// النصوص
+                Text(
+                  "Feel the Vibe",
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: widget.textColor,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
 
                 const SizedBox(height: 16),
@@ -97,24 +97,17 @@ class _IntroPage2State extends State<IntroPage2> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    "Smooth orange & yellow waves that move with you",
+                    "A seamless blend of technology and lifestyle, designed just for you.",
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.w500,
                       color: widget.textColor.withOpacity(0.9),
-                      shadows: const [
-                        Shadow(
-                          blurRadius: 8,
-                          color: Colors.orangeAccent,
-                          offset: Offset(1, 1),
-                        ),
-                      ],
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
 
-                const Spacer(flex: 5),
+                const Spacer(flex: 4),
               ],
             ),
           ),

@@ -90,7 +90,8 @@ flutter:
   assets:
     - asset/icon/iconimage.jpg
     - asset/image/intro2.jpg
-    - asset/image/intro3.jpeg
+    - asset/image/intro3.png
+  
     - asset/image/sell-used-electronics.jpg
     - asset/image/offer50.png
     - asset/image/download.jpg
