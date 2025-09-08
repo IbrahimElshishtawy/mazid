@@ -1,5 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'dart:math';
+import 'package:sensors_plus/sensors_plus.dart';
+import 'package:wave/wave.dart';
+import 'package:wave/config.dart';
 
 class IntroPage2 extends StatefulWidget {
   final Color textColor;
@@ -9,22 +14,30 @@ class IntroPage2 extends StatefulWidget {
   State<IntroPage2> createState() => _IntroPage2State();
 }
 
-class _IntroPage2State extends State<IntroPage2>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _IntroPage2State extends State<IntroPage2> {
+  double x = 0.0;
+  double y = 0.0;
+  StreamSubscription? _gyroscopeSubscription;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 6),
-    )..repeat();
+
+    try {
+      _gyroscopeSubscription = accelerometerEvents.listen((event) {
+        setState(() {
+          x = (event.x / 20).clamp(-0.5, 0.5);
+          y = (event.y / 20).clamp(-0.5, 0.5);
+        });
+      });
+    } catch (e) {
+      debugPrint("Accelerometer not available: $e");
+    }
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _gyroscopeSubscription?.cancel();
     super.dispose();
   }
 
@@ -33,64 +46,44 @@ class _IntroPage2State extends State<IntroPage2>
     return Scaffold(
       body: Stack(
         children: [
-          // الخلفية المتحركة (waves)
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return CustomPaint(
-                painter: WavePainter(_controller.value),
-                child: Container(),
-              );
-            },
+          /// خلفية موجات متحركة (برتقالي + أصفر) تتحرك مع الجهاز
+          Positioned.fill(
+            child: WaveWidget(
+              config: CustomConfig(
+                gradients: [
+                  [Colors.orange, Colors.yellow],
+                  [Colors.deepOrangeAccent, Colors.amber],
+                ],
+                durations: [30000, 19000],
+                heightPercentages: [0.20, 0.23],
+                blur: const MaskFilter.blur(BlurStyle.solid, 5),
+                gradientBegin: Alignment(-1 + x, 1 + y),
+                gradientEnd: Alignment(1 + x, -1 + y),
+              ),
+              backgroundColor: Colors.black,
+              size: const Size(double.infinity, double.infinity),
+              waveAmplitude: 0,
+            ),
           ),
 
-          // الفقاعات
-          _bubbles(),
-
-          // المحتوى النصي والرسمي
+          /// النصوص
           SafeArea(
             child: Column(
               children: [
-                const Spacer(flex: 3),
+                const Spacer(flex: 4),
 
-                // أيقونة أو صورة
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blue.withOpacity(0.4),
-                        blurRadius: 8,
-                        offset: const Offset(2, 4),
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      'asset/icon/iconimage.jpg',
-                      height: 120,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 40),
-
-                // العنوان
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
                     "Enjoy the Experience",
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                       color: widget.textColor.withOpacity(0.95),
                       shadows: const [
                         Shadow(
-                          blurRadius: 10,
-                          color: Colors.blueAccent,
+                          blurRadius: 12,
+                          color: Colors.deepOrange,
                           offset: Offset(2, 2),
                         ),
                       ],
@@ -99,22 +92,21 @@ class _IntroPage2State extends State<IntroPage2>
                   ),
                 ),
 
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
 
-                // النص الفرعي
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    "Smooth animations with waves & bubbles",
+                    "Smooth orange & yellow waves that move with you",
                     style: TextStyle(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                       color: widget.textColor.withOpacity(0.9),
                       shadows: const [
                         Shadow(
-                          blurRadius: 10,
-                          color: Colors.blueAccent,
-                          offset: Offset(2, 2),
+                          blurRadius: 8,
+                          color: Colors.orangeAccent,
+                          offset: Offset(1, 1),
                         ),
                       ],
                     ),
@@ -122,7 +114,7 @@ class _IntroPage2State extends State<IntroPage2>
                   ),
                 ),
 
-                const Spacer(flex: 3),
+                const Spacer(flex: 5),
               ],
             ),
           ),
@@ -130,64 +122,4 @@ class _IntroPage2State extends State<IntroPage2>
       ),
     );
   }
-
-  /// ويدجت الفقاعات
-  Widget _bubbles() {
-    return Positioned.fill(
-      child: IgnorePointer(child: CustomPaint(painter: BubblePainter())),
-    );
-  }
-}
-
-/// رسام الموجات
-class WavePainter extends CustomPainter {
-  final double progress;
-  WavePainter(this.progress);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.blueAccent.withOpacity(0.6);
-    final path = Path();
-
-    final double waveHeight = 30;
-    final double speed = progress * 2 * pi;
-
-    path.moveTo(0, size.height / 2);
-
-    for (double i = 0; i <= size.width; i++) {
-      path.lineTo(
-        i,
-        size.height / 2 + sin((i / size.width * 2 * pi) + speed) * waveHeight,
-      );
-    }
-
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    path.close();
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant WavePainter oldDelegate) =>
-      oldDelegate.progress != progress;
-}
-
-/// رسام الفقاعات
-class BubblePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.white.withOpacity(0.2);
-
-    final random = Random();
-    for (var i = 0; i < 15; i++) {
-      final dx = random.nextDouble() * size.width;
-      final dy = random.nextDouble() * size.height;
-      final radius = 8 + random.nextDouble() * 12;
-      canvas.drawCircle(Offset(dx, dy), radius, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

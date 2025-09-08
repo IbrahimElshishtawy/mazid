@@ -58,6 +58,8 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   cloud_firestore: ^6.0.1
   provider: ^6.1.5+1
+  sensors_plus: ^6.1.2
+  font_awesome_flutter: ^10.9.1
 
 dev_dependencies:
   flutter_test:
