@@ -1,98 +1,85 @@
-import 'package:mazid/core/models/product_models.dart';
-
-enum SwapStatus { pending, accepted, rejected }
-
-class SwapRequestModel {
+/// موديل لمنتجات التبديل
+class SwapProductModel {
   final String id;
-  final ProductModel senderProduct;
-  final ProductModel receiverProduct;
-  final String senderId;
-  final String urlimage;
-  final String receiverId;
-  SwapStatus status;
+  final String name;
+  final String description;
+  final String imageUrl;
+  final String ownerId;
+  // (user id)
+  final String status;
+  // (pending, accepted, rejected, completed)
   final DateTime createdAt;
+  final double price;
+  final double rating;
 
-  SwapRequestModel({
+  SwapProductModel({
     required this.id,
-    required this.senderProduct,
-    required this.receiverProduct,
-    required this.senderId,
-    required this.receiverId,
-    required this.urlimage,
-    this.status = SwapStatus.pending,
-    DateTime? createdAt,
-  }) : createdAt = createdAt ?? DateTime.now();
+    required this.name,
+    required this.description,
+    required this.imageUrl,
+    required this.ownerId,
+    required this.status,
+    required this.createdAt,
+    required this.price,
+    required this.rating,
+  });
 
-  /// factory من JSON
-  factory SwapRequestModel.fromJson(Map<String, dynamic> json) {
-    SwapStatus parseStatus(String? status) {
-      switch (status) {
-        case 'accepted':
-          return SwapStatus.accepted;
-        case 'rejected':
-          return SwapStatus.rejected;
-        default:
-          return SwapStatus.pending;
-      }
-    }
-
-    return SwapRequestModel(
-      id: _safeString(json['_id'] ?? json['id']),
-      senderProduct: ProductModel.fromJson(json['senderProduct'] ?? {}),
-      receiverProduct: ProductModel.fromJson(json['receiverProduct'] ?? {}),
-      senderId: _safeString(json['senderId']),
-      receiverId: _safeString(json['receiverId']),
-      urlimage: _safeString(json['image'] as String?),
-      status: parseStatus(json['status'] as String?),
-      createdAt:
-          DateTime.tryParse(_safeString(json['createdAt'])) ?? DateTime.now(),
+  /// تحويل من JSON (من Supabase أو Firebase)
+  factory SwapProductModel.fromJson(Map<String, dynamic> json) {
+    return SwapProductModel(
+      id: json['id']?.toString() ?? '',
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      imageUrl: json['image_url'] ?? '',
+      ownerId: json['owner_id'] ?? '',
+      status: json['status'] ?? 'pending',
+      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+      price: (json['price'] is int)
+          ? (json['price'] as int).toDouble()
+          : (json['price'] ?? 0.0).toDouble(),
+      rating: (json['rating'] is int)
+          ? (json['rating'] as int).toDouble()
+          : (json['rating'] ?? 0.0).toDouble(),
     );
   }
 
+  /// تحويل إلى JSON (للتخزين في قاعدة البيانات)
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
-      'senderProduct': senderProduct.toJson(),
-      'receiverProduct': receiverProduct.toJson(),
-      'senderId': senderId,
-      'receiverId': receiverId,
-      'status': status.name,
-      'createdAt': createdAt.toIso8601String(),
+      'id': id,
+      'name': name,
+      'description': description,
+      'image_url': imageUrl,
+      'owner_id': ownerId,
+      'status': status,
+      'created_at': createdAt.toIso8601String(),
+      'price': price,
+      'rating': rating,
     };
   }
 
-  /// نسخة مع تعديل قيم محددة
-  SwapRequestModel copyWith({
+  /// نسخة جديدة مع تعديل بعض الخصائص
+  SwapProductModel copyWith({
     String? id,
-    ProductModel? senderProduct,
-    ProductModel? receiverProduct,
-    String? senderId,
-    String? receiverId,
-    String? urlimage,
-    SwapStatus? status,
+    String? name,
+    String? description,
+    String? imageUrl,
+    String? ownerId,
+    String? status,
     DateTime? createdAt,
+    double? price,
+    double? rating,
   }) {
-    return SwapRequestModel(
+    return SwapProductModel(
       id: id ?? this.id,
-      senderProduct: senderProduct ?? this.senderProduct,
-      receiverProduct: receiverProduct ?? this.receiverProduct,
-      senderId: senderId ?? this.senderId,
-      receiverId: receiverId ?? this.receiverId,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
+      ownerId: ownerId ?? this.ownerId,
       status: status ?? this.status,
-      urlimage: urlimage ?? this.urlimage,
       createdAt: createdAt ?? this.createdAt,
+      price: price ?? this.price,
+      rating: rating ?? this.rating,
     );
-  }
-
-  @override
-  String toString() {
-    return 'SwapRequestModel(id: $id, sender: ${senderProduct.title}, receiver: ${receiverProduct.title}, status: $status)';
-  }
-
-  /// helper method
-  static String _safeString(dynamic value) {
-    if (value == null) return '';
-    if (value is String) return value;
-    return value.toString();
   }
 }

@@ -1,96 +1,59 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/product_models.dart';
+import 'package:flutter/widgets.dart';
+import 'package:mazid/core/models/swap_request_model.dart';
+import 'package:mazid/core/models/swap_status.dart';
+import 'package:mazid/pages/Swap/ui/ProductDetailPageswap.dart';
 
-/// Widget لعرض كارت منتج.
-/// - بياخد [ProductModel] يحتوي على بيانات المنتج.
-/// - ممكن يمرر [onRequestSwap] كـ Callback عند الضغط على زر "Request Swap".
-class CustomProductCard extends StatelessWidget {
-  final ProductModel product; // موديل المنتج (عنوان، صورة، وصف...)
-  final VoidCallback? onRequestSwap; // زر لطلب التبديل
+/// زر الكارت بيتغير حسب الحالة
+class ProductCardButton extends StatelessWidget {
+  final SwapStatus status;
+  final SwapProductModel product;
 
-  const CustomProductCard({
+  const ProductCardButton({
     super.key,
+    required this.status,
     required this.product,
-    this.onRequestSwap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4, // ظل للكارت
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // ✅ صورة المنتج
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.network(
-              product.firstImage,
-              height: 120,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                height: 120,
-                color: Colors.grey[300],
-                child: const Icon(Icons.broken_image, color: Colors.grey),
+    switch (status) {
+      case SwapStatus.myProducts:
+        return ElevatedButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductDetailPage(product: product),
               ),
-            ),
-          ),
+            );
+          },
+          child: const Text("تفاصيل"),
+        );
 
-          const SizedBox(height: 8),
+      case SwapStatus.accepted:
+        return ElevatedButton(onPressed: () {}, child: const Text("تم القبول"));
 
-          // ✅ عنوان المنتج
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              product.title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+      case SwapStatus.pending:
+        return ElevatedButton(onPressed: () {}, child: const Text("معلق"));
 
-          // ✅ وصف المنتج
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Text(
-              product.description,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: Colors.black54),
-            ),
-          ),
+      case SwapStatus.request:
+        return ElevatedButton(onPressed: () {}, child: const Text("تم الطلب"));
 
-          // ✅ سعر المنتج
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            child: Text(
-              "\$${product.price.toStringAsFixed(2)}",
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.deepOrange,
-              ),
-            ),
-          ),
+      case SwapStatus.completed:
+        return ElevatedButton(
+          onPressed: () {},
+          child: const Text("تم الإتمام"),
+        );
 
-          const Spacer(),
+      case SwapStatus.approved:
+        return ElevatedButton(
+          onPressed: () {},
+          child: const Text("تمت الموافقة"),
+        );
 
-          // ✅ زر "Request Swap"
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: onRequestSwap,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepOrange,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              child: const Text("Request Swap"),
-            ),
-          ),
-        ],
-      ),
-    );
+      default:
+        return ElevatedButton(onPressed: () {}, child: const Text("غير معروف"));
+    }
   }
 }

@@ -1,10 +1,5 @@
-// ignore_for_file: deprecated_member_use
-
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:particles_flutter/component/particle/particle.dart';
-import 'package:particles_flutter/particles_engine.dart';
-import 'package:mazid/pages/spa/widget/bubbles.dart';
+import 'dart:math';
 
 class IntroPage2 extends StatefulWidget {
   final Color textColor;
@@ -14,181 +9,185 @@ class IntroPage2 extends StatefulWidget {
   State<IntroPage2> createState() => _IntroPage2State();
 }
 
-class _IntroPage2State extends State<IntroPage2> with TickerProviderStateMixin {
-  late AnimationController _titleController;
-  late Animation<Color?> _colorAnimation;
-
-  final String _title = "Amazing Deals Await You";
-
-  // 🔹 متغيرات الفقاعات
-  List<Particle> _bubbles = [];
-  Timer? _timer;
+class _IntroPage2State extends State<IntroPage2>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-
-    /// Animation للعنوان (كتابة تدريجية + تغيير لون)
-    _titleController = AnimationController(
+    _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
-    );
-
-    _colorAnimation = ColorTween(begin: Colors.grey[400], end: Colors.grey[700])
-        .animate(
-          CurvedAnimation(parent: _titleController, curve: Curves.easeInOut),
-        );
-
-    _titleController.forward();
-
-    /// 🔹 إنشاء الفقاعات باللون الأبيض
-    _bubbles = BubbleHelper.createBubbles(Colors.white);
-
-    /// 🔹 تحريك الفقاعات بشكل مستمر
-    _timer = Timer.periodic(const Duration(milliseconds: 600), (timer) {
-      if (!mounted) return;
-      setState(() => _bubbles.shuffle());
-    });
+      duration: const Duration(seconds: 6),
+    )..repeat();
   }
 
   @override
   void dispose() {
-    _titleController.dispose();
-    _timer?.cancel();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return Scaffold(
       body: Stack(
         children: [
-          /// الخلفية: صورة
-          Positioned.fill(
-            child: Image.asset('asset/image/intro2.jpg', fit: BoxFit.cover),
+          // الخلفية المتحركة (waves)
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return CustomPaint(
+                painter: WavePainter(_controller.value),
+                child: Container(),
+              );
+            },
           ),
 
-          /// Overlay
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.black.withOpacity(0.6),
-                    Colors.transparent,
-                    Colors.black.withOpacity(0.4),
-                  ],
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                ),
-              ),
-            ),
-          ),
+          // الفقاعات
+          _bubbles(),
 
-          /// 🔹 الفقاعات البيضاء
-          IgnorePointer(
-            child: Particles(
-              awayRadius: 120,
-              particles: _bubbles,
-              height: size.height,
-              width: size.width,
-              onTapAnimation: false,
-              awayAnimationDuration: const Duration(milliseconds: 250),
-              awayAnimationCurve: Curves.easeOut,
-              enableHover: false,
-              hoverRadius: 80,
-              connectDots: false,
-            ),
-          ),
+          // المحتوى النصي والرسمي
+          SafeArea(
+            child: Column(
+              children: [
+                const Spacer(flex: 3),
 
-          /// النصوص
-          Column(
-            children: [
-              const Spacer(flex: 5),
-
-              /// العنوان المتحرك
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: AnimatedBuilder(
-                  animation: _titleController,
-                  builder: (context, child) {
-                    final textLength = (_title.length * _titleController.value)
-                        .toInt()
-                        .clamp(0, _title.length);
-                    final displayText = _title.substring(0, textLength);
-
-                    return Text(
-                      displayText,
-                      style: TextStyle(
-                        fontSize: 34,
-                        fontWeight: FontWeight.bold,
-                        color: _colorAnimation.value,
-                        letterSpacing: 1.5,
-                        shadows: const [
-                          Shadow(
-                            blurRadius: 8,
-                            color: Colors.black87,
-                            offset: Offset(2, 3),
-                          ),
-                        ],
+                // أيقونة أو صورة
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blue.withOpacity(0.4),
+                        blurRadius: 8,
+                        offset: const Offset(2, 4),
                       ),
-                      textAlign: TextAlign.center,
-                    );
-                  },
-                ),
-              ),
-
-              const Spacer(flex: 17),
-
-              /// باقي النصوص
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  children: const [
-                    Text(
-                      "Sell, swap, or adopt pets easily",
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 6,
-                            color: Colors.black54,
-                            offset: Offset(2, 2),
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      'asset/icon/iconimage.jpg',
+                      height: 120,
+                      fit: BoxFit.cover,
                     ),
-                    SizedBox(height: 12),
-                    Text(
-                      "Join the auction and grab your favorite now",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white70,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 6,
-                            color: Colors.black54,
-                            offset: Offset(2, 2),
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                  ),
                 ),
-              ),
 
-              const Spacer(flex: 6),
-            ],
+                const SizedBox(height: 40),
+
+                // العنوان
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    "Enjoy the Experience",
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: widget.textColor.withOpacity(0.95),
+                      shadows: const [
+                        Shadow(
+                          blurRadius: 10,
+                          color: Colors.blueAccent,
+                          offset: Offset(2, 2),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // النص الفرعي
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    "Smooth animations with waves & bubbles",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: widget.textColor.withOpacity(0.9),
+                      shadows: const [
+                        Shadow(
+                          blurRadius: 10,
+                          color: Colors.blueAccent,
+                          offset: Offset(2, 2),
+                        ),
+                      ],
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+                const Spacer(flex: 3),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
+
+  /// ويدجت الفقاعات
+  Widget _bubbles() {
+    return Positioned.fill(
+      child: IgnorePointer(child: CustomPaint(painter: BubblePainter())),
+    );
+  }
+}
+
+/// رسام الموجات
+class WavePainter extends CustomPainter {
+  final double progress;
+  WavePainter(this.progress);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.blueAccent.withOpacity(0.6);
+    final path = Path();
+
+    final double waveHeight = 30;
+    final double speed = progress * 2 * pi;
+
+    path.moveTo(0, size.height / 2);
+
+    for (double i = 0; i <= size.width; i++) {
+      path.lineTo(
+        i,
+        size.height / 2 + sin((i / size.width * 2 * pi) + speed) * waveHeight,
+      );
+    }
+
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant WavePainter oldDelegate) =>
+      oldDelegate.progress != progress;
+}
+
+/// رسام الفقاعات
+class BubblePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.white.withOpacity(0.2);
+
+    final random = Random();
+    for (var i = 0; i < 15; i++) {
+      final dx = random.nextDouble() * size.width;
+      final dy = random.nextDouble() * size.height;
+      final radius = 8 + random.nextDouble() * 12;
+      canvas.drawCircle(Offset(dx, dy), radius, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

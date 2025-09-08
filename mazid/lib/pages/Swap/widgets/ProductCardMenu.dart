@@ -10,13 +10,20 @@ import 'package:mazid/core/service/swap_service.dart';
 ///   1. عرض تفاصيل المنتج.
 ///   2. إضافة المنتج إلى السلة.
 ///   3. إزالة المنتج.
-///
+/// الصفحهه المشواله عن اتخاذ القرار التجا بيع او شراء التي هكات ابهتجرايخ
+/// اتخج منت الباك ايند مكيفة النكغس المارس  ال
+/// علي الاتجخهها السوال ا
 /// بتستخدم `SwapRequestModel` و `SwapService` عشان تتعامل مع تفاصيل الطلب لو متوفرة.
 class ProductCardMenu extends StatelessWidget {
-  final SwapRequestModel? swapRequest; // بيانات الطلب (لو متوفرة)
+  final SwapProductModel? swapRequest; // بيانات الطلب (لو متوفرة)
   final SwapService? swapService; // خدمة إدارة الطلبات (لو متوفرة)
 
-  const ProductCardMenu({super.key, this.swapRequest, this.swapService});
+  const ProductCardMenu({
+    super.key,
+    this.swapRequest,
+    this.swapService,
+    required SwapProductModel product,
+  });
 
   @override
   Widget build(BuildContext context) {

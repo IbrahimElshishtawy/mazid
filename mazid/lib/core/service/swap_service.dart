@@ -6,26 +6,26 @@ class SwapService {
   final supabase = Supabase.instance.client;
 
   /// جلب كل الطلبات
-  Future<List<SwapRequestModel>> getAllRequests() async {
+  Future<List<SwapProductModel>> getAllRequests() async {
     final response = await supabase.from('swap_requests').select();
     return (response as List)
-        .map((json) => SwapRequestModel.fromJson(json))
+        .map((json) => SwapProductModel.fromJson(json))
         .toList();
   }
 
   /// جلب الطلبات المرسلة من مستخدم
-  Future<List<SwapRequestModel>> getRequestsBySender(String senderId) async {
+  Future<List<SwapProductModel>> getRequestsBySender(String senderId) async {
     final response = await supabase
         .from('swap_requests')
         .select()
         .eq('sender_id', senderId);
     return (response as List)
-        .map((json) => SwapRequestModel.fromJson(json))
+        .map((json) => SwapProductModel.fromJson(json))
         .toList();
   }
 
   /// جلب الطلبات المستلمة من مستخدم
-  Future<List<SwapRequestModel>> getRequestsByReceiver(
+  Future<List<SwapProductModel>> getRequestsByReceiver(
     String receiverId,
   ) async {
     final response = await supabase
@@ -33,12 +33,12 @@ class SwapService {
         .select()
         .eq('receiver_id', receiverId);
     return (response as List)
-        .map((json) => SwapRequestModel.fromJson(json))
+        .map((json) => SwapProductModel.fromJson(json))
         .toList();
   }
 
   /// إرسال طلب جديد
-  Future<void> sendSwapRequest(SwapRequestModel request) async {
+  Future<void> sendSwapRequest(SwapProductModel request) async {
     await supabase.from('swap_requests').insert(request.toJson());
     if (kDebugMode) {
       print("✅ Swap request sent: ${request.id}");
@@ -70,7 +70,7 @@ class SwapService {
   }
 
   /// تحديث الطلب
-  Future<void> updateRequest(SwapRequestModel updatedRequest) async {
+  Future<void> updateRequest(SwapProductModel updatedRequest) async {
     await supabase
         .from('swap_requests')
         .update(updatedRequest.toJson())
@@ -78,6 +78,18 @@ class SwapService {
 
     if (kDebugMode) {
       print("🔄 Swap request updated: ${updatedRequest.id}");
+    }
+  }
+
+  /// تحديث حالة الطلب فقط
+  Future<void> updateRequestStatus(String requestId, String status) async {
+    await supabase
+        .from('swap_requests')
+        .update({'status': status})
+        .eq('id', requestId);
+
+    if (kDebugMode) {
+      print("🔄 Request $requestId updated to status: $status");
     }
   }
 

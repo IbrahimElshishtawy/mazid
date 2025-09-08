@@ -16,10 +16,7 @@ class IntroPage3 extends StatefulWidget {
 }
 
 class _IntroPage3State extends State<IntroPage3> with TickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final AnimationController _textController;
-  late final Animation<Offset> _slideAnimation;
-  late final Animation<double> _fadeAnimation;
+  late AnimationController _titleController;
   late Animation<Color?> _colorAnimation;
 
   final String _title = "Your new best friend is just a swipe away!";
@@ -32,43 +29,23 @@ class _IntroPage3State extends State<IntroPage3> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    // Animation لظهور النصوص
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1200),
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.4),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
-
-    // Animation للعنوان (تايب رايتر + تغيير لون تدريجي)
-    _textController = AnimationController(
+    /// Animation للعنوان (كتابة تدريجية + تغيير لون)
+    _titleController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 3),
     );
 
-    _colorAnimation =
-        ColorTween(
-          begin: Colors.grey[400], // رمادي فاتح
-          end: const Color.fromARGB(255, 102, 101, 101), // رمادي غامق
-        ).animate(
-          CurvedAnimation(parent: _textController, curve: Curves.easeInOut),
+    _colorAnimation = ColorTween(begin: Colors.grey[300], end: Colors.grey[700])
+        .animate(
+          CurvedAnimation(parent: _titleController, curve: Curves.easeInOut),
         );
 
-    _controller.forward();
-    _textController.forward();
+    _titleController.forward();
 
-    // 🔹 إنشاء الفقاعات البيضاء
+    /// 🔹 إنشاء الفقاعات البيضاء
     _bubbles = BubbleHelper.createBubbles(Colors.white);
 
-    // 🔹 حركة الفقاعات
+    /// 🔹 تحريك الفقاعات بشكل مستمر
     _timer = Timer.periodic(const Duration(milliseconds: 600), (timer) {
       if (!mounted) return;
       setState(() => _bubbles.shuffle());
@@ -77,8 +54,7 @@ class _IntroPage3State extends State<IntroPage3> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _controller.dispose();
-    _textController.dispose();
+    _titleController.dispose();
     _timer?.cancel();
     super.dispose();
   }
@@ -90,27 +66,29 @@ class _IntroPage3State extends State<IntroPage3> with TickerProviderStateMixin {
     return Scaffold(
       body: Stack(
         children: [
-          // الخلفية
-          SizedBox.expand(
+          /// الخلفية
+          Positioned.fill(
             child: Image.asset('asset/image/intro3.jpeg', fit: BoxFit.cover),
           ),
 
-          // Gradient Overlay
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Colors.black.withOpacity(0.7),
-                  Colors.black.withOpacity(0.3),
-                  Colors.transparent,
-                ],
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
+          /// Overlay
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withOpacity(0.7),
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.4),
+                  ],
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                ),
               ),
             ),
           ),
 
-          // 🔹 الفقاعات
+          /// 🔹 الفقاعات
           IgnorePointer(
             child: Particles(
               awayRadius: 120,
@@ -126,55 +104,89 @@ class _IntroPage3State extends State<IntroPage3> with TickerProviderStateMixin {
             ),
           ),
 
-          // النصوص
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                children: [
-                  const Spacer(flex: 3),
+          /// النصوص
+          Column(
+            children: [
+              const Spacer(flex: 5),
 
-                  // تايب رايتر + Fade + Slide + تغيير لون
-                  AnimatedBuilder(
-                    animation: Listenable.merge([_textController, _controller]),
-                    builder: (context, child) {
-                      final textLength = (_title.length * _textController.value)
-                          .toInt()
-                          .clamp(0, _title.length);
-                      final displayText = _title.substring(0, textLength);
+              /// العنوان المتحرك (تايب رايتر + لون متغير)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: AnimatedBuilder(
+                  animation: _titleController,
+                  builder: (context, child) {
+                    final textLength = (_title.length * _titleController.value)
+                        .toInt()
+                        .clamp(0, _title.length);
+                    final displayText = _title.substring(0, textLength);
 
-                      return SlideTransition(
-                        position: _slideAnimation,
-                        child: FadeTransition(
-                          opacity: _fadeAnimation,
-                          child: Text(
-                            displayText,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                              color:
-                                  _colorAnimation.value, // لون متغير تدريجياً
-                              height: 1.4,
-                              letterSpacing: 1.2,
-                              shadows: const [
-                                Shadow(
-                                  blurRadius: 8,
-                                  color: Colors.black87,
-                                  offset: Offset(2, 2),
-                                ),
-                              ],
-                            ),
+                    return Text(
+                      displayText,
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: _colorAnimation.value,
+                        letterSpacing: 1.3,
+                        shadows: const [
+                          Shadow(
+                            blurRadius: 8,
+                            color: Colors.black87,
+                            offset: Offset(2, 2),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-
-                  const Spacer(flex: 14),
-                ],
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    );
+                  },
+                ),
               ),
-            ),
+
+              const Spacer(flex: 15),
+
+              /// نصوص فرعية
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: const [
+                    Text(
+                      "Find the perfect match for your lifestyle",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 6,
+                            color: Colors.black54,
+                            offset: Offset(2, 2),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 12),
+                    Text(
+                      "Adopt, connect, and start your journey now",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white70,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 6,
+                            color: Colors.black54,
+                            offset: Offset(2, 2),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+
+              const Spacer(flex: 6),
+            ],
           ),
         ],
       ),

@@ -1,5 +1,7 @@
 // lib/core/controllers/home_controller.dart
 
+// ignore_for_file: await_only_futures
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

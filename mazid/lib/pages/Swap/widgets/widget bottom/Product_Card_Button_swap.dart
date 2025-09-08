@@ -4,20 +4,23 @@ import 'package:flutter/material.dart';
 
 /// زر مخصص (Button) بيظهر تحت كارت المنتج
 /// - بيغيّر شكله ونصه حسب نوع الصفحة (pageType)
-/// - لو "منتجاتي" → يظهر زر ثابت يقول "هذا منتجك"
+/// - لو "myProducts" → يظهر زر ثابت يقول "هذا منتجك"
 /// - لو "accepted" → يظهر زر أخضر مكتوب "تم القبول"
 /// - لو "pending" → يظهر زر برتقالي مكتوب "قيد الانتظار"
+/// - لو "request" → يظهر زر أزرق لقبول التبديل
 /// - غير كده → يظهر زر افتراضي للتبديل (Swap) أو "قيد الانتظار" لو الضغط تم
 class ProductCardButton extends StatelessWidget {
   final String pageType; // نوع الصفحة اللي بيحدد شكل الزر
   final bool isPending; // هل الطلب في حالة انتظار ولا لأ
   final VoidCallback onPressed; // الحدث اللي يحصل لما المستخدم يضغط الزر
+  final VoidCallback? onAccept; // الحدث عند قبول التبديل
 
   const ProductCardButton({
     super.key,
     required this.pageType,
     required this.isPending,
     required this.onPressed,
+    this.onAccept,
   });
 
   @override
@@ -66,6 +69,28 @@ class ProductCardButton extends StatelessWidget {
           ),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.orange,
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+
+      // حالة جديدة: طلب تبديل عندي وعايز أقبله
+      case "request":
+        return ElevatedButton.icon(
+          onPressed:
+              onAccept ??
+              () => ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text("تم قبول التبديل"))),
+          icon: const Icon(Icons.check_circle, color: Colors.white),
+          label: const Text(
+            "قبول التبديل",
+            style: TextStyle(color: Colors.white),
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
             padding: const EdgeInsets.symmetric(vertical: 10),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
