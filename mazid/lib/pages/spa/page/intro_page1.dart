@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 import 'package:wave/wave.dart';
@@ -13,54 +12,36 @@ class IntroPage1 extends StatefulWidget {
 }
 
 class _IntroPage1State extends State<IntroPage1> {
-  double x = 0.0;
-  double y = 0.0;
-  StreamSubscription? _accelerometerSubscription;
-  DateTime _lastUpdate = DateTime.now();
-
-  @override
-  void initState() {
-    super.initState();
-    _accelerometerSubscription = accelerometerEvents.listen((event) {
-      // throttle: update كل 100ms فقط
-      if (DateTime.now().difference(_lastUpdate).inMilliseconds > 100) {
-        setState(() {
-          x = (event.x / 20).clamp(-0.5, 0.5);
-          y = (event.y / 20).clamp(-0.5, 0.5);
-        });
-        _lastUpdate = DateTime.now();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _accelerometerSubscription?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          /// الخلفية (Orange × Yellow Waves)
+          /// الخلفية (Orange × Yellow Waves) متحركة حسب accelerometer
           Positioned.fill(
-            child: WaveWidget(
-              config: CustomConfig(
-                gradients: [
-                  [Colors.orange, Colors.yellow],
-                  [Colors.deepOrangeAccent, Colors.amber],
-                ],
-                durations: [35000, 19440],
-                heightPercentages: [0.20, 0.23],
-                blur: const MaskFilter.blur(BlurStyle.solid, 5),
-                gradientBegin: Alignment(-1 + x, 1 + y),
-                gradientEnd: Alignment(1 + x, -1 + y),
-              ),
-              backgroundColor: Colors.black,
-              size: const Size(double.infinity, double.infinity),
-              waveAmplitude: 0,
+            child: StreamBuilder<AccelerometerEvent>(
+              stream: accelerometerEvents,
+              builder: (context, snapshot) {
+                final x = ((snapshot.data?.x ?? 0) / 20).clamp(-0.5, 0.5);
+                final y = ((snapshot.data?.y ?? 0) / 20).clamp(-0.5, 0.5);
+
+                return WaveWidget(
+                  config: CustomConfig(
+                    gradients: [
+                      [Colors.orange, Colors.yellow],
+                      [Colors.deepOrangeAccent, Colors.amber],
+                    ],
+                    durations: [35000, 19440],
+                    heightPercentages: [0.20, 0.23],
+                    blur: const MaskFilter.blur(BlurStyle.solid, 5),
+                    gradientBegin: Alignment(-1 + x, 1 + y),
+                    gradientEnd: Alignment(1 + x, -1 + y),
+                  ),
+                  backgroundColor: Colors.black,
+                  size: const Size(double.infinity, double.infinity),
+                  waveAmplitude: 0,
+                );
+              },
             ),
           ),
 

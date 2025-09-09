@@ -72,10 +72,15 @@ class _IntroPage3State extends State<IntroPage3> {
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
                       height: 140,
-                      color: Colors.deepPurple, // لون الخلفية اللي انت عايزه
-                      child: Image.asset(
-                        "asset/image/intro3.png",
-                        fit: BoxFit.fill,
+                      width:
+                          double.infinity, // خلي العرض ياخد كل المساحة المتاحة
+                      decoration: BoxDecoration(
+                        color: Colors.deepPurple, // لون أساسي تحتي
+                        image: const DecorationImage(
+                          image: AssetImage("asset/image/intro3.png"),
+                          fit: BoxFit
+                              .cover, // الصورة هتمتد لتغطي كل الـ Container
+                        ),
                       ),
                     ),
                   ),

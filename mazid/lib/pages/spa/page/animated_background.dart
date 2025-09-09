@@ -1,4 +1,5 @@
-// TODO Implement this library.
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mazid/pages/spa/widget/bubbles.dart';
