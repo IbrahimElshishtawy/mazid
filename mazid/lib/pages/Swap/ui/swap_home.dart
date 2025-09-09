@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mazid/core/models/swap_request_model.dart';
 import 'package:mazid/core/models/swap_status.dart';
 import 'package:mazid/pages/Swap/widgets/swaptabar.dart';
-import 'package:mazid/pages/Swap/widgets/widget%20bottom/custom_product_card.dart';
+import 'package:mazid/pages/Swap/widgets/custom_product_card.dart';
 
 class SwapHome extends StatefulWidget {
   const SwapHome({super.key});
@@ -84,10 +84,23 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
           return p.status == "request";
         case SwapStatus.completed:
           return p.status == "completed";
-        default:
-          return false;
+        case SwapStatus.approved:
+          // TODO: Handle this case.
+          throw UnimplementedError();
+        case SwapStatus.other:
+          // TODO: Handle this case.
+          throw UnimplementedError();
       }
     }).toList();
+
+    if (filtered.isEmpty) {
+      return const Center(
+        child: Text(
+          "لا يوجد منتجات هنا",
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+      );
+    }
 
     return ListView.builder(
       padding: const EdgeInsets.all(12),

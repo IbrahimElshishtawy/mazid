@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -18,15 +16,20 @@ class _IntroPage1State extends State<IntroPage1> {
   double x = 0.0;
   double y = 0.0;
   StreamSubscription? _accelerometerSubscription;
+  DateTime _lastUpdate = DateTime.now();
 
   @override
   void initState() {
     super.initState();
     _accelerometerSubscription = accelerometerEvents.listen((event) {
-      setState(() {
-        x = (event.x / 20).clamp(-0.5, 0.5);
-        y = (event.y / 20).clamp(-0.5, 0.5);
-      });
+      // throttle: update كل 100ms فقط
+      if (DateTime.now().difference(_lastUpdate).inMilliseconds > 100) {
+        setState(() {
+          x = (event.x / 20).clamp(-0.5, 0.5);
+          y = (event.y / 20).clamp(-0.5, 0.5);
+        });
+        _lastUpdate = DateTime.now();
+      }
     });
   }
 
@@ -66,7 +69,7 @@ class _IntroPage1State extends State<IntroPage1> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 23),
+                const SizedBox(height: 23),
 
                 /// صورة اللوجو
                 Container(
