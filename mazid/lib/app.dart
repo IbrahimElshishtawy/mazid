@@ -20,7 +20,8 @@ class mazid extends StatelessWidget {
     final introSeen = prefs.getBool('introSeen') ?? false;
     final loggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-    if (!introSeen) {
+    var introSeen2 = introSeen;
+    if (!introSeen2) {
       return const IntroPage();
     } else if (loggedIn) {
       return const HomePage();

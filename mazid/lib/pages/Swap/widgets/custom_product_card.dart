@@ -27,7 +27,6 @@ class ProductCardswap extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // صورة المنتج
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
             child: Image.network(
@@ -37,8 +36,6 @@ class ProductCardswap extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-
-          // تفاصيل المنتج
           ListTile(
             title: Text(
               product.name,
@@ -57,7 +54,7 @@ class ProductCardswap extends StatelessWidget {
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    ProductCardRating(rating: product.rating), // ⭐
+                    ProductCardRating(rating: product.rating), 
                     const SizedBox(width: 4),
                     Text(product.rating.toStringAsFixed(1)),
                   ],
@@ -70,8 +67,7 @@ class ProductCardswap extends StatelessWidget {
           // الأزرار أو الأكشن الإضافي
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child:
-                extraActions ??
+            child: extraActions ??
                 ProductCardButton(
                   status: status,
                   product: product,

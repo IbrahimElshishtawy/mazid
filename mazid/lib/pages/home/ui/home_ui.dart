@@ -5,7 +5,6 @@ import 'package:mazid/pages/home/section/banner_section.dart';
 import 'package:mazid/pages/home/section/categories_section.dart';
 import 'package:mazid/pages/home/section/products_grid.dart';
 import 'package:mazid/pages/profile/ui/Profile_Page.dart';
-import 'package:mazid/pages/Auction/ui/auction_list_page.dart';
 import 'package:provider/provider.dart';
 
 class HomeUI extends StatelessWidget {
@@ -19,7 +18,9 @@ class HomeUI extends StatelessWidget {
       const Center(
         child: Text("CartPage", style: TextStyle(color: Colors.white)),
       ),
-      const AuctionListPage(),
+      const Center(
+        child: Text("BID", style: TextStyle(color: Colors.white)),
+      ),
       _buildHomePage(controller),
       _buildSwapPage(controller),
       _buildProfilePage(controller),

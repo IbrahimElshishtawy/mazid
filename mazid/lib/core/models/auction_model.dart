@@ -1,40 +1,44 @@
-// lib/core/models/auction_model.dart
-class AuctionModel {
+// models/transaction.dart
+class AuctionTransaction {
   final String id;
   final String productId;
-  final String sellerId;
-  final double startingPrice;
-  final DateTime startTime;
-  final DateTime endTime;
-  late final bool isActive;
+  final String winnerId;
+  final double amount;
+  final String status; // pending, paid, failed, refunded
+  final String? stripePaymentIntentId;
+  final DateTime createdAt;
 
-  AuctionModel({
+  AuctionTransaction({
     required this.id,
     required this.productId,
-    required this.sellerId,
-    required this.startingPrice,
-    required this.startTime,
-    required this.endTime,
-    this.isActive = true,
+    required this.winnerId,
+    required this.amount,
+    required this.status,
+    this.stripePaymentIntentId,
+    required this.createdAt,
   });
 
-  factory AuctionModel.fromJson(Map<String, dynamic> json) => AuctionModel(
-    id: json['id'],
-    productId: json['product_id'],
-    sellerId: json['seller_id'],
-    startingPrice: (json['starting_price'] as num).toDouble(),
-    startTime: DateTime.parse(json['start_time']),
-    endTime: DateTime.parse(json['end_time']),
-    isActive: json['is_active'] ?? true,
-  );
+  factory AuctionTransaction.fromJson(Map<String, dynamic> json) {
+    return AuctionTransaction(
+      id: json['id'] as String,
+      productId: json['product_id'] as String,
+      winnerId: json['winner_id'] as String,
+      amount: (json['amount'] as num).toDouble(),
+      status: json['status'] as String,
+      stripePaymentIntentId: json['stripe_payment_intent_id'] as String?,
+      createdAt: DateTime.parse(json['created_at']),
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'product_id': productId,
-    'seller_id': sellerId,
-    'starting_price': startingPrice,
-    'start_time': startTime.toIso8601String(),
-    'end_time': endTime.toIso8601String(),
-    'is_active': isActive,
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'product_id': productId,
+      'winner_id': winnerId,
+      'amount': amount,
+      'status': status,
+      'stripe_payment_intent_id': stripePaymentIntentId,
+      'created_at': createdAt.toIso8601String(),
+    };
+  }
 }

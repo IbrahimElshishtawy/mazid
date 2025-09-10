@@ -1,34 +1,35 @@
-// lib/core/models/bid_model.dart
-// ignore_for_file: file_names
-
-class BidModel {
+class Bid {
   final String id;
-  final String auctionId;
-  final String userId;
+  final String productId;
+  final String bidderId;
   final double amount;
-  final DateTime time;
+  final DateTime createdAt;
 
-  BidModel({
+  Bid({
     required this.id,
-    required this.auctionId,
-    required this.userId,
+    required this.productId,
+    required this.bidderId,
     required this.amount,
-    required this.time,
+    required this.createdAt,
   });
 
-  factory BidModel.fromJson(Map<String, dynamic> json) => BidModel(
-    id: json['id'],
-    auctionId: json['auction_id'],
-    userId: json['user_id'],
-    amount: (json['amount'] as num).toDouble(),
-    time: DateTime.parse(json['time']),
-  );
+  factory Bid.fromJson(Map<String, dynamic> json) {
+    return Bid(
+      id: json['id'] as String,
+      productId: json['product_id'] as String,
+      bidderId: json['bidder_id'] as String,
+      amount: (json['amount'] as num).toDouble(),
+      createdAt: DateTime.parse(json['created_at']),
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'auction_id': auctionId,
-    'user_id': userId,
-    'amount': amount,
-    'time': time.toIso8601String(),
-  };
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'product_id': productId,
+      'bidder_id': bidderId,
+      'amount': amount,
+      'created_at': createdAt.toIso8601String(),
+    };
+  }
 }

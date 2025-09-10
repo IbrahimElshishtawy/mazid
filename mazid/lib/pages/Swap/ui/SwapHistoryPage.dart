@@ -8,7 +8,6 @@ class SwapHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // فلترة المنتجات اللي انتهت أو تم قبول/رفض طلبها
     final history = allProducts
         .where(
           (p) =>
