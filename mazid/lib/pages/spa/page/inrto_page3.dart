@@ -71,15 +71,14 @@ class _IntroPage3State extends State<IntroPage3> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      height: 140,
-                      width:
-                          double.infinity, // خلي العرض ياخد كل المساحة المتاحة
+                      height: 120,
+                      width: 150, // خلي العرض ياخد كل المساحة المتاحة
                       decoration: BoxDecoration(
                         color: Colors.deepPurple, // لون أساسي تحتي
                         image: const DecorationImage(
                           image: AssetImage("asset/image/intro3.png"),
                           fit: BoxFit
-                              .cover, // الصورة هتمتد لتغطي كل الـ Container
+                              .fill, // الصورة هتمتد لتغطي كل الـ Container
                         ),
                       ),
                     ),

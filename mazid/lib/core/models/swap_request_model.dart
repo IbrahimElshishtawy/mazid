@@ -6,7 +6,7 @@ class SwapProductModel {
   final String imageUrl;
   final String ownerId;
   // (user id)
-  final String status;
+  String status; // تم التعديل من late final -> String فقط
   // (pending, accepted, rejected, completed)
   final DateTime createdAt;
   final double price;

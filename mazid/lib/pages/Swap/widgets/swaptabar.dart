@@ -19,7 +19,8 @@ class SwapTabBar extends StatelessWidget {
             Tab(icon: Icon(Icons.check_circle), text: "مقبولة"),
             Tab(icon: Icon(Icons.hourglass_bottom), text: "معلقة"),
             Tab(icon: Icon(Icons.trolley), text: "موافقه"),
-            Tab(icon: Icon(Icons.done_all), text: "مكتملة"),
+
+            Tab(icon: Icon(Icons.history), text: "السجل"), // تاب السجل الجديد
           ],
         ),
       ),

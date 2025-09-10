@@ -6,11 +6,15 @@ class SwapRequestsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // بيانات تجريبية (ممكن تتغير بعدين وتيجي من Firebase أو Supabase)
+    // بيانات تجريبية لعدة منتجات
     final requests = [
       {"user": "أحمد", "product": "موبايل سامسونج", "status": "pending"},
       {"user": "منى", "product": "لاب توب HP", "status": "accepted"},
       {"user": "خالد", "product": "سماعات بلوتوث", "status": "rejected"},
+      {"user": "ليلى", "product": "كاميرا كانون", "status": "pending"},
+      {"user": "سعيد", "product": "ساعة ذكية", "status": "accepted"},
+      {"user": "هالة", "product": "تابلت سامسونج", "status": "pending"},
+      {"user": "رامي", "product": "سماعات JBL", "status": "rejected"},
     ];
 
     return Scaffold(
@@ -66,13 +70,15 @@ class SwapRequestsPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.check, color: Colors.green),
             onPressed: () {
-              // هنا تحط منطق القبول
+              // هنا منطق القبول
+              print("تم قبول الطلب");
             },
           ),
           IconButton(
             icon: const Icon(Icons.close, color: Colors.red),
             onPressed: () {
-              // هنا تحط منطق الرفض
+              // هنا منطق الرفض
+              print("تم رفض الطلب");
             },
           ),
         ],
