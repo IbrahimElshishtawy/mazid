@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 class Bid {
   final String id;
   final String productId;

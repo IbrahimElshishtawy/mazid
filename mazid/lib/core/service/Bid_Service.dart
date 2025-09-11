@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:mazid/core/models/BidModel.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
