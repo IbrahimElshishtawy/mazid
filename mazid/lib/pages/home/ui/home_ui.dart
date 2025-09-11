@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/core/data/dummyProducts.dart'; // ✅ استدعاء الداتا
 import 'package:mazid/pages/Auction/home/auction_home.dart';
 import 'package:mazid/pages/Swap/ui/swap_home.dart';
 import 'package:mazid/pages/home/controller/home_controller.dart';
@@ -51,8 +50,6 @@ class HomeUI extends StatelessWidget {
       slivers: [
         const SliverToBoxAdapter(child: BannerSection()),
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
-
-        /// ✅ ممكن كمان تستخدم dummyProducts هنا لو عايز تعرضها في ProductsGrid
         SliverToBoxAdapter(
           child: CategoriesSection(
             selectedCategory: controller.selectedCategory,
@@ -61,14 +58,14 @@ class HomeUI extends StatelessWidget {
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
         SliverToBoxAdapter(
-          child: dummyProducts.isEmpty
+          child: controller.filteredProducts.isEmpty
               ? const Center(
                   child: Text(
                     "No products found",
                     style: TextStyle(color: Colors.white),
                   ),
                 )
-              : ProductsGrid(products: dummyProducts), // ✅ عرض منتجات dummy
+              : ProductsGrid(products: controller.filteredProducts),
         ),
       ],
     );
@@ -89,6 +86,10 @@ class HomeUI extends StatelessWidget {
         child: CircularProgressIndicator(color: Colors.orangeAccent),
       );
     }
-    return ProfilePage(userId: controller.currentUser?.id ?? "guest");
+    return ProfilePage(
+      userId:
+          controller.currentUser?.id ??
+          "guest", // fallback لو المستخدم مش لوج ان
+    );
   }
 }

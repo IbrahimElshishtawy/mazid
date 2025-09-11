@@ -27,6 +27,8 @@ class UserModel {
     this.totalAuctions = 0,
     this.totalSpent = 0.0,
     this.totalEarned = 0.0,
+    required String password,
+    required String imageUrl,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,8 @@ class UserModel {
       totalAuctions: json['total_auctions'] ?? 0,
       totalSpent: (json['total_spent'] ?? 0).toDouble(),
       totalEarned: (json['total_earned'] ?? 0).toDouble(),
+      password: '',
+      imageUrl: '',
     );
   }
 
@@ -72,6 +76,8 @@ class UserModel {
       totalAuctions: map['total_auctions'] as int? ?? 0,
       totalSpent: (map['total_spent'] as num?)?.toDouble() ?? 0.0,
       totalEarned: (map['total_earned'] as num?)?.toDouble() ?? 0.0,
+      password: '',
+      imageUrl: '',
     );
   }
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/core/models/swap_request_model.dart';
 
 /// منتجات تجريبية (Dummy Data)
 final List<ProductModel> dummyProducts = [
@@ -79,3 +80,17 @@ final List<Map<String, dynamic>> dummyBids = [
   {"productId": "p2", "user": "علي", "amount": 1100.0, "time": "قبل 15 دقيقة"},
   {"productId": "p3", "user": "محمود", "amount": 480.0, "time": "قبل 25 دقيقة"},
 ];
+
+final List<SwapProductModel> dummySwapProducts = dummyProducts.map((p) {
+  return SwapProductModel(
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    imageUrl: p.image,
+    ownerId: "unknown", // placeholder
+    status: "pending",
+    createdAt: DateTime.now(),
+    price: p.price,
+    rating: p.rating,
+  );
+}).toList();

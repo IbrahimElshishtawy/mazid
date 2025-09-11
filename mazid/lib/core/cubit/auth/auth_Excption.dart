@@ -47,6 +47,8 @@ class AuthService {
         email: email.trim(),
         avatar: '',
         phone: phone.trim(),
+        password: '',
+        imageUrl: '',
       );
     } on AuthException {
       rethrow;

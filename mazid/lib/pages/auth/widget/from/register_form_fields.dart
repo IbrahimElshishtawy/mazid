@@ -34,6 +34,8 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
       email: widget.emailController.text.trim(),
       phone: widget.phoneController.text.trim(),
       avatar: "",
+      password: '',
+      imageUrl: '',
     );
   }
 

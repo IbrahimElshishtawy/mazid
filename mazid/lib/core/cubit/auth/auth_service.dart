@@ -43,6 +43,8 @@ class AuthService {
           email: email.trim(),
           avatar: '',
           phone: phone.trim(),
+          password: '',
+          imageUrl: '',
         );
       } else {
         print("❌ [AuthService] Registration failed for $email");
