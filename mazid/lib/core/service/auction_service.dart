@@ -1,5 +1,5 @@
+import 'package:mazid/core/models/auction_model.dart' show AuctionTransaction;
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models/transaction.dart';
 
 class TransactionService {
   final supabase = Supabase.instance.client;
