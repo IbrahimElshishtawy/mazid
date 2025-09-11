@@ -1,66 +1,52 @@
-// lib/core/service/auction_service.dart
-import 'package:mazid/core/models/BidModel.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models/auction_model.dart';
+import '../models/transaction.dart';
 
-final supabase = Supabase.instance.client;
+class TransactionService {
+  final supabase = Supabase.instance.client;
 
-class AuctionService {
-  Future<void> createAuction(AuctionModel auction) async {
-    await supabase.from('auctions').insert([auction.toJson()]);
+  Future<void> createTransaction(AuctionTransaction tx) async {
+    await supabase.from('transactions').insert(tx.toJson());
   }
 
-  Future<List<AuctionModel>> fetchAllAuctions() async {
-    final data = await supabase.from('auctions').select();
-    return (data as List).map((e) => AuctionModel.fromJson(e)).toList();
-  }
-
-  Future<List<AuctionModel>> fetchAuctionBySeller(String sellerId) async {
-    final data = await supabase
-        .from('auctions')
+  Future<List<AuctionTransaction>> getUserTransactions(String userId) async {
+    final response = await supabase
+        .from('transactions')
         .select()
-        .eq('seller_id', sellerId);
-    return (data as List).map((e) => AuctionModel.fromJson(e)).toList();
+        .eq('winner_id', userId);
+
+    return (response as List)
+        .map((json) => AuctionTransaction.fromJson(json))
+        .toList();
   }
 
-  Future<AuctionModel?> fetchAuctionById(String auctionId) async {
-    final data = await supabase
-        .from('auctions')
+  Future<List<AuctionTransaction>> getProductTransactions(
+    String productId,
+  ) async {
+    final response = await supabase
+        .from('transactions')
         .select()
-        .eq('id', auctionId)
-        .maybeSingle();
-    if (data == null) return null;
-    return AuctionModel.fromJson(data);
+        .eq('product_id', productId);
+
+    return (response as List)
+        .map((json) => AuctionTransaction.fromJson(json))
+        .toList();
   }
 
-  Future<void> placeBid(BidModel bid) async {
-    await supabase.from('bids').insert([bid.toJson()]);
-  }
-
-  Future<List<BidModel>> fetchBidsForAuction(String auctionId) async {
-    final data = await supabase
-        .from('bids')
-        .select()
-        .eq('auction_id', auctionId)
-        .order('amount', ascending: false);
-    return (data as List).map((e) => BidModel.fromJson(e)).toList();
-  }
-
-  Future<BidModel?> getHighestBid(String auctionId) async {
-    final data = await supabase
-        .from('bids')
-        .select()
-        .eq('auction_id', auctionId)
-        .order('amount', ascending: false)
-        .limit(1);
-    if ((data as List).isEmpty) return null;
-    return BidModel.fromJson(data.first);
-  }
-
-  Future<void> markAuctionAsFinished(String auctionId) async {
+  Future<void> updateTransactionStatus(String txId, String newStatus) async {
     await supabase
-        .from('auctions')
-        .update({'is_active': false})
-        .eq('id', auctionId);
+        .from('transactions')
+        .update({'status': newStatus})
+        .eq('id', txId);
+  }
+
+  /// 🔹 تحديث Stripe PaymentIntent ID (لو رجع من Stripe)
+  Future<void> attachStripePaymentIntent(
+    String txId,
+    String paymentIntentId,
+  ) async {
+    await supabase
+        .from('transactions')
+        .update({'stripe_payment_intent_id': paymentIntentId})
+        .eq('id', txId);
   }
 }
