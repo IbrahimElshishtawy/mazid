@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mazid/core/data/dummyProducts.dart';
 
 import 'package:mazid/core/models/product_models.dart';
 
@@ -240,6 +241,7 @@ class ProductDetailPage extends StatelessWidget {
             style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
             onPressed: () {
               Navigator.pop(context);
+              // هنا ممكن نضيف منطق إضافة المزايدة في dummyBids أو Supabase لاحقاً
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   backgroundColor: Colors.orange,

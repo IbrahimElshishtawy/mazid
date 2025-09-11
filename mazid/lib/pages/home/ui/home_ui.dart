@@ -18,9 +18,7 @@ class HomeUI extends StatelessWidget {
       const Center(
         child: Text("CartPage", style: TextStyle(color: Colors.white)),
       ),
-      const Center(
-        child: Text("BID", style: TextStyle(color: Colors.white)),
-      ),
+      const AuctionProductsPage(), // ⬅️ هنا بدلناها بصفحة المزاد
       _buildHomePage(controller),
       _buildSwapPage(controller),
       _buildProfilePage(controller),
@@ -78,7 +76,7 @@ class HomeUI extends StatelessWidget {
         child: CircularProgressIndicator(color: Colors.orangeAccent),
       );
     }
-    return const SwapHome(); // يعرض SwapHome على طول
+    return const SwapHome();
   }
 
   Widget _buildProfilePage(HomeController controller) {
@@ -87,10 +85,6 @@ class HomeUI extends StatelessWidget {
         child: CircularProgressIndicator(color: Colors.orangeAccent),
       );
     }
-    return ProfilePage(
-      userId:
-          controller.currentUser?.id ??
-          "guest", // fallback لو المستخدم مش لوج ان
-    );
+    return ProfilePage(userId: controller.currentUser?.id ?? "guest");
   }
 }

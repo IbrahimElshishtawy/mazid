@@ -25,15 +25,15 @@ class BannerWidget extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         image: DecorationImage(
-          image: AssetImage(imageUrl), // هنا لو الصورة محلية
-          // image: NetworkImage(imageUrl), // هنا لو الصورة من الإنترنت
-          fit: BoxFit.cover, // عشان الصورة تملأ البانر كله
+          image: AssetImage(imageUrl),
+          // image: NetworkImage(imageUrl),
+          fit: BoxFit.cover,
         ),
       ),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: Colors.black.withOpacity(0.4), // طبقة شفافة غامقة فوق الصورة
+          color: Colors.black.withOpacity(0.4),
         ),
         alignment: Alignment.center,
         child: Text(
