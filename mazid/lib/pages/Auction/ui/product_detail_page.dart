@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/core/data/dummyProducts.dart';
-
 import 'package:mazid/core/models/product_models.dart';
 
 class ProductDetailPage extends StatelessWidget {
@@ -10,6 +9,7 @@ class ProductDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // فلترة المزايدات الخاصة بالمنتج ده
     final productBids = dummyBids
         .where((bid) => bid["productId"] == product.id)
         .toList();
@@ -21,7 +21,7 @@ class ProductDetailPage extends StatelessWidget {
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.orange),
         title: Text(
-          product.title,
+          product.name,
           style: const TextStyle(
             color: Colors.orange,
             fontWeight: FontWeight.bold,
@@ -43,7 +43,7 @@ class ProductDetailPage extends StatelessWidget {
           Hero(
             tag: product.id,
             child: Image.network(
-              product.firstImage,
+              product.image,
               height: 250,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -60,7 +60,7 @@ class ProductDetailPage extends StatelessWidget {
               ),
               child: ListView(
                 children: [
-                  // اسم المنتج والسعر
+                  // اسم المنتج + السعر
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -137,34 +137,32 @@ class ProductDetailPage extends StatelessWidget {
                     )
                   else
                     Column(
-                      children: productBids
-                          .map(
-                            (bid) => ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.orange.shade700,
-                                child: Text(
-                                  bid["user"][0],
-                                  style: const TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              title: Text(
-                                bid["user"],
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                              subtitle: Text(
-                                bid["time"],
-                                style: const TextStyle(color: Colors.white70),
-                              ),
-                              trailing: Text(
-                                "\$${bid["amount"]}",
-                                style: const TextStyle(
-                                  color: Colors.orangeAccent,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                      children: productBids.map((bid) {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.orange.shade700,
+                            child: Text(
+                              bid["user"][0],
+                              style: const TextStyle(color: Colors.white),
                             ),
-                          )
-                          .toList(),
+                          ),
+                          title: Text(
+                            bid["user"],
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                          subtitle: Text(
+                            bid["time"],
+                            style: const TextStyle(color: Colors.white70),
+                          ),
+                          trailing: Text(
+                            "\$${bid["amount"]}",
+                            style: const TextStyle(
+                              color: Colors.orangeAccent,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   const SizedBox(height: 80),
                 ],
@@ -189,9 +187,7 @@ class ProductDetailPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          onPressed: () {
-            _showBidDialog(context, product);
-          },
+          onPressed: () => _showBidDialog(context),
           child: const Text(
             "ضع مزايدة جديدة",
             style: TextStyle(
@@ -205,7 +201,7 @@ class ProductDetailPage extends StatelessWidget {
     );
   }
 
-  void _showBidDialog(BuildContext context, ProductModel product) {
+  void _showBidDialog(BuildContext context) {
     final bidController = TextEditingController();
 
     showDialog(
@@ -241,7 +237,7 @@ class ProductDetailPage extends StatelessWidget {
             style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
             onPressed: () {
               Navigator.pop(context);
-              // هنا ممكن نضيف منطق إضافة المزايدة في dummyBids أو Supabase لاحقاً
+              // هنا ممكن تضيف منطق إضافة المزايدة في Supabase أو Firestore
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   backgroundColor: Colors.orange,
