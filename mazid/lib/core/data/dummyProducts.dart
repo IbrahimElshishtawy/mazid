@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:mazid/core/models/product_models.dart';
 
 /// منتجات تجريبية (Dummy Data)

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/core/data/dummyProducts.dart'; // ✅ استدعاء الداتا
-import 'package:mazid/pages/Swap/ui/ProductDetailPageswap.dart';
+import 'package:mazid/pages/Auction/home/auction_home.dart';
 import 'package:mazid/pages/Swap/ui/swap_home.dart';
 import 'package:mazid/pages/home/controller/home_controller.dart';
 import 'package:mazid/pages/home/section/banner_section.dart';
@@ -20,7 +20,7 @@ class HomeUI extends StatelessWidget {
       const Center(
         child: Text("CartPage", style: TextStyle(color: Colors.white)),
       ),
-
+      AuctionHomePage(),
       _buildHomePage(controller),
       _buildSwapPage(controller),
       _buildProfilePage(controller),

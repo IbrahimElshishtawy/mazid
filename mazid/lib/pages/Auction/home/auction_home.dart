@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/core/data/dummyProducts.dart';
+import 'package:mazid/core/models/swap_request_model.dart';
 import 'package:mazid/pages/Swap/ui/ProductDetailPageswap.dart';
 
-class HomePage extends StatelessWidget {
-  final List<ProductModel> products;
-
-  const HomePage({super.key, required this.products});
+class AuctionHomePage extends StatelessWidget {
+  const AuctionHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +20,16 @@ class HomePage extends StatelessWidget {
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(16),
-        itemCount: products.length,
+        itemCount: dummyProducts.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // عمودين
+          crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
           childAspectRatio: 0.7,
         ),
         itemBuilder: (context, index) {
-          final product = products[index];
+          final SwapProductModel product =
+              dummyProducts[index] as SwapProductModel;
           return GestureDetector(
             onTap: () {
               Navigator.push(
@@ -48,25 +48,23 @@ class HomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // صورة المنتج
                   ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(16),
                     ),
                     child: Image.network(
                       product.image,
+
                       height: 140,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
                   ),
                   const SizedBox(height: 8),
-
-                  // اسم المنتج
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      product.name,
+                      product.title,
                       style: const TextStyle(
                         color: Colors.orange,
                         fontSize: 16,
@@ -76,13 +74,10 @@ class HomePage extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(height: 4),
-
-                  // السعر
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
-                      "\$${product.price}",
+                      "\$${product.currentPrice}",
                       style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
@@ -90,8 +85,6 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-
-                  // زر التفاصيل
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.symmetric(vertical: 6),
@@ -103,7 +96,7 @@ class HomePage extends StatelessWidget {
                     ),
                     child: const Center(
                       child: Text(
-                        "تفاصيل المنتج",
+                        "شارك الآن",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,

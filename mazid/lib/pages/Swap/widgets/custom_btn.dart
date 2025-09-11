@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/swap_request_model.dart';
 import 'package:mazid/core/models/swap_status.dart';
@@ -43,7 +44,9 @@ class ProductCardButton extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // منطق الموافقة على الطلب
-                print("تم قبول طلب التبديل للمنتج ${product.name}");
+                if (kDebugMode) {
+                  print("تم قبول طلب التبديل للمنتج ${product.name}");
+                }
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               child: const Text("قبول"),
@@ -52,7 +55,9 @@ class ProductCardButton extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 // منطق رفض الطلب
-                print("تم رفض طلب التبديل للمنتج ${product.name}");
+                if (kDebugMode) {
+                  print("تم رفض طلب التبديل للمنتج ${product.name}");
+                }
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               child: const Text("رفض"),

@@ -4,10 +4,8 @@ class SwapProductModel {
   final String name;
   final String description;
   final String imageUrl;
-  final String ownerId;
-  // (user id)
-  String status; // تم التعديل من late final -> String فقط
-  // (pending, accepted, rejected, completed)
+  final String ownerId; // (user id)
+  String status; // (pending, accepted, rejected, completed)
   final DateTime createdAt;
   final double price;
   final double rating;
@@ -24,7 +22,6 @@ class SwapProductModel {
     required this.rating,
   });
 
-  /// تحويل من JSON (من Supabase أو Firebase)
   factory SwapProductModel.fromJson(Map<String, dynamic> json) {
     return SwapProductModel(
       id: json['id']?.toString() ?? '',
@@ -43,7 +40,10 @@ class SwapProductModel {
     );
   }
 
-  /// تحويل إلى JSON (للتخزين في قاعدة البيانات)
+  String get image => imageUrl;
+  double get currentPrice => price;
+  String get title => name;
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -58,7 +58,6 @@ class SwapProductModel {
     };
   }
 
-  /// نسخة جديدة مع تعديل بعض الخصائص
   SwapProductModel copyWith({
     String? id,
     String? name,
