@@ -21,7 +21,11 @@ class ProfilePage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          child: isAdmin ? _buildAdminProfile() : _buildUserProfile(),
+          child: isAdmin
+              ? _buildAdminProfile()
+              : (userId == "guest"
+                    ? _buildGuestProfile()
+                    : _buildUserProfile()),
         ),
       ),
     );
@@ -30,31 +34,41 @@ class ProfilePage extends StatelessWidget {
   // بيانات الإدمن
   Widget _buildAdminProfile() {
     final adminUser = UserModel(
-      id: "admin_001",
+      id: AdminData.id,
       name: AdminData.name,
       email: AdminData.email,
       phone: AdminData.phone,
       password: AdminData.password,
-      imageUrl: "https://example.com/admin_image.png",
-      avatar: '',
+      imageUrl: AdminData.imageUrl,
+      avatar: AdminData.avatar,
+      walletBalance: AdminData.walletBalance.toDouble(),
+      totalPurchases: AdminData.totalPurchases,
+      totalCancelledOrders: AdminData.totalCancelledOrders,
+      pendingOrders: AdminData.pendingOrders,
+      receivedOrders: AdminData.receivedOrders,
+      unreceivedOrders: AdminData.unreceivedOrders,
+      totalSales: AdminData.totalSales,
+      totalAuctions: AdminData.totalAuctions,
+      totalSpent: AdminData.totalSpent,
+      totalEarned: AdminData.totalEarned,
     );
 
     return Column(
       children: [
         UserCard(user: adminUser),
         const SizedBox(height: 24),
-        WalletSection(walletBalance: 0),
+        WalletSection(walletBalance: adminUser.walletBalance),
         const SizedBox(height: 24),
         StatsGrid(
-          totalPurchases: 0,
-          totalCancelledOrders: 0,
-          pendingOrders: 0,
-          receivedOrders: 0,
-          unreceivedOrders: 0,
-          totalSales: 0,
-          totalAuctions: 0,
-          totalSpent: 0,
-          totalEarned: 0,
+          totalPurchases: adminUser.totalPurchases,
+          totalCancelledOrders: adminUser.totalCancelledOrders,
+          pendingOrders: adminUser.pendingOrders,
+          receivedOrders: adminUser.receivedOrders,
+          unreceivedOrders: adminUser.unreceivedOrders,
+          totalSales: adminUser.totalSales,
+          totalAuctions: adminUser.totalAuctions,
+          totalSpent: adminUser.totalSpent,
+          totalEarned: adminUser.totalEarned,
         ),
       ],
     );
@@ -73,7 +87,16 @@ class ProfilePage extends StatelessWidget {
           );
         }
 
-        if (!snapshot.hasData) {
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text(
+              "حدث خطأ أثناء تحميل البيانات",
+              style: TextStyle(color: Colors.redAccent),
+            ),
+          );
+        }
+
+        if (!snapshot.hasData || snapshot.data == null) {
           return const Center(
             child: Text(
               "لا توجد بيانات للمستخدم",
@@ -88,22 +111,65 @@ class ProfilePage extends StatelessWidget {
           children: [
             UserCard(user: user),
             const SizedBox(height: 24),
-            WalletSection(walletBalance: profileData.walletBalance),
+            WalletSection(walletBalance: user.walletBalance),
             const SizedBox(height: 24),
             StatsGrid(
-              totalPurchases: profileData.totalPurchases,
-              totalCancelledOrders: profileData.totalCancelledOrders,
-              pendingOrders: profileData.pendingOrders,
-              receivedOrders: profileData.receivedOrders,
-              unreceivedOrders: profileData.unreceivedOrders,
-              totalSales: profileData.totalSales,
-              totalAuctions: profileData.totalAuctions,
-              totalSpent: profileData.totalSpent,
-              totalEarned: profileData.totalEarned,
+              totalPurchases: user.totalPurchases,
+              totalCancelledOrders: user.totalCancelledOrders,
+              pendingOrders: user.pendingOrders,
+              receivedOrders: user.receivedOrders,
+              unreceivedOrders: user.unreceivedOrders,
+              totalSales: user.totalSales,
+              totalAuctions: user.totalAuctions,
+              totalSpent: user.totalSpent,
+              totalEarned: user.totalEarned,
             ),
           ],
         );
       },
+    );
+  }
+
+  // بيانات الضيف
+  Widget _buildGuestProfile() {
+    final guestUser = UserModel(
+      id: "guest_001",
+      name: "ضيف",
+      email: "guest@example.com",
+      phone: "-",
+      password: "",
+      imageUrl: 'asset/icon/iconimage.jpg',
+      avatar: '',
+      walletBalance: 0.0,
+      totalPurchases: 0,
+      totalCancelledOrders: 0,
+      pendingOrders: 0,
+      receivedOrders: 0,
+      unreceivedOrders: 0,
+      totalSales: 0,
+      totalAuctions: 0,
+      totalSpent: 0.0,
+      totalEarned: 0.0,
+    );
+
+    return Column(
+      children: [
+        UserCard(user: guestUser),
+        const SizedBox(height: 24),
+        WalletSection(walletBalance: guestUser.walletBalance),
+        const SizedBox(height: 24),
+        StatsGrid(
+          totalPurchases: guestUser.totalPurchases,
+          totalCancelledOrders: guestUser.totalCancelledOrders,
+          pendingOrders: guestUser.pendingOrders,
+          receivedOrders: guestUser.receivedOrders,
+          unreceivedOrders: guestUser.unreceivedOrders,
+          totalSales: guestUser.totalSales,
+          totalAuctions: guestUser.totalAuctions,
+          totalSpent: guestUser.totalSpent,
+          totalEarned: guestUser.totalEarned,
+        ),
+      ],
     );
   }
 }

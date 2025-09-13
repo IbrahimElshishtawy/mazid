@@ -29,17 +29,23 @@ class UserCard extends StatelessWidget {
           Stack(
             children: [
               CircleAvatar(
-                radius: 60,
-                backgroundColor: Colors.orangeAccent,
-                child: CircleAvatar(
-                  radius: 55,
-                  backgroundImage: NetworkImage(
-                    user.avatar.isNotEmpty
-                        ? user.avatar
-                        : 'https://via.placeholder.com/150',
-                  ),
-                ),
+                radius: 55,
+                backgroundColor: Colors.grey.shade800,
+                backgroundImage: user.avatar.isNotEmpty
+                    ? NetworkImage(user.avatar)
+                    : null,
+                child: user.avatar.isEmpty
+                    ? ClipOval(
+                        child: Image.asset(
+                          'assets/images/placeholder.png',
+                          width: 110,
+                          height: 110,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : null,
               ),
+
               Positioned(
                 bottom: 0,
                 right: 0,

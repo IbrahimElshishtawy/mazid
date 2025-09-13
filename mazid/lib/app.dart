@@ -17,16 +17,17 @@ class mazid extends StatelessWidget {
 
   Future<Widget> _determineStartPage() async {
     final prefs = await SharedPreferences.getInstance();
-    final introSeen = prefs.getBool('introSeen') ?? false;
     final loggedIn = prefs.getBool('isLoggedIn') ?? false;
+    final introSeen = prefs.getBool('introSeen') ?? false;
 
-    var introSeen2 = introSeen;
-    if (!introSeen2) {
-      return const IntroPage();
-    } else if (loggedIn) {
+    if (loggedIn) {
       return const HomePage();
     } else {
-      return const LoginPage();
+      if (!introSeen) {
+        return const IntroPage();
+      } else {
+        return const LoginPage();
+      }
     }
   }
 
