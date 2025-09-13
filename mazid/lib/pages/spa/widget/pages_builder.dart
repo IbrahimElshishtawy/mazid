@@ -8,7 +8,6 @@ import 'package:mazid/pages/spa/page/inrto_page3.dart';
 import 'package:mazid/pages/spa/widget/page_indicator.dart';
 import 'package:mazid/pages/auth/ui/login.dart';
 
-/// بيانات الصفحات
 class PageData {
   final Color bgColor;
   final Color textColor;
@@ -17,7 +16,6 @@ class PageData {
   PageData(this.bgColor, this.textColor, this.type);
 }
 
-/// قائمة الصفحات
 final List<PageData> pagesData = [
   PageData(Colors.black, Colors.white, "intro"),
   PageData(Colors.white, Colors.black, "intro"),
@@ -37,7 +35,6 @@ class _IntroAnimationState extends State<IntroAnimation> {
   int currentPage = 0;
   int _lastPage = 0;
 
-  /// بناء صفحات الانترو + اللوجين
   List<Widget> buildPages() {
     return [
       const IntroPage1(textColor: Colors.white),
@@ -51,7 +48,6 @@ class _IntroAnimationState extends State<IntroAnimation> {
   Widget build(BuildContext context) {
     final pages = buildPages();
 
-    // لو وصلنا Login → نعرضها مباشرة
     if (currentPage == pages.length - 1) {
       return const LoginPage();
     }
@@ -59,14 +55,12 @@ class _IntroAnimationState extends State<IntroAnimation> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        /// لون خلفية الصفحة الحالية
         Container(color: pagesData[currentPage].bgColor),
 
-        /// انيميشن السوايب
         LiquidSwipe(
           pages: pages,
           liquidController: _liquidController,
-          enableLoop: true,
+          enableLoop: false, // وقفنا اللوب عشان الـ Login تكون النهاية
           fullTransitionValue: 500,
           enableSideReveal: false,
           waveType: WaveType.liquidReveal,
@@ -82,15 +76,15 @@ class _IntroAnimationState extends State<IntroAnimation> {
           },
         ),
 
-        /// إنديكيتور للصفحات
-        Positioned(
-          bottom: 20,
-          child: PageIndicator(
-            length: pages.length,
-            currentPage: currentPage,
-            color: Colors.white,
+        if (currentPage < pages.length - 1)
+          Positioned(
+            bottom: 20,
+            child: PageIndicator(
+              length: pages.length - 1,
+              currentPage: currentPage,
+              color: pagesData[currentPage].textColor,
+            ),
           ),
-        ),
       ],
     );
   }

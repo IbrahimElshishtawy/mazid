@@ -19,7 +19,11 @@ class PageData {
 
 final List<PageData> pagesData = [
   PageData(Colors.black, Colors.white, "intro"),
-  PageData(Colors.black, Colors.white, "intro"),
+  PageData(
+    const Color.fromARGB(255, 247, 247, 247),
+    const Color.fromARGB(255, 1, 1, 1),
+    "intro",
+  ),
   PageData(Colors.black, Colors.white, "intro"),
   PageData(Colors.white, Colors.black, "login"),
 ];
@@ -36,7 +40,6 @@ class _IntroAnimationState extends State<IntroAnimation> {
   int currentPage = 0;
   int _lastPage = 0;
 
-  // دالة بناء الصفحات
   List<Widget> buildPages() {
     return pagesData.map((page) {
       final index = pagesData.indexOf(page);
