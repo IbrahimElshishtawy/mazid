@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class IntroPage1 extends StatelessWidget {
-  const IntroPage1({super.key, required Color textColor});
+  const IntroPage1({super.key, required this.textColor});
+
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // خلفية سوداء
+      backgroundColor: Colors.black, // خلفية شفافة
       body: SafeArea(
         child: Center(
           child: Column(
@@ -16,21 +18,21 @@ class IntroPage1 extends StatelessWidget {
               /// الانيميشن في النص
               Lottie.asset(
                 'asset/animation/intro1animation.json',
-                width: 250,
-                height: 250,
+                width: 290,
+                height: 290,
                 fit: BoxFit.contain,
               ),
 
               const SizedBox(height: 30),
 
               /// النص الترحيبي
-              const Text(
+              Text(
                 "Welcome to Mazid Store",
                 style: TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  shadows: [
+                  color: textColor,
+                  shadows: const [
                     Shadow(
                       blurRadius: 10,
                       color: Colors.orange,
@@ -44,9 +46,12 @@ class IntroPage1 extends StatelessWidget {
               const SizedBox(height: 12),
 
               /// النص الفرعي
-              const Text(
+              Text(
                 "Your first step into a smarter shopping experience.",
-                style: TextStyle(fontSize: 16, color: Colors.white70),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: textColor.withOpacity(0.8),
+                ),
                 textAlign: TextAlign.center,
               ),
             ],

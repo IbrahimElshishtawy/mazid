@@ -1,13 +1,11 @@
-import 'dart:async';
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
 import 'package:mazid/pages/spa/page/intro_page1.dart';
 import 'package:mazid/pages/spa/page/intro_page2.dart';
 import 'package:mazid/pages/spa/page/inrto_page3.dart';
-import 'package:mazid/pages/spa/widget/bubbles.dart';
 import 'package:mazid/pages/spa/widget/page_indicator.dart';
-import 'package:particles_flutter/component/particle/particle.dart';
-import 'package:particles_flutter/particles_engine.dart';
 import 'package:mazid/pages/auth/ui/login.dart';
 
 /// بيانات الصفحات
@@ -38,34 +36,12 @@ class _IntroAnimationState extends State<IntroAnimation> {
   final LiquidController _liquidController = LiquidController();
   int currentPage = 0;
   int _lastPage = 0;
-  List<Particle> _bubbles = [];
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // إنشاء فقاعات البداية
-    _bubbles = BubbleHelper.createBubbles(Colors.white);
-
-    // حركة بسيطة للفقاعات (Shuffle)
-    _timer = Timer.periodic(const Duration(milliseconds: 600), (timer) {
-      if (!mounted) return;
-      setState(() => _bubbles.shuffle());
-    });
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
 
   /// بناء صفحات الانترو + اللوجين
   List<Widget> buildPages() {
     return [
       const IntroPage1(textColor: Colors.white),
-      const IntroPage2(textColor: Color.fromARGB(255, 255, 255, 255)),
+      const IntroPage2(textColor: Colors.black),
       const IntroPage3(textColor: Colors.white),
       const LoginPage(),
     ];
@@ -73,10 +49,9 @@ class _IntroAnimationState extends State<IntroAnimation> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final pages = buildPages();
 
-    // لو وصلنا Login → نعرضها مباشرة بدون تأثير
+    // لو وصلنا Login → نعرضها مباشرة
     if (currentPage == pages.length - 1) {
       return const LoginPage();
     }
@@ -84,26 +59,10 @@ class _IntroAnimationState extends State<IntroAnimation> {
     return Stack(
       alignment: Alignment.center,
       children: [
-        // الخلفية بلون الصفحة
+        /// لون خلفية الصفحة الحالية
         Container(color: pagesData[currentPage].bgColor),
 
-        // فقاعات متحركة
-        IgnorePointer(
-          child: Particles(
-            awayRadius: 120,
-            particles: _bubbles,
-            height: size.height,
-            width: size.width,
-            onTapAnimation: false,
-            awayAnimationDuration: const Duration(milliseconds: 250),
-            awayAnimationCurve: Curves.easeOut,
-            enableHover: false,
-            hoverRadius: 80,
-            connectDots: false,
-          ),
-        ),
-
-        // Liquid Swipe
+        /// انيميشن السوايب
         LiquidSwipe(
           pages: pages,
           liquidController: _liquidController,
@@ -115,27 +74,21 @@ class _IntroAnimationState extends State<IntroAnimation> {
           onPageChangeCallback: (page) {
             final int pagesLen = pages.length;
             final bool isBack = page == ((_lastPage - 1 + pagesLen) % pagesLen);
-            final dir = isBack
-                ? SlideDirection.leftToRight
-                : SlideDirection.rightToLeft;
 
             setState(() {
               currentPage = page;
               _lastPage = page;
-
-              // إضافة حركة للفقاعات مع تغيير الصفحة
-              _bubbles.addAll(BubbleHelper.waveBubbles(dir, Colors.white));
             });
           },
         ),
 
-        // Page Indicator أبيض فقط
+        /// إنديكيتور للصفحات
         Positioned(
           bottom: 20,
           child: PageIndicator(
             length: pages.length,
             currentPage: currentPage,
-            color: Colors.white, // ثابت أبيض
+            color: Colors.white,
           ),
         ),
       ],

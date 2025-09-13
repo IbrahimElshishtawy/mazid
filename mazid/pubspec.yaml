@@ -91,8 +91,8 @@ flutter:
   assets:
     - asset/icon/iconimage.jpg
     - asset/animation/intro1animation.json
-    - asset/image/intro2.jpg
-    - asset/image/intro3.png
+    - asset/animation/intro2.json
+    - asset/animation/intro3.json
   
     - asset/image/sell-used-electronics.jpg
     - asset/image/offer50.png
