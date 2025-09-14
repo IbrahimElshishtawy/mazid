@@ -6,7 +6,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class CartService {
   final supabase = Supabase.instance.client;
 
-  /// إضافة منتج للسلة أو تحديث الكمية لو موجود
   Future<void> addToCart({
     required String userId,
     required int productId,
@@ -15,7 +14,6 @@ class CartService {
     required String imageUrl,
   }) async {
     try {
-      // تحقق من وجود المنتج في السلة
       final existing = await supabase
           .from('cart')
           .select()
@@ -24,13 +22,11 @@ class CartService {
           .maybeSingle();
 
       if (existing != null) {
-        // تحديث الكمية لو موجود
         await supabase
             .from('cart')
             .update({'quantity': (existing['quantity'] as int) + 1})
             .eq('id', existing['id']);
       } else {
-        // إضافة المنتج للسلة
         await supabase.from('cart').insert({
           'user_id': userId,
           'product_id': productId,
@@ -46,7 +42,6 @@ class CartService {
     }
   }
 
-  /// جلب جميع عناصر السلة لمستخدم معين
   Future<List<Map<String, dynamic>>> getCart(String userId) async {
     try {
       final response = await supabase
@@ -77,7 +72,6 @@ class CartService {
     }
   }
 
-  /// حذف عنصر من السلة
   Future<void> deleteItem(int cartId) async {
     try {
       await supabase.from('cart').delete().eq('id', cartId);
@@ -87,7 +81,6 @@ class CartService {
     }
   }
 
-  /// جلب عدد المنتجات في السلة
   Future<int> getCartCount(String userId) async {
     try {
       final response = await supabase
@@ -95,7 +88,6 @@ class CartService {
           .select()
           .eq('user_id', userId);
 
-      // response يكون List<dynamic>، نرجع الطول مباشرة
       return (response as List).length;
     } catch (e) {
       print('❌ [CartService] getCartCount error: $e');

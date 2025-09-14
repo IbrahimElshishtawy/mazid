@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:mazid/core/cubit/auth/auth_Excption.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/core/models/user_model.dart';
-import 'package:mazid/core/service/product_service.dart';
-import 'package:mazid/core/service/swap_service.dart';
+import 'package:mazid/core/service/product/product_service.dart';
+import 'package:mazid/core/service/swip/swap_service.dart';
 
 class HomeController extends ChangeNotifier {
   final ProductService _productService = ProductService();

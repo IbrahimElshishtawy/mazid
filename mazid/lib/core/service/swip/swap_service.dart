@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models/swap_request_model.dart';
+import '../../models/swap_request_model.dart';
 
 class SwapService {
   final supabase = Supabase.instance.client;

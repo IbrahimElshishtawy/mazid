@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/swap_request_model.dart';
-import 'package:mazid/core/service/swap_service.dart';
+import 'package:mazid/core/service/swip/swap_service.dart';
 
 /// Widget عبارة عن قائمة منبثقة (Popup Menu) خاصة بكارت المنتج.
 /// - بتظهر على شكل أيقونة (⋮) في الكارت.

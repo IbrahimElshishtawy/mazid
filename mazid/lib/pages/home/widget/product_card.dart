@@ -3,7 +3,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/product_models.dart';
-import 'package:mazid/core/service/cart_service.dart';
+import 'package:mazid/core/service/cart/cart_service.dart';
 import 'package:mazid/pages/home/Details/Product_Details_Page.dart';
 import 'package:mazid/pages/home/widget/StarRating.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
