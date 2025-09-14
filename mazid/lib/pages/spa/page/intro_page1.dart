@@ -6,9 +6,7 @@ import 'package:mazid/pages/spa/widget/CurvedTopClipper.dart';
 
 class IntroPage1 extends StatelessWidget {
   const IntroPage1({super.key, required this.textColor});
-
   final Color textColor;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,7 +106,7 @@ class IntroPage1 extends StatelessWidget {
                   Text(
                     "Your first step into a smarter shopping experience.",
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       color: textColor.withOpacity(0.8),
                     ),
                     textAlign: TextAlign.center,

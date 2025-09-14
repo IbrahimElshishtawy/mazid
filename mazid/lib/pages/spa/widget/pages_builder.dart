@@ -60,7 +60,7 @@ class _IntroAnimationState extends State<IntroAnimation> {
         LiquidSwipe(
           pages: pages,
           liquidController: _liquidController,
-          enableLoop: false, // وقفنا اللوب عشان الـ Login تكون النهاية
+          enableLoop: false,
           fullTransitionValue: 500,
           enableSideReveal: false,
           waveType: WaveType.liquidReveal,

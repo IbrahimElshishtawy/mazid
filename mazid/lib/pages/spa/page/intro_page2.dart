@@ -7,7 +7,6 @@ import 'package:mazid/pages/spa/widget/CurvedTopClipper.dart';
 class IntroPage2 extends StatelessWidget {
   final Color textColor;
   const IntroPage2({super.key, required this.textColor});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +27,6 @@ class IntroPage2 extends StatelessWidget {
                 ),
               ),
             ),
-
             Positioned(
               top: 20,
               right: 180,
@@ -65,7 +63,6 @@ class IntroPage2 extends StatelessWidget {
                 ],
               ),
             ),
-
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -97,7 +94,7 @@ class IntroPage2 extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Text(
-                      "Smart, fast, and secure auctions.",
+                      "Smart, fast, and secure auctions",
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,

@@ -36,13 +36,10 @@ class IntroPage3 extends StatelessWidget {
                 ),
               ),
             ),
-
-            /// المحتوى الأساسي
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  /// الانيميشن في النص
                   Lottie.asset(
                     "asset/animation/intro3.json",
                     width: 330,
@@ -69,10 +66,7 @@ class IntroPage3 extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-
                   const SizedBox(height: 16),
-
-                  /// النص الفرعي
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: Text(
@@ -80,13 +74,12 @@ class IntroPage3 extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white70, // ابيض فاتح
+                        color: Colors.white70,
                         height: 1.5,
                       ),
                       textAlign: TextAlign.center,
                     ),
                   ),
-
                   const SizedBox(height: 30),
                 ],
               ),

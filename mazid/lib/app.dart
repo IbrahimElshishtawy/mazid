@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 // Pages
 import 'package:mazid/pages/auth/ui/login.dart';
 import 'package:mazid/pages/auth/ui/Register_page.dart';
-import 'package:mazid/pages/spa/intro_page.dart';
+import 'package:mazid/pages/spa/ui/intro_page.dart';
 
 class mazid extends StatelessWidget {
   const mazid({super.key});

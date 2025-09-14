@@ -8,7 +8,6 @@ import 'package:mazid/pages/spa/page/inrto_page3.dart';
 import 'package:mazid/pages/spa/widget/page_indicator.dart';
 import 'package:mazid/pages/auth/ui/login.dart';
 
-// تعريف class PageData
 class PageData {
   final Color bgColor;
   final Color textColor;
