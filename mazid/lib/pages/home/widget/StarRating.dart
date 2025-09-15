@@ -3,7 +3,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-/// ويدجت للنجوم (قابلة لإعادة الاستخدام)
 class StarRating extends StatelessWidget {
   final double rating;
   final int starCount;
@@ -18,11 +17,8 @@ class StarRating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // لو مفيش ريتنج نخليه عشوائي (3, 4, أو 5)
     final random = Random();
-    final effectiveRating = (rating == 0)
-        ? (3 + random.nextInt(3)) // هيديك يا 3 يا 4 يا 5
-        : rating;
+    final effectiveRating = (rating == 0) ? (3 + random.nextInt(3)) : rating;
 
     final filledStars = min(effectiveRating.floor(), starCount);
 

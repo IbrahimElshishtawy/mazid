@@ -16,9 +16,7 @@ class HomeUI extends StatelessWidget {
     final controller = Provider.of<HomeController>(context);
 
     List<Widget> pages = [
-      const Center(
-        child: Text("CartPage", style: TextStyle(color: Colors.white)),
-      ),
+      NotificationsPage(),
       AuctionHomePage(),
       _buildHomePage(controller),
       _buildSwapPage(controller),
@@ -86,10 +84,6 @@ class HomeUI extends StatelessWidget {
         child: CircularProgressIndicator(color: Colors.orangeAccent),
       );
     }
-    return ProfilePage(
-      userId:
-          controller.currentUser?.id ??
-          "guest", // fallback لو المستخدم مش لوج ان
-    );
+    return ProfilePage(userId: controller.currentUser?.id ?? "guest");
   }
 }

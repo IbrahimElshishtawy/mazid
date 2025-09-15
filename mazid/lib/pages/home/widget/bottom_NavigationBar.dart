@@ -23,13 +23,13 @@ class BottomNavigationbarWidget extends StatelessWidget {
       animationCurve: Curves.easeInOut,
       animationDuration: const Duration(milliseconds: 400),
       items: const <Widget>[
-        Icon(Icons.shopping_cart, size: 28, color: Colors.white), // 0
+        Icon(Icons.notifications, size: 28, color: Colors.white), // 0
         Icon(Icons.gavel, size: 28, color: Colors.white), // 1
         Icon(Icons.home, size: 28, color: Colors.white), // 2
         Icon(Icons.swap_horiz, size: 28, color: Colors.white), // 3
         Icon(Icons.person, size: 28, color: Colors.white), // 4
       ],
-      onTap: onTap, // هيستدعي الفانكشن اللي جاياله من HomeContents
+      onTap: onTap,
     );
   }
 }
