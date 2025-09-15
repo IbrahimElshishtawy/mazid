@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class NotificationsPage extends StatelessWidget {
@@ -30,7 +32,6 @@ class NotificationsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('الإشعارات'), centerTitle: true),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: notifications.length,

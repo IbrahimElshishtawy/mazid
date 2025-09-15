@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:mazid/core/service/auth/facebook_auth_service.dart';
 import 'package:mazid/core/service/auth/google_auth_service.dart';
@@ -21,7 +23,7 @@ class LoginSocialButtons extends StatelessWidget {
         ),
         const SizedBox(width: 12),
 
-        // زر جوجل
+        //  Google
         _buildSocialCircleButton(
           context,
           icon: FontAwesomeIcons.google,
@@ -29,8 +31,16 @@ class LoginSocialButtons extends StatelessWidget {
           onPressed: () async {
             try {
               await GoogleAuthService.signInWithGoogle();
-              if (!context.mounted) return;
-              Navigator.pushReplacementNamed(context, '/home');
+              final user = GoogleAuthService.currentUser;
+              if (user != null) {
+                if (!context.mounted) return;
+                Navigator.pushReplacementNamed(context, '/home');
+              } else {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Login failed, user not found')),
+                );
+              }
             } catch (e) {
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
@@ -51,7 +61,7 @@ class LoginSocialButtons extends StatelessWidget {
         ),
         const SizedBox(width: 12),
 
-        // زر فيسبوك
+        // Facebook
         _buildSocialCircleButton(
           context,
           icon: FontAwesomeIcons.facebookF,
@@ -59,8 +69,18 @@ class LoginSocialButtons extends StatelessWidget {
           onPressed: () async {
             try {
               await FacebookAuthService.signInWithFacebook();
-              if (!context.mounted) return;
-              Navigator.pushReplacementNamed(context, '/home');
+
+              // التحقق من المستخدم بعد تسجيل الدخول
+              final user = FacebookAuthService.currentUser;
+              if (user != null) {
+                if (!context.mounted) return;
+                Navigator.pushReplacementNamed(context, '/home');
+              } else {
+                if (!context.mounted) return;
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Login failed, user not found')),
+                );
+              }
             } catch (e) {
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(

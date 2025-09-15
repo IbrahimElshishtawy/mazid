@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/pages/Auction/home/auction_home.dart';
+import 'package:mazid/pages/Notifications/NotificationsPage.dart';
 import 'package:mazid/pages/Swap/ui/swap_home.dart';
 import 'package:mazid/pages/home/controller/home_controller.dart';
 import 'package:mazid/pages/home/section/banner_section.dart';
