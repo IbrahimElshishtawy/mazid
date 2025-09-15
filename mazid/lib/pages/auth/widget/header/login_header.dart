@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mazid/pages/auth/widget/from/login_social_buttons.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({super.key});
@@ -7,7 +8,7 @@ class LoginHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: const [
-        SizedBox(height: 50),
+        SizedBox(height: 30),
 
         Text(
           "Mazid",
@@ -32,7 +33,6 @@ class LoginHeader extends StatelessWidget {
 
         SizedBox(height: 10),
 
-        // وصف قصير
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Text(
@@ -43,6 +43,7 @@ class LoginHeader extends StatelessWidget {
         ),
 
         SizedBox(height: 40),
+        LoginSocialButtons(),
       ],
     );
   }
