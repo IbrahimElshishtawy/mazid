@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class GoogleAuthService {
   static final SupabaseClient _supabase = Supabase.instance.client;
 
+  /// تسجيل الدخول باستخدام Google
   static Future<void> signInWithGoogle() async {
     try {
       if (kDebugMode) {
@@ -12,9 +13,7 @@ class GoogleAuthService {
 
       await _supabase.auth.signInWithOAuth(
         OAuthProvider.google,
-        redirectTo: kIsWeb
-            ? null
-            : 'com.mazid://login-callback', // ✅ عدلتها لـ com.mazid
+        redirectTo: kIsWeb ? null : 'com.mazid://login-callback',
       );
 
       if (kDebugMode) {
@@ -27,6 +26,7 @@ class GoogleAuthService {
     }
   }
 
+  /// تسجيل الخروج
   static Future<void> signOut() async {
     try {
       if (kDebugMode) {
@@ -45,6 +45,7 @@ class GoogleAuthService {
     }
   }
 
+  /// المستخدم الحالي
   static User? get currentUser {
     final user = _supabase.auth.currentUser;
     if (kDebugMode) {
@@ -55,5 +56,26 @@ class GoogleAuthService {
       }
     }
     return user;
+  }
+
+  static void listenAuthChanges() {
+    _supabase.auth.onAuthStateChange.listen((data) {
+      final event = data.event;
+      final session = data.session;
+
+      if (event == AuthChangeEvent.signedIn && session != null) {
+        if (kDebugMode) {
+          print('🎉 User signed in: ${session.user.email}');
+        }
+      } else if (event == AuthChangeEvent.signedOut) {
+        if (kDebugMode) {
+          print('👋 User signed out');
+        }
+      } else {
+        if (kDebugMode) {
+          print('📌 Auth event: $event');
+        }
+      }
+    });
   }
 }
