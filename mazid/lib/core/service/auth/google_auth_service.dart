@@ -6,13 +6,19 @@ class GoogleAuthService {
 
   static Future<void> signInWithGoogle() async {
     try {
+      if (kDebugMode) {
+        print('🚀 Starting Google Sign-In process...');
+      }
+
       await _supabase.auth.signInWithOAuth(
         OAuthProvider.google,
-        redirectTo: kIsWeb ? null : 'com.your.app://login-callback',
+        redirectTo: kIsWeb
+            ? null
+            : 'com.mazid://login-callback', // ✅ عدلتها لـ com.mazid
       );
 
       if (kDebugMode) {
-        print('✅ Google Sign-In Redirect started');
+        print('✅ Redirect to Google Auth done, waiting for callback...');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -23,9 +29,14 @@ class GoogleAuthService {
 
   static Future<void> signOut() async {
     try {
-      await _supabase.auth.signOut();
       if (kDebugMode) {
-        print('✅ User signed out');
+        print('🚀 Signing out user...');
+      }
+
+      await _supabase.auth.signOut();
+
+      if (kDebugMode) {
+        print('✅ User signed out successfully');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -34,5 +45,15 @@ class GoogleAuthService {
     }
   }
 
-  static User? get currentUser => _supabase.auth.currentUser;
+  static User? get currentUser {
+    final user = _supabase.auth.currentUser;
+    if (kDebugMode) {
+      if (user != null) {
+        print('👤 Current user: ${user.email}, id: ${user.id}');
+      } else {
+        print('⚠️ No user is currently signed in');
+      }
+    }
+    return user;
+  }
 }

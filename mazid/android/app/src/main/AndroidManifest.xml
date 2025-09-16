@@ -27,13 +27,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <!--  OAuth Redirect -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- لازم يكون مطابق للـ redirectTo اللي في الكود -->
-                <data android:scheme="com.your.app" android:host="login-callback" />
+                <data android:scheme="com.mazid" android:host="login-callback" />
             </intent-filter>
         </activity>
 
