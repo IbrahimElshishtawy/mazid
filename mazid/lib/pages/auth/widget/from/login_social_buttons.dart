@@ -23,7 +23,7 @@ class LoginSocialButtons extends StatelessWidget {
         ),
         const SizedBox(width: 12),
 
-        //  Google
+        // زر Google
         _buildSocialCircleButton(
           context,
           icon: FontAwesomeIcons.google,
@@ -61,7 +61,7 @@ class LoginSocialButtons extends StatelessWidget {
         ),
         const SizedBox(width: 12),
 
-        // Facebook
+        // زر Facebook
         _buildSocialCircleButton(
           context,
           icon: FontAwesomeIcons.facebookF,
@@ -70,7 +70,7 @@ class LoginSocialButtons extends StatelessWidget {
             try {
               await FacebookAuthService.signInWithFacebook();
 
-              // التحقق من المستخدم بعد تسجيل الدخول
+              // تحقق من المستخدم بعد تسجيل الدخول
               final user = FacebookAuthService.currentUser;
               if (user != null) {
                 if (!context.mounted) return;
