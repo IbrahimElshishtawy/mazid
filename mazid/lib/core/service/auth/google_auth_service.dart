@@ -8,11 +8,11 @@ class GoogleAuthService {
     try {
       await _supabase.auth.signInWithOAuth(
         OAuthProvider.google,
-        // مهم في الموبايل عشان يعرف يرجّع للجهاز
         redirectTo: kIsWeb ? null : 'com.your.app://login-callback',
       );
+
       if (kDebugMode) {
-        print('✅ Google Sign-In Successful');
+        print('✅ Google Sign-In Redirect started');
       }
     } catch (e) {
       if (kDebugMode) {
