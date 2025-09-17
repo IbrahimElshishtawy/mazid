@@ -6,7 +6,15 @@ class GoogleAuthService {
 
   static Future<void> signInWithGoogle() async {
     try {
-      await _supabase.auth.signInWithOAuth(OAuthProvider.google);
+      await _supabase.auth.signInWithOAuth(
+        Provider.google,
+        options: AuthOptions(
+          redirectTo: 'io.supabase.flutter://login-callback',
+        ),
+      );
+      if (kDebugMode) {
+        print('✅ Google Sign-In initiated');
+      }
     } catch (e) {
       if (kDebugMode) {
         print('❌ Google Sign-In Error: $e');
@@ -14,6 +22,7 @@ class GoogleAuthService {
     }
   }
 
+  /// تسجيل الخروج
   static Future<void> signOut() async {
     try {
       await _supabase.auth.signOut();
