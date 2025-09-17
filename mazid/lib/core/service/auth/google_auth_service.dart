@@ -1,39 +1,35 @@
-import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class GoogleAuthService {
   static final SupabaseClient _supabase = Supabase.instance.client;
+  static final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   static Future<void> signInWithGoogle() async {
     try {
-      await _supabase.auth.signInWithOAuth(
-        Provider.google,
-        options: AuthOptions(
-          redirectTo: 'io.supabase.flutter://login-callback',
-        ),
+      // تسجيل الدخول بحساب جوجل (Native)
+      final googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return; // المستخدم لغى العملية
+
+      final googleAuth = await googleUser.authentication;
+
+      // إرسال الـ token لـ Supabase
+      final res = await _supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: googleAuth.idToken!,
+        accessToken: googleAuth.accessToken,
       );
-      if (kDebugMode) {
-        print('✅ Google Sign-In initiated');
-      }
+
+      print('✅ Logged in as: ${res.user?.email}');
     } catch (e) {
-      if (kDebugMode) {
-        print('❌ Google Sign-In Error: $e');
-      }
+      print('❌ Google Sign-In Error: $e');
     }
   }
 
-  /// تسجيل الخروج
   static Future<void> signOut() async {
-    try {
-      await _supabase.auth.signOut();
-      if (kDebugMode) {
-        print('✅ User signed out');
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('❌ Sign-Out Error: $e');
-      }
-    }
+    await _googleSignIn.signOut();
+    await _supabase.auth.signOut();
+    print('✅ User signed out');
   }
 
   static User? get currentUser => _supabase.auth.currentUser;

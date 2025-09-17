@@ -40,7 +40,7 @@ dependencies:
   lottie: ^3.3.1
   video_player: ^2.10.0
   chewie: ^1.12.1
-  supabase_flutter: ^2.9.1
+  supabase_flutter: ^2.6.0
   flutter_bloc: ^9.1.1
   equatable: ^2.0.7
   animated_text_kit: ^4.2.3
@@ -60,7 +60,7 @@ dependencies:
   sensors_plus: ^6.1.2
   font_awesome_flutter: ^10.9.1
   shelf: ^1.4.2
-  google_sign_in: ^7.1.1
+  google_sign_in: ^6.2.1
 
 
 dev_dependencies:
