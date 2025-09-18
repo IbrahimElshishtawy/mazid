@@ -6,12 +6,10 @@ class GoogleAuthService {
   static final SupabaseClient _supabase = Supabase.instance.client;
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
-    clientId: kIsWeb
-        ? null
-        : "76266535797-t45dr5js5quu60ijkgogga11f8nkrrtu.apps.googleusercontent.com",
+    serverClientId:
+        "76266535797-t45dr5js5quu60ijkgogga11f8nkrrtu.apps.googleusercontent.com",
   );
 
-  /// تسجيل الدخول بحساب جوجل وارجاع AuthResponse
   static Future<AuthResponse?> signInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
