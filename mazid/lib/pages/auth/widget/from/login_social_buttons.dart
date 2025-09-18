@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:mazid/core/service/auth/facebook_auth_service.dart';
@@ -28,18 +28,14 @@ class LoginSocialButtons extends StatelessWidget {
           icon: FontAwesomeIcons.google,
           color: Colors.redAccent,
           onPressed: () async {
-            try {
-              final res = await GoogleAuthService.signInWithGoogle();
-              if (res != null && res.user != null) {
-                Navigator.pushReplacementNamed(context, '/home');
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Login failed, user not found')),
-                );
-              }
-            } catch (e) {
+            final res = await GoogleAuthService.signInWithGoogle();
+            if (res != null && res.user != null) {
+              if (!context.mounted) return;
+              Navigator.pushReplacementNamed(context, '/home');
+            } else {
+              if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Google login failed: $e')),
+                const SnackBar(content: Text('Login failed, user not found')),
               );
             }
           },
@@ -55,8 +51,6 @@ class LoginSocialButtons extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 12),
-
-        // زر Facebook
         _buildSocialCircleButton(
           context,
           icon: FontAwesomeIcons.facebookF,
@@ -64,8 +58,6 @@ class LoginSocialButtons extends StatelessWidget {
           onPressed: () async {
             try {
               await FacebookAuthService.signInWithFacebook();
-
-              // تحقق من المستخدم بعد تسجيل الدخول
               final user = FacebookAuthService.currentUser;
               if (user != null) {
                 if (!context.mounted) return;
