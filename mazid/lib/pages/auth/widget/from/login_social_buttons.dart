@@ -23,26 +23,21 @@ class LoginSocialButtons extends StatelessWidget {
         ),
         const SizedBox(width: 12),
 
-        // زر Google
         _buildSocialCircleButton(
           context,
           icon: FontAwesomeIcons.google,
           color: Colors.redAccent,
           onPressed: () async {
             try {
-              await GoogleAuthService.signInWithGoogle();
-              final user = GoogleAuthService.currentUser;
-              if (user != null) {
-                if (!context.mounted) return;
+              final res = await GoogleAuthService.signInWithGoogle();
+              if (res != null && res.user != null) {
                 Navigator.pushReplacementNamed(context, '/home');
               } else {
-                if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Login failed, user not found')),
                 );
               }
             } catch (e) {
-              if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Google login failed: $e')),
               );
