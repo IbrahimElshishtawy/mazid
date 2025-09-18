@@ -8,12 +8,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class GoogleAuthService {
   static final SupabaseClient _supabase = Supabase.instance.client;
 
-  // استخدم serverClientId على Android
+  /// GoogleSignIn instance
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
     serverClientId: kIsWeb
         ? null
-        : "76266535797-t45dr5js5quu60ijkgogga11f8nkrrtu.apps.googleusercontent.com",
+        : "76266535797-ebv8h6gfuhk142fvn21qjc0aqj01t2m2.apps.googleusercontent.com",
   );
 
   /// تسجيل الدخول بحساب Google
@@ -26,14 +26,16 @@ class GoogleAuthService {
       }
 
       final googleAuth = await googleUser.authentication;
-      final accessToken = googleAuth.accessToken;
-      final idToken = googleAuth.idToken;
 
-      if (accessToken == null || idToken == null) {
-        debugPrint("❌ Google tokens not found");
+      final idToken = googleAuth.idToken;
+      final accessToken = googleAuth.accessToken;
+
+      if (idToken == null) {
+        debugPrint("❌ idToken غير موجود");
         return null;
       }
 
+      // Supabase OAuth
       final res = await _supabase.auth.signInWithIdToken(
         provider: OAuthProvider.google,
         idToken: idToken,
