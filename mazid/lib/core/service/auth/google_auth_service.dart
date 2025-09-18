@@ -6,33 +6,29 @@ class GoogleAuthService {
   static final SupabaseClient _supabase = Supabase.instance.client;
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
-
     clientId: kIsWeb
         ? null
         : "76266535797-t45dr5js5quu60ijkgogga11f8nkrrtu.apps.googleusercontent.com",
   );
 
-  /// تسجيل الدخول باستخدام Google + Supabase
-  static Future<void> signInWithGoogle() async {
+  /// تسجيل الدخول بحساب جوجل وارجاع AuthResponse
+  static Future<AuthResponse?> signInWithGoogle() async {
     try {
-      // 1️⃣ سجل الدخول بجوجل
       final googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
         debugPrint("❌ المستخدم لغى تسجيل الدخول");
-        return;
+        return null;
       }
 
-      // 2️⃣ هات التوكينات
       final googleAuth = await googleUser.authentication;
       final accessToken = googleAuth.accessToken;
       final idToken = googleAuth.idToken;
 
       if (accessToken == null || idToken == null) {
         debugPrint("❌ Google tokens not found");
-        return;
+        return null;
       }
 
-      // 3️⃣ بعت التوكينات لـ Supabase
       final res = await _supabase.auth.signInWithIdToken(
         provider: OAuthProvider.google,
         idToken: idToken,
@@ -44,9 +40,12 @@ class GoogleAuthService {
       } else {
         debugPrint("❌ فشل تسجيل الدخول في Supabase");
       }
+
+      return res;
     } catch (e, st) {
       debugPrint("❌ Google Sign-In Error: $e");
       debugPrint("$st");
+      return null;
     }
   }
 
