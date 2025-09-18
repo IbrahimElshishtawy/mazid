@@ -1,15 +1,22 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class GoogleAuthService {
   static final SupabaseClient _supabase = Supabase.instance.client;
+
+  // استخدم serverClientId على Android
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: ['email', 'profile'],
-    serverClientId:
-        "76266535797-t45dr5js5quu60ijkgogga11f8nkrrtu.apps.googleusercontent.com",
+    serverClientId: kIsWeb
+        ? null
+        : "76266535797-t45dr5js5quu60ijkgogga11f8nkrrtu.apps.googleusercontent.com",
   );
 
+  /// تسجيل الدخول بحساب Google
   static Future<AuthResponse?> signInWithGoogle() async {
     try {
       final googleUser = await _googleSignIn.signIn();
