@@ -57,7 +57,6 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  /// تحميل بيانات المستخدم
   void _loadUserData() async {
     try {
       final user = await _authService.currentUser();
@@ -92,7 +91,6 @@ class HomeController extends ChangeNotifier {
     _safeNotifyListeners();
   }
 
-  /// الفلترة حسب التصنيف
   void filterByCategory(String category) {
     final Map<String, String> apiCategories = {
       "All": "all",
@@ -119,13 +117,11 @@ class HomeController extends ChangeNotifier {
     _safeNotifyListeners();
   }
 
-  /// تغيير التاب
   void changeTab(int index) {
     currentIndex = index;
     _safeNotifyListeners();
   }
 
-  /// دالة آمنة للتأكد أن الكنترولر ما اتعملوش dispose
   void _safeNotifyListeners() {
     if (!_isDisposed) {
       notifyListeners();
