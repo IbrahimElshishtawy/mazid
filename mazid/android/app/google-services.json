@@ -1,1 +1,54 @@
-{"installed":{"client_id":"76266535797-t45dr5js5quu60ijkgogga11f8nkrrtu.apps.googleusercontent.com","project_id":"mazid-472212","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs"}}
+{
+  "project_info": {
+    "project_number": "316435715817",
+    "project_id": "storeapp-firebase",
+    "storage_bucket": "storeapp-firebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:316435715817:android:54ea331738a669379b0278",
+        "android_client_info": {
+          "package_name": "com.example.mazid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "316435715817-p2o4toj6eibfdnbnctmv14qadkj2i5mj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mazid",
+            "certificate_hash": "99863775d900be6fec8bfba6e059b646b3477548"
+          }
+        },
+        {
+          "client_id": "316435715817-qh99fd7vjbalsvafhbd833mde848bskh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMQ4IS8dF4rLD88QVZbC9a26-Z01H0VTQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "316435715817-qh99fd7vjbalsvafhbd833mde848bskh.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "316435715817-imhskm2lkkm2us76kdkl8e1prps8qn54.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mazid"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
