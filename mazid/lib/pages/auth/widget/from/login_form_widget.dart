@@ -3,81 +3,32 @@ import 'package:mazid/pages/auth/animation/animated_login_button.dart';
 import 'package:mazid/pages/auth/widget/from/login_form.dart';
 import 'package:mazid/pages/auth/widget/header/login_header.dart';
 import 'package:mazid/pages/auth/widget/header/login_footer.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-class LoginFormWidget extends StatefulWidget {
-  const LoginFormWidget({super.key});
+class LoginFormWidget extends StatelessWidget {
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final bool obscurePassword;
+  final VoidCallback onTogglePassword;
+  final VoidCallback onLoginPressed;
+  final bool isLoading;
+  final AnimationController animController;
 
-  @override
-  State<LoginFormWidget> createState() => _LoginFormWidgetState();
-}
-
-class _LoginFormWidgetState extends State<LoginFormWidget>
-    with SingleTickerProviderStateMixin {
-  final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-
-  late AnimationController animController;
-  bool obscurePassword = true;
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    animController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    animController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _login() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    setState(() => isLoading = true);
-
-    try {
-      final supabase = Supabase.instance.client;
-
-      final response = await supabase.auth.signInWithPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
-
-      if (response.user != null) {
-        // ✅ نجاح تسجيل الدخول
-        if (!mounted) return;
-        Navigator.pushReplacementNamed(
-          context,
-          "/home",
-          arguments: response.user!.id, // نمرر الـ userId
-        );
-      }
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("❌ خطأ أثناء تسجيل الدخول: $e")));
-    } finally {
-      setState(() => isLoading = false);
-    }
-  }
+  const LoginFormWidget({
+    super.key,
+    required this.emailController,
+    required this.passwordController,
+    required this.obscurePassword,
+    required this.onTogglePassword,
+    required this.onLoginPressed,
+    required this.isLoading,
+    required this.animController,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Form(
-        key: _formKey,
         child: ListView(
           children: [
             const SizedBox(height: 50),
@@ -87,16 +38,12 @@ class _LoginFormWidgetState extends State<LoginFormWidget>
               emailController: emailController,
               passwordController: passwordController,
               obscurePassword: obscurePassword,
-              onTogglePassword: () {
-                setState(() {
-                  obscurePassword = !obscurePassword;
-                });
-              },
+              onTogglePassword: onTogglePassword,
             ),
             const SizedBox(height: 20),
             AnimatedLoginButton(
               animController: animController,
-              onPressed: _login,
+              onPressed: onLoginPressed,
               isLoading: isLoading,
               theme: Theme.of(context),
             ),
