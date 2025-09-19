@@ -51,6 +51,7 @@ class ProfileData {
         avatar: '',
         password: '',
         imageUrl: '',
+        role: '',
       );
 
       return user;

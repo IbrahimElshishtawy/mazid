@@ -36,6 +36,7 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
       avatar: "",
       password: '',
       imageUrl: '',
+      role: '',
     );
   }
 

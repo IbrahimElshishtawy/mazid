@@ -10,32 +10,37 @@ import 'package:mazid/pages/profile/ui/Profile_Page.dart';
 import 'package:provider/provider.dart';
 
 class HomeUI extends StatelessWidget {
-  const HomeUI({super.key, required HomeController controller});
+  const HomeUI({super.key, required this.controller});
+
+  final HomeController controller;
 
   @override
   Widget build(BuildContext context) {
-    final controller = Provider.of<HomeController>(context);
+    // إعادة ربط controller مع Provider لو احتجنا
+    final ctrl = Provider.of<HomeController>(context);
 
     List<Widget> pages = [
       NotificationsPage(),
-      AuctionHomePage(),
-      _buildHomePage(controller),
-      _buildSwapPage(controller),
-      _buildProfilePage(controller),
+      const AuctionHomePage(),
+      _buildHomePage(ctrl),
+      _buildSwapPage(ctrl),
+      _buildProfilePage(ctrl),
     ];
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: pages[controller.currentIndex],
+      body: pages[ctrl.currentIndex],
     );
   }
 
+  // صفحة الرئيسية (Products + Banner + Categories)
   Widget _buildHomePage(HomeController controller) {
     if (controller.isLoading) {
       return const Center(
         child: CircularProgressIndicator(color: Colors.orange),
       );
     }
+
     if (controller.errorMessage.isNotEmpty) {
       return Center(
         child: Text(
@@ -70,6 +75,7 @@ class HomeUI extends StatelessWidget {
     );
   }
 
+  // صفحة Swap
   Widget _buildSwapPage(HomeController controller) {
     if (controller.isUserLoading) {
       return const Center(
@@ -79,12 +85,16 @@ class HomeUI extends StatelessWidget {
     return const SwapHome();
   }
 
+  // صفحة Profile
   Widget _buildProfilePage(HomeController controller) {
     if (controller.isUserLoading) {
       return const Center(
         child: CircularProgressIndicator(color: Colors.orangeAccent),
       );
     }
-    return ProfilePage(userId: controller.currentUser?.id ?? "guest");
+
+    // إذا المستخدم غير موجود، نعتبره ضيف
+    final userId = controller.currentUser?.id ?? "guest";
+    return ProfilePage(userId: userId);
   }
 }

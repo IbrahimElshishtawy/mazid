@@ -28,14 +28,14 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // بيانات الإدمن
+  // بيانات الأدمن
   Widget _buildAdminProfile() {
     final adminUser = UserModel(
       id: AdminData.id,
       name: AdminData.name,
       email: AdminData.email,
       phone: AdminData.phone,
-      password: "", // 🔒 مش محتاجين نعرض الباسورد
+      password: "", // 🔒 لا نعرض كلمة المرور
       imageUrl: AdminData.imageUrl,
       avatar: AdminData.avatar,
       walletBalance: AdminData.walletBalance.toDouble(),
@@ -48,6 +48,7 @@ class ProfilePage extends StatelessWidget {
       totalAuctions: AdminData.totalAuctions,
       totalSpent: AdminData.totalSpent,
       totalEarned: AdminData.totalEarned,
+      role: 'admin', // ✅ حقل role
     );
 
     return Column(
@@ -71,7 +72,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // بيانات المستخدم (عادي أو أدمن)
+  // بيانات المستخدم العادي
   Widget _buildUserProfile() {
     final profileData = ProfileData(userId: userId);
 
@@ -104,10 +105,12 @@ class ProfilePage extends StatelessWidget {
 
         final user = snapshot.data!;
 
+        // لو المستخدم هو الأدمن
         if (user.email == AdminData.email) {
           return _buildAdminProfile();
         }
 
+        // مستخدم عادي
         return Column(
           children: [
             UserCard(user: user),
@@ -151,6 +154,7 @@ class ProfilePage extends StatelessWidget {
       totalAuctions: 0,
       totalSpent: 0.0,
       totalEarned: 0.0,
+      role: 'guest', // ✅ حقل role
     );
 
     return Column(

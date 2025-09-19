@@ -2,7 +2,6 @@
 
 class AdminData {
   static const String id = "admin_001";
-  // بيانات شخصية
   static const String name = "إبراهيم خالد الششتاوي أحمد";
   static const String email = "himashishtawy1@gmail.com";
   static const String phone = "01223070571";
@@ -10,6 +9,8 @@ class AdminData {
 
   static const String imageUrl = 'asset/icon/iconimage.jpg';
   static const String avatar = 'asset/icon/iconimage.jpg';
+
+  static const String role = "admin";
 
   // محفظة وطلبات
   static const int walletBalance = 120;

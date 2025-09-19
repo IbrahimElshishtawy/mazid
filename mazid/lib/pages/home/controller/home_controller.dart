@@ -1,69 +1,66 @@
-// lib/core/controllers/home_controller.dart
-
-// ignore_for_file: await_only_futures
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:mazid/core/cubit/auth/auth_Excption.dart';
+import 'package:mazid/core/data/admin_data.dart';
 import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/core/models/user_model.dart';
 import 'package:mazid/core/service/product/product_service.dart';
-import 'package:mazid/core/service/swip/swap_service.dart';
 
 class HomeController extends ChangeNotifier {
-  final ProductService _productService = ProductService();
   final AuthService _authService = AuthService();
-  final SwapService swapService = SwapService();
+  final ProductService _productService = ProductService();
 
-  int currentIndex = 2;
-  List<ProductModel> allProducts = [];
+  List<ProductModel> products = [];
   List<ProductModel> filteredProducts = [];
   bool isLoading = true;
   bool isUserLoading = true;
-  String errorMessage = '';
-  String selectedCategory = "All";
-
   UserModel? currentUser;
 
-  bool _isDisposed = false;
+  int currentIndex = 0;
 
-  /// بدء تحميل البيانات
-  void init(BuildContext context) {
-    _loadProducts();
+  var selectedCategory;
+
+  var filterByCategory;
+
+  var errorMessage; // ✅ للـ BottomNavigationBar
+
+  /// تشغيل أولي
+  Future<void> init(BuildContext context) async {
+    await _loadProducts();
     _loadUserData();
   }
 
-  /// تحميل المنتجات
-  void _loadProducts() async {
+  Future<void> _loadProducts() async {
     try {
-      final products = await _productService.fetchAllProducts();
-
-      debugPrint("📦 All products fetched: ${products.length}");
-
-      allProducts = products;
+      products = await _productService.fetchAllProducts();
       filteredProducts = products;
-      isLoading = false;
-
-      if (allProducts.isEmpty) {
-        errorMessage = "⚠️ لا توجد منتجات متاحة حالياً";
-      }
-
-      _safeNotifyListeners();
     } catch (e) {
-      errorMessage = "❌ خطأ أثناء تحميل المنتجات: $e";
-      isLoading = false;
-      _safeNotifyListeners();
+      debugPrint("❌ خطأ أثناء تحميل المنتجات: $e");
     }
+    isLoading = false;
+    _safeNotifyListeners();
   }
 
   void _loadUserData() async {
     try {
-      final user = await _authService.currentUser();
-      if (user != null) {
-        final userData = await _authService.getUserData(user.id);
-        if (userData != null) {
-          currentUser = userData;
+      if (_authService.isAdminLogin()) {
+        currentUser = UserModel(
+          id: AdminData.id,
+          email: AdminData.email,
+          name: AdminData.name,
+          role: AdminData.role, // دلوقتي موجود
+          avatar: AdminData.avatar,
+          phone: AdminData.phone,
+          password: AdminData.password,
+          imageUrl: AdminData.imageUrl,
+        );
+      } else {
+        // ✅ بيانات المستخدم من Supabase
+        final user = _authService.currentUser();
+        if (user != null) {
+          final userData = await _authService.getUserData(user.id);
+          if (userData != null) {
+            currentUser = userData;
+          }
         }
       }
     } catch (e) {
@@ -74,63 +71,31 @@ class HomeController extends ChangeNotifier {
     _safeNotifyListeners();
   }
 
-  /// البحث في المنتجات
+  /// البحث
   void onSearchChanged(String query) {
     if (query.isEmpty) {
-      filteredProducts = allProducts;
+      filteredProducts = products;
     } else {
-      filteredProducts = allProducts
+      filteredProducts = products
           .where(
             (p) =>
                 p.name.toLowerCase().contains(query.toLowerCase()) ||
-                p.title.toLowerCase().contains(query.toLowerCase()),
+                p.description.toLowerCase().contains(query.toLowerCase()),
           )
           .toList();
     }
-    selectedCategory = "All";
     _safeNotifyListeners();
   }
 
-  void filterByCategory(String category) {
-    final Map<String, String> apiCategories = {
-      "All": "all",
-      "Cosmetic": "beauty",
-      "Clothes": "clothing",
-      "Laptops": "laptops",
-      "Electronics": "electronics",
-      "Accessories": "accessories",
-    };
-
-    selectedCategory = category;
-    if (category == "All") {
-      filteredProducts = allProducts;
-    } else {
-      final apiCategory =
-          apiCategories[category]?.toLowerCase() ?? category.toLowerCase();
-
-      filteredProducts = allProducts
-          .where((p) => p.category.toLowerCase().contains(apiCategory))
-          .toList();
-    }
-
-    debugPrint("🔍 Category: $category | Products: ${filteredProducts.length}");
-    _safeNotifyListeners();
-  }
-
+  /// تغيير التاب
   void changeTab(int index) {
     currentIndex = index;
     _safeNotifyListeners();
   }
 
   void _safeNotifyListeners() {
-    if (!_isDisposed) {
+    if (hasListeners) {
       notifyListeners();
     }
-  }
-
-  @override
-  void dispose() {
-    _isDisposed = true; // نخلي الفلاغ true
-    super.dispose();
   }
 }

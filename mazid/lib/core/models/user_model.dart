@@ -36,7 +36,7 @@ class UserModel {
     required this.phone,
     required this.password,
     required this.imageUrl,
-    this.role = "user",
+    required this.role,
     this.walletBalance = 0,
     this.pendingOrders = 0,
     this.totalCancelledOrders = 0,
@@ -58,8 +58,8 @@ class UserModel {
       phone: json['phone'] ?? '',
       password: json['password'] ?? '',
       imageUrl: json['imageUrl'] ?? '',
-      role: json['role'] ?? "user",
-      walletBalance: (json['walletBalance'] ?? 0).toDouble(),
+      role: json['role'] ?? 'user',
+      walletBalance: json['walletBalance'] ?? 0,
       pendingOrders: json['pendingOrders'] ?? 0,
       totalCancelledOrders: json['totalCancelledOrders'] ?? 0,
       receivedOrders: json['receivedOrders'] ?? 0,
@@ -95,7 +95,6 @@ class UserModel {
     };
   }
 
-  /// تحويل من Map الناتج من Supabase/PostgREST
   static UserModel fromMap(PostgrestMap map) {
     return UserModel(
       id: map['id'] as String,
@@ -105,8 +104,8 @@ class UserModel {
       phone: map['phone'] as String? ?? '',
       password: map['password'] as String? ?? '',
       imageUrl: map['imageUrl'] as String? ?? '',
-      role: map['role'] as String? ?? "user",
-      walletBalance: (map['walletBalance'] as num?)?.toDouble() ?? 0.0,
+      role: map['role'] as String? ?? 'user',
+      walletBalance: map['walletBalance'] as double? ?? 0,
       pendingOrders: map['pendingOrders'] as int? ?? 0,
       totalCancelledOrders: map['totalCancelledOrders'] as int? ?? 0,
       receivedOrders: map['receivedOrders'] as int? ?? 0,

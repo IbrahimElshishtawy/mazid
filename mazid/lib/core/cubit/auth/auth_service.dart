@@ -45,6 +45,7 @@ class AuthService {
           phone: phone.trim(),
           password: '',
           imageUrl: '',
+          role: '',
         );
       } else {
         print("❌ [AuthService] Registration failed for $email");
