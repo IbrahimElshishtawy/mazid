@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, use_build_context_synchronously
+// ignore_for_file: deprecated_member_use, use_build_context_synchronously, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'package:mazid/core/service/auth/facebook_auth_service.dart';
