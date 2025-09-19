@@ -3,6 +3,8 @@ import 'package:mazid/core/models/product_models.dart';
 import 'package:mazid/core/models/user_model.dart';
 import 'package:mazid/pages/home/drawer/Favorites/ui/FavoritesPage.dart';
 import 'package:mazid/pages/profile/ui/Profile_Page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({
@@ -138,7 +140,28 @@ class DrawerMenu extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text("Logout", style: TextStyle(color: Colors.white)),
-            onTap: () {},
+            onTap: () async {
+              try {
+                await Supabase.instance.client.auth.signOut();
+
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+
+                if (context.mounted) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    "/login",
+                    (route) => false,
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("❌ خطأ أثناء تسجيل الخروج: $e")),
+                  );
+                }
+              }
+            },
           ),
         ],
       ),
