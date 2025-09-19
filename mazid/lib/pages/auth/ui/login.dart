@@ -139,17 +139,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     position: _slideAnimation,
                     child: FadeTransition(
                       opacity: _fadeAnimation,
-                      child: LoginFormWidget(
-                        emailController: emailController,
-                        passwordController: passwordController,
-                        obscurePassword: _obscurePassword,
-                        onTogglePassword: () {
-                          setState(() => _obscurePassword = !_obscurePassword);
-                        },
-                        onLoginPressed: () => _handleLogin(context),
-                        isLoading: state is AuthLoading,
-                        animController: _animController,
-                      ),
+                      child: LoginFormWidget(),
                     ),
                   ),
                 );
