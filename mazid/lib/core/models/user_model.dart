@@ -10,9 +10,9 @@ class UserModel {
   final String phone;
   final String password;
   final String imageUrl;
+  final String role;
 
   // محفظة المستخدم
-  // ignore: strict_top_level_inference
   final double walletBalance;
 
   // طلبات وأوامر
@@ -36,6 +36,7 @@ class UserModel {
     required this.phone,
     required this.password,
     required this.imageUrl,
+    this.role = "user",
     this.walletBalance = 0,
     this.pendingOrders = 0,
     this.totalCancelledOrders = 0,
@@ -57,7 +58,8 @@ class UserModel {
       phone: json['phone'] ?? '',
       password: json['password'] ?? '',
       imageUrl: json['imageUrl'] ?? '',
-      walletBalance: json['walletBalance'] ?? 0,
+      role: json['role'] ?? "user",
+      walletBalance: (json['walletBalance'] ?? 0).toDouble(),
       pendingOrders: json['pendingOrders'] ?? 0,
       totalCancelledOrders: json['totalCancelledOrders'] ?? 0,
       receivedOrders: json['receivedOrders'] ?? 0,
@@ -79,6 +81,7 @@ class UserModel {
       'phone': phone,
       'password': password,
       'imageUrl': imageUrl,
+      'role': role,
       'walletBalance': walletBalance,
       'pendingOrders': pendingOrders,
       'totalCancelledOrders': totalCancelledOrders,
@@ -102,7 +105,8 @@ class UserModel {
       phone: map['phone'] as String? ?? '',
       password: map['password'] as String? ?? '',
       imageUrl: map['imageUrl'] as String? ?? '',
-      walletBalance: map['walletBalance'] as double? ?? 0,
+      role: map['role'] as String? ?? "user",
+      walletBalance: (map['walletBalance'] as num?)?.toDouble() ?? 0.0,
       pendingOrders: map['pendingOrders'] as int? ?? 0,
       totalCancelledOrders: map['totalCancelledOrders'] as int? ?? 0,
       receivedOrders: map['receivedOrders'] as int? ?? 0,
