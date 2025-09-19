@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mazid/core/data/admin_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
 import 'package:mazid/core/cubit/auth/auth_state.dart';
@@ -88,7 +89,21 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     setState(() => _isLoading = true);
     await _animController.forward();
 
-    context.read<AuthCubit>().loginWithEmail(email: email, password: password);
+    // ✅ تحقق من الأدمن
+    if (email == AdminData.email && password == AdminData.password) {
+      await _saveLoginStatus(email);
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const HomePage()), // صفحة الأدمن
+      );
+    } else {
+      // ✅ تسجيل دخول عادي عبر الكيوبت
+      context.read<AuthCubit>().loginWithEmail(
+        email: email,
+        password: password,
+      );
+    }
   }
 
   @override
