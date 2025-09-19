@@ -71,7 +71,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // بيانات المستخدم العادي أو الأدمن
+  // بيانات المستخدم (عادي أو أدمن)
   Widget _buildUserProfile() {
     final profileData = ProfileData(userId: userId);
 
@@ -104,12 +104,10 @@ class ProfilePage extends StatelessWidget {
 
         final user = snapshot.data!;
 
-        // ✅ لو المستخدم الحالي هو الأدمن
         if (user.email == AdminData.email) {
           return _buildAdminProfile();
         }
 
-        // 👤 مستخدم عادي
         return Column(
           children: [
             UserCard(user: user),
