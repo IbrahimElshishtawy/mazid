@@ -5,8 +5,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class ProfileData {
   final String userId;
   final supabase = Supabase.instance.client;
-
-  // إحصائيات افتراضية
   int? totalPurchases;
   int? totalCancelledOrders;
   int? pendingOrders;
@@ -19,32 +17,46 @@ class ProfileData {
   double? walletBalance;
 
   ProfileData({required this.userId});
-
   Future<UserModel?> getUserData() async {
     try {
+      final authUser = supabase.auth.currentUser;
+      if (authUser == null) {
+        if (kDebugMode) {
+          print("⚠️ لا يوجد مستخدم مسجل دخول حالياً");
+        }
+        return null;
+      }
+
       final response = await supabase
           .from('users')
           .select()
           .eq('id', userId)
-          .single();
-      final user = UserModel.fromMap(response);
+          .maybeSingle();
 
-      // جلب باقي البيانات من جدول orders أو finance حسب تصميمك
-      totalPurchases = await getTotalPurchases();
-      totalCancelledOrders = await getTotalCancelledOrders();
-      pendingOrders = await getPendingOrders();
-      receivedOrders = await getReceivedOrders();
-      unreceivedOrders = await getUnreceivedOrders();
-      totalSales = await getTotalSales();
-      totalAuctions = await getTotalAuctions();
-      totalSpent = await getTotalSpent();
-      totalEarned = await getTotalEarned();
-      walletBalance = await getWalletBalance();
+      final user = UserModel(
+        id: userId,
+        name: response?['name'] ?? authUser.userMetadata?['name'] ?? "مستخدم",
+        email: authUser.email ?? "no-email",
+        phone: response?['phone'] ?? "",
+        walletBalance: await getWalletBalance(),
+        totalPurchases: await getTotalPurchases(),
+        totalCancelledOrders: await getTotalCancelledOrders(),
+        pendingOrders: await getPendingOrders(),
+        receivedOrders: await getReceivedOrders(),
+        unreceivedOrders: await getUnreceivedOrders(),
+        totalSales: await getTotalSales(),
+        totalAuctions: await getTotalAuctions(),
+        totalSpent: await getTotalSpent(),
+        totalEarned: await getTotalEarned(),
+        avatar: '',
+        password: '',
+        imageUrl: '',
+      );
 
       return user;
     } catch (e) {
       if (kDebugMode) {
-        print("❌ Error fetching user data: $e");
+        print("❌ خطأ أثناء جلب بيانات المستخدم: $e");
       }
       return null;
     }
