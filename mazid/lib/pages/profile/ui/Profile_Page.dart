@@ -10,9 +10,8 @@ import 'package:mazid/pages/profile/widget/wallet_section.dart';
 
 class ProfilePage extends StatelessWidget {
   final String userId;
-  final bool isAdmin;
 
-  const ProfilePage({super.key, required this.userId, this.isAdmin = false});
+  const ProfilePage({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +20,9 @@ class ProfilePage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          child: isAdmin
-              ? _buildAdminProfile()
-              : (userId == "guest"
-                    ? _buildGuestProfile()
-                    : _buildUserProfile()),
+          child: (userId == "guest")
+              ? _buildGuestProfile()
+              : _buildUserProfile(),
         ),
       ),
     );
@@ -38,7 +35,7 @@ class ProfilePage extends StatelessWidget {
       name: AdminData.name,
       email: AdminData.email,
       phone: AdminData.phone,
-      password: AdminData.password,
+      password: "", // 🔒 مش محتاجين نعرض الباسورد
       imageUrl: AdminData.imageUrl,
       avatar: AdminData.avatar,
       walletBalance: AdminData.walletBalance.toDouble(),
@@ -74,7 +71,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // بيانات المستخدم العادي
+  // بيانات المستخدم العادي أو الأدمن
   Widget _buildUserProfile() {
     final profileData = ProfileData(userId: userId);
 
@@ -107,6 +104,12 @@ class ProfilePage extends StatelessWidget {
 
         final user = snapshot.data!;
 
+        // ✅ لو المستخدم الحالي هو الأدمن
+        if (user.email == AdminData.email) {
+          return _buildAdminProfile();
+        }
+
+        // 👤 مستخدم عادي
         return Column(
           children: [
             UserCard(user: user),
