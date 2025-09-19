@@ -8,7 +8,6 @@ import 'package:mazid/core/cubit/auth/auth_state.dart';
 import 'package:mazid/pages/auth/animation/login_animation.dart';
 import 'package:mazid/pages/auth/widget/from/login_form_widget.dart';
 import 'package:mazid/pages/home/ui/home_page.dart';
-import 'package:mazid/core/data/admin_data.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,6 +25,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -85,24 +85,10 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
 
-    // تشغيل animation
+    setState(() => _isLoading = true);
     await _animController.forward();
 
-    if (email == AdminData.email && password == AdminData.password) {
-      await _animController.reverse();
-      await _saveLoginStatus(email);
-      if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomePage()),
-      );
-    } else {
-      // تسجيل الدخول عبر Bloc
-      context.read<AuthCubit>().loginWithEmail(
-        email: email,
-        password: password,
-      );
-    }
+    context.read<AuthCubit>().loginWithEmail(email: email, password: password);
   }
 
   @override
@@ -132,6 +118,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                   // اهتزاز الصفحة عند الخطأ
                   _entryController.forward(from: 0.0);
                 }
+
+                setState(() => _isLoading = false);
               },
               builder: (context, state) {
                 return Center(
@@ -139,7 +127,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                     position: _slideAnimation,
                     child: FadeTransition(
                       opacity: _fadeAnimation,
-                      child: LoginFormWidget(),
+                      child: LoginFormWidget(
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        obscurePassword: _obscurePassword,
+                        onTogglePassword: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                        onLoginPressed: () => _handleLogin(context),
+                        isLoading: _isLoading,
+                        animController: _animController,
+                      ),
                     ),
                   ),
                 );
