@@ -28,10 +28,10 @@ class AuthFailure extends AuthState {
   List<Object?> get props => [message];
 }
 
-class AuthOtpSent extends AuthState {
-  final String phone;
-  AuthOtpSent(this.phone);
+class AuthUserCreated extends AuthState {
+  final UserModel user;
+  AuthUserCreated(this.user);
 
   @override
-  List<Object?> get props => [phone];
+  List<Object?> get props => [user.id, user.email];
 }
