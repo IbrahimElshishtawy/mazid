@@ -19,7 +19,7 @@ class HomeContents extends StatelessWidget {
             appBar: AppbarWidget(onSearchChanged: controller.onSearchChanged),
             backgroundColor: Colors.black,
             drawer: DrawerMenu(favoriteProducts: []),
-            body: HomeUI(controller: controller),
+            body: const HomeUI(),
             bottomNavigationBar: BottomNavigationbarWidget(
               currentIndex: controller.currentIndex,
               onTap: (index) {
