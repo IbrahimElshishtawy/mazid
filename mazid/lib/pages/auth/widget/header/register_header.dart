@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mazid/pages/auth/widget/from/login_social_buttons.dart';
 
 class RegisterHeader extends StatelessWidget {
   const RegisterHeader({super.key});
@@ -7,7 +8,7 @@ class RegisterHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Column(
       children: [
-        SizedBox(height: 50),
+        SizedBox(height: 20),
 
         // name of the app
         Text(
@@ -31,8 +32,9 @@ class RegisterHeader extends StatelessWidget {
             style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.4),
           ),
         ),
-
-        SizedBox(height: 50),
+        SizedBox(height: 15),
+        LoginSocialButtons(),
+        SizedBox(height: 14),
       ],
     );
   }
