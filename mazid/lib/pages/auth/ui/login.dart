@@ -67,7 +67,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  /// ✅ التحقق من حالة تسجيل الدخول المحفوظة
   Future<void> _checkLoginStatus() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -83,14 +82,12 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     }
   }
 
-  /// ✅ حفظ حالة تسجيل الدخول
   Future<void> _saveLoginStatus(String email) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isLoggedIn', true);
     await prefs.setString('userEmail', email);
   }
 
-  /// ✅ معالجة تسجيل الدخول
   void _handleLogin(BuildContext context) async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
