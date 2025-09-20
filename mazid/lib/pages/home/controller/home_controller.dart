@@ -11,19 +11,16 @@ class HomeController extends ChangeNotifier {
 
   List<ProductModel> products = [];
   List<ProductModel> filteredProducts = [];
+
   bool isLoading = true;
   bool isUserLoading = true;
-  UserModel? currentUser;
 
+  UserModel? currentUser;
   int currentIndex = 0;
 
-  var selectedCategory;
+  String? selectedCategory;
+  String errorMessage = "";
 
-  var filterByCategory;
-
-  var errorMessage; // ✅ للـ BottomNavigationBar
-
-  /// تشغيل أولي
   Future<void> init(BuildContext context) async {
     await _loadProducts();
     _loadUserData();
@@ -34,7 +31,8 @@ class HomeController extends ChangeNotifier {
       products = await _productService.fetchAllProducts();
       filteredProducts = products;
     } catch (e) {
-      debugPrint("❌ خطأ أثناء تحميل المنتجات: $e");
+      errorMessage = "❌ خطأ أثناء تحميل المنتجات: $e";
+      debugPrint(errorMessage);
     }
     isLoading = false;
     _safeNotifyListeners();
@@ -47,14 +45,13 @@ class HomeController extends ChangeNotifier {
           id: AdminData.id,
           email: AdminData.email,
           name: AdminData.name,
-          role: AdminData.role, // دلوقتي موجود
+          role: AdminData.role,
           avatar: AdminData.avatar,
           phone: AdminData.phone,
           password: AdminData.password,
           imageUrl: AdminData.imageUrl,
         );
       } else {
-        // ✅ بيانات المستخدم من Supabase
         final user = _authService.currentUser();
         if (user != null) {
           final userData = await _authService.getUserData(user.id);
@@ -87,7 +84,18 @@ class HomeController extends ChangeNotifier {
     _safeNotifyListeners();
   }
 
-  /// تغيير التاب
+  void filterByCategory(String? category) {
+    selectedCategory = category;
+
+    if (category == null || category.isEmpty) {
+      filteredProducts = products;
+    } else {
+      filteredProducts = products.where((p) => p.category == category).toList();
+    }
+
+    _safeNotifyListeners();
+  }
+
   void changeTab(int index) {
     currentIndex = index;
     _safeNotifyListeners();
