@@ -10,26 +10,25 @@ import 'package:mazid/pages/profile/ui/Profile_Page.dart';
 import 'package:provider/provider.dart';
 
 class HomeUI extends StatelessWidget {
-  const HomeUI({super.key, required this.controller});
-
-  final HomeController controller;
+  const HomeUI({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // إعادة ربط controller مع Provider لو احتجنا
-    final ctrl = Provider.of<HomeController>(context);
+    return Consumer<HomeController>(
+      builder: (context, controller, child) {
+        List<Widget> pages = [
+          NotificationsPage(),
+          AuctionHomePage(),
+          _buildHomePage(controller),
+          _buildSwapPage(controller),
+          _buildProfilePage(controller),
+        ];
 
-    List<Widget> pages = [
-      NotificationsPage(),
-      const AuctionHomePage(),
-      _buildHomePage(ctrl),
-      _buildSwapPage(ctrl),
-      _buildProfilePage(ctrl),
-    ];
-
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: pages[ctrl.currentIndex],
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: pages[controller.currentIndex],
+        );
+      },
     );
   }
 
@@ -93,7 +92,6 @@ class HomeUI extends StatelessWidget {
       );
     }
 
-    // إذا المستخدم غير موجود، نعتبره ضيف
     final userId = controller.currentUser?.id ?? "guest";
     return ProfilePage(userId: userId);
   }
