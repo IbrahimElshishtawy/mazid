@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/core/cubit/auth/auth_Excption.dart';
 import 'package:mazid/core/data/admin_data.dart';
-import 'package:mazid/core/models/product_models.dart';
-import 'package:mazid/core/models/user_model.dart';
+import 'package:mazid/core/models/prouduct/product_models.dart';
+import 'package:mazid/core/models/user/user_model.dart';
 import 'package:mazid/core/service/product/product_service.dart';
 
 class HomeController extends ChangeNotifier {

@@ -1,6 +1,6 @@
 // lib/pages/home/widget/products_grid.dart
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/core/models/prouduct/product_models.dart';
 import 'package:mazid/pages/home/widget/product_card.dart';
 
 class ProductsGrid extends StatelessWidget {

@@ -2,7 +2,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/core/models/prouduct/product_models.dart';
 
 class Apiproductstore {
   final Dio _dio = Dio();

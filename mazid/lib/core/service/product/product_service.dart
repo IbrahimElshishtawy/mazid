@@ -1,7 +1,7 @@
 // lib/core/services/product_service.dart
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/core/models/prouduct/product_models.dart';
 
 class ProductService {
   final Dio _dio = Dio();

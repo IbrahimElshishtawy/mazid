@@ -1,6 +1,6 @@
 // product_service.dart
 import 'package:dio/dio.dart';
-import '../models/product_models.dart';
+import '../models/prouduct/product_models.dart';
 
 class ApiProductDummyjson {
   final Dio _dio = Dio(

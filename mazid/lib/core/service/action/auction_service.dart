@@ -1,4 +1,5 @@
-import 'package:mazid/core/models/auction_model.dart' show AuctionTransaction;
+import 'package:mazid/core/models/actions/auction_model.dart'
+    show AuctionTransaction;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TransactionService {

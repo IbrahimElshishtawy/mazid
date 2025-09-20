@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/swap_request_model.dart';
-import 'package:mazid/core/models/swap_status.dart';
+import 'package:mazid/core/models/swap/swap_request_model.dart';
+import 'package:mazid/core/models/swap/swap_status.dart';
 import 'package:mazid/pages/Swap/ui/ProductDetailPageswap.dart';
 
 /// زر الكارت بيتغير حسب الحالة، مع إضافة إمكانية الموافقة على طلب التبديل

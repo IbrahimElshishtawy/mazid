@@ -1,6 +1,6 @@
 // lib/core/service/auth_service.dart
 // ignore_for_file: avoid_print
-import 'package:mazid/core/models/user_model.dart';
+import 'package:mazid/core/models/user/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {

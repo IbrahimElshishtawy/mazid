@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/swap_request_model.dart';
-import 'package:mazid/core/models/swap_status.dart';
+import 'package:mazid/core/models/swap/swap_request_model.dart';
+import 'package:mazid/core/models/swap/swap_status.dart';
 import 'package:mazid/pages/Swap/widgets/ProductCardMenu.dart';
 import 'package:mazid/pages/Swap/widgets/custom_btn.dart';
 import 'package:mazid/pages/Swap/widgets/ProductCardRating.dart'; // ويدجت الريتنج
@@ -54,7 +54,7 @@ class ProductCardswap extends StatelessWidget {
                 const SizedBox(height: 4),
                 Row(
                   children: [
-                    ProductCardRating(rating: product.rating), 
+                    ProductCardRating(rating: product.rating),
                     const SizedBox(width: 4),
                     Text(product.rating.toStringAsFixed(1)),
                   ],
@@ -67,7 +67,8 @@ class ProductCardswap extends StatelessWidget {
           // الأزرار أو الأكشن الإضافي
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: extraActions ??
+            child:
+                extraActions ??
                 ProductCardButton(
                   status: status,
                   product: product,

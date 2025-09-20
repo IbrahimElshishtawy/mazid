@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/user_model.dart';
+import 'package:mazid/core/models/user/user_model.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class RegisterFormFields extends StatefulWidget {

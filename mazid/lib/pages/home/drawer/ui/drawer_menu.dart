@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/product_models.dart';
-import 'package:mazid/core/models/user_model.dart';
+import 'package:mazid/core/models/prouduct/product_models.dart';
+import 'package:mazid/core/models/user/user_model.dart';
 import 'package:mazid/pages/home/drawer/Favorites/ui/FavoritesPage.dart';
 import 'package:mazid/pages/profile/ui/Profile_Page.dart';
 import 'package:shared_preferences/shared_preferences.dart';

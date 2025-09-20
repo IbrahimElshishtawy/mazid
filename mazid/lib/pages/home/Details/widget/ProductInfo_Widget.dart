@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/core/models/prouduct/product_models.dart';
 
 class ProductInfoWidget extends StatelessWidget {
   final ProductModel product;

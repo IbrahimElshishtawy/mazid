@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/swap_request_model.dart';
-import 'package:mazid/core/models/swap_status.dart';
+import 'package:mazid/core/models/swap/swap_request_model.dart';
+import 'package:mazid/core/models/swap/swap_status.dart';
 import 'package:mazid/pages/Swap/widgets/swaptabar.dart';
 import 'package:mazid/pages/Swap/widgets/custom_product_card.dart';
 

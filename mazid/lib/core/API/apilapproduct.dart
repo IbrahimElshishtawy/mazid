@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:mazid/core/models/product_models.dart';
+import 'package:mazid/core/models/prouduct/product_models.dart';
 
 class ApiLapProduct {
   final Dio dio;

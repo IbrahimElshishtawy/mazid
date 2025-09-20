@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/swap_request_model.dart';
+import 'package:mazid/core/models/swap/swap_request_model.dart';
 
 class ProductDetailPagemazid extends StatelessWidget {
   final SwapProductModel product;

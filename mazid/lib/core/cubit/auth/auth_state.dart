@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:mazid/core/models/user_model.dart';
+import 'package:mazid/core/models/user/user_model.dart';
 
 abstract class AuthState extends Equatable {
   @override

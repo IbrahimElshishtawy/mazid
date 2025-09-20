@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/swap_request_model.dart';
+import 'package:mazid/core/models/swap/swap_request_model.dart';
 import 'package:mazid/core/service/swip/swap_service.dart';
 
 /// Widget عبارة عن قائمة منبثقة (Popup Menu) خاصة بكارت المنتج.

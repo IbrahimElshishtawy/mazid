@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
-import 'package:mazid/core/models/product_models.dart';
-import 'package:mazid/core/models/swap_request_model.dart';
+import 'package:mazid/core/models/prouduct/product_models.dart';
+import 'package:mazid/core/models/swap/swap_request_model.dart';
 
 /// منتجات تجريبية (Dummy Data)
 final List<ProductModel> dummyProducts = [
