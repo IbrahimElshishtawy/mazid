@@ -7,7 +7,8 @@ import 'package:mazid/core/cubit/auth/auth_state.dart';
 import 'package:mazid/pages/auth/animation/login_animation.dart';
 import 'package:mazid/pages/auth/widget/from/register_form_fields.dart';
 import 'package:mazid/pages/auth/widget/header/register_header.dart';
-import 'package:mazid/pages/auth/widget/register_terms.dart';
+import 'package:mazid/pages/auth/widget/widget/register_terms.dart';
+import 'package:mazid/pages/auth/widget/widget/success_dialog.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -55,43 +56,11 @@ class _RegisterPageState extends State<RegisterPage> {
                   showDialog(
                     context: context,
                     barrierDismissible: false,
-                    builder: (context) => AlertDialog(
-                      backgroundColor: const Color.fromARGB(255, 4, 3, 3),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                            size: 80,
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            "Account created successfully!",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 254, 254, 255),
-                            ),
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                            Navigator.pushReplacementNamed(context, '/home');
-                          },
-                          child: Text(
-                            "Continue",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ],
+                    builder: (context) => SuccessDialog(
+                      onContinue: () {
+                        Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, '/home');
+                      },
                     ),
                   );
                 } else if (state is AuthFailure) {
