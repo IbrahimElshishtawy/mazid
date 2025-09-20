@@ -1,5 +1,4 @@
 // ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:mazid/core/data/admin_data.dart';
 import 'package:mazid/core/models/user_model.dart';
@@ -28,14 +27,14 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // بيانات الأدمن
+  // ✅ بيانات الأدمن
   Widget _buildAdminProfile() {
     final adminUser = UserModel(
       id: AdminData.id,
       name: AdminData.name,
       email: AdminData.email,
       phone: AdminData.phone,
-      password: "", // 🔒 لا نعرض كلمة المرور
+      password: "",
       imageUrl: AdminData.imageUrl,
       avatar: AdminData.avatar,
       walletBalance: AdminData.walletBalance.toDouble(),
@@ -48,7 +47,7 @@ class ProfilePage extends StatelessWidget {
       totalAuctions: AdminData.totalAuctions,
       totalSpent: AdminData.totalSpent,
       totalEarned: AdminData.totalEarned,
-      role: 'admin', // ✅ حقل role
+      role: 'admin',
     );
 
     return Column(
@@ -72,7 +71,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // بيانات المستخدم العادي
+  // ✅ بيانات المستخدم من Firebase
   Widget _buildUserProfile() {
     final profileData = ProfileData(userId: userId);
 
@@ -105,12 +104,12 @@ class ProfilePage extends StatelessWidget {
 
         final user = snapshot.data!;
 
-        // لو المستخدم هو الأدمن
+        // ✅ لو المستخدم أدمن
         if (user.email == AdminData.email) {
           return _buildAdminProfile();
         }
 
-        // مستخدم عادي
+        // ✅ مستخدم عادي
         return Column(
           children: [
             UserCard(user: user),
@@ -134,7 +133,6 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  // بيانات الضيف
   Widget _buildGuestProfile() {
     final guestUser = UserModel(
       id: "guest_001",
@@ -154,7 +152,7 @@ class ProfilePage extends StatelessWidget {
       totalAuctions: 0,
       totalSpent: 0.0,
       totalEarned: 0.0,
-      role: 'guest', // ✅ حقل role
+      role: 'guest',
     );
 
     return Column(
