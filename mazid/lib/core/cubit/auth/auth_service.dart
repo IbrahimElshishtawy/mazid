@@ -6,7 +6,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class AuthService {
   final supabase = Supabase.instance.client;
 
-  /// تسجيل مستخدم جديد
   Future<UserModel?> register({
     required String name,
     required String email,
