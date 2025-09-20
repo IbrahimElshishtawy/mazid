@@ -26,17 +26,16 @@ class RegisterFormFields extends StatefulWidget {
 class _RegisterFormFieldsState extends State<RegisterFormFields> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-
   UserModel getUserModel() {
     return UserModel(
-      id: UniqueKey().toString(),
+      id: '',
       name: widget.nameController.text.trim(),
       email: widget.emailController.text.trim(),
       phone: widget.phoneController.text.trim(),
       avatar: "",
       password: '',
       imageUrl: '',
-      role: '',
+      role: 'user',
     );
   }
 
@@ -64,11 +63,11 @@ class _RegisterFormFieldsState extends State<RegisterFormFields> {
             border: OutlineInputBorder(),
             filled: true,
           ),
-          initialCountryCode: 'EG', // الدولة الافتراضية، ممكن تغيرها
+          initialCountryCode: 'EG', // الدولة الافتراضية
           onChanged: (phone) {
             if (kDebugMode) {
               print(phone.completeNumber);
-            } // الرقم كامل مع كود الدولة
+            }
           },
           validator: (value) {
             if (value == null || value.number.isEmpty) {
