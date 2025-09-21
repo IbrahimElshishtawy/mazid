@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mazid/core/data/dummyProducts.dart';
 import 'package:mazid/core/models/swap/swap_request_model.dart';
 import 'package:mazid/core/models/swap/swap_status.dart';
+import 'package:mazid/core/widget/product_swap_card.dart';
 import 'package:mazid/pages/Auction/ui/product_detail_page.dart';
-import 'package:mazid/core/widget/product_card.dart';
 
 class AuctionHomePage extends StatelessWidget {
   const AuctionHomePage({super.key});
