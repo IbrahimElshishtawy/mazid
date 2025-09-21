@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mazid/core/models/swap/swap_request_model.dart';
 import 'package:mazid/core/models/swap/swap_status.dart';
 import 'package:mazid/core/widget/product_card.dart';
+import 'package:mazid/core/widget/product_swap_card.dart';
 
 /// 🛍 عرض المنتجات حسب الحالة
 class ProductListView extends StatelessWidget {
