@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mazid/pages/Auction/ui/intro_Auction_page.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mazid/pages/Auction/home/auction_home.dart';
 import 'package:mazid/pages/Notifications/NotificationsPage.dart';
 import 'package:mazid/pages/Swap/ui/swap_home.dart';
@@ -8,13 +11,46 @@ import 'package:mazid/pages/home/section/categories_section.dart';
 import 'package:mazid/pages/home/section/products_grid.dart';
 import 'package:mazid/pages/home/widget/error_view.dart';
 import 'package:mazid/pages/profile/ui/Profile_Page.dart';
-import 'package:provider/provider.dart';
 
-class HomeUI extends StatelessWidget {
+class HomeUI extends StatefulWidget {
   const HomeUI({super.key});
 
   @override
+  _HomeUIState createState() => _HomeUIState();
+}
+
+class _HomeUIState extends State<HomeUI> {
+  bool _showTermsPage = false;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuctionTerms();
+  }
+
+  Future<void> _checkAuctionTerms() async {
+    final prefs = await SharedPreferences.getInstance();
+    final accepted = prefs.getBool('auction_terms_accepted') ?? false;
+
+    setState(() {
+      _showTermsPage = !accepted;
+      _loading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Center(
+        child: CircularProgressIndicator(color: Colors.orange),
+      );
+    }
+
+    if (_showTermsPage) {
+      return AuctionTermsPage();
+    }
+
     return Consumer<HomeController>(
       builder: (context, controller, child) {
         List<Widget> pages = [
@@ -33,7 +69,6 @@ class HomeUI extends StatelessWidget {
     );
   }
 
-  // صفحة الرئيسية (Products + Banner + Categories)
   Widget _buildHomePage(HomeController controller, BuildContext context) {
     if (controller.isLoading) {
       return const Center(
@@ -44,7 +79,7 @@ class HomeUI extends StatelessWidget {
     if ((controller.errorMessage).isNotEmpty) {
       return ErrorView(
         message: controller.errorMessage,
-        onRetry: () => controller.init(context), // إعادة المحاولة
+        onRetry: () => controller.init(context),
       );
     }
 
@@ -73,7 +108,6 @@ class HomeUI extends StatelessWidget {
     );
   }
 
-  // صفحة Swap
   Widget _buildSwapPage(HomeController controller) {
     if (controller.isUserLoading) {
       return const Center(
@@ -83,7 +117,6 @@ class HomeUI extends StatelessWidget {
     return const SwapHome();
   }
 
-  // صفحة Profile
   Widget _buildProfilePage(HomeController controller) {
     if (controller.isUserLoading) {
       return const Center(
