@@ -5,33 +5,9 @@ import 'package:mazid/core/models/prouduct/product_models.dart';
 import 'package:mazid/core/models/swap/swap_request_model.dart';
 import 'package:mazid/core/models/swap/swap_status.dart';
 import 'package:mazid/core/service/cart/cart_service.dart';
+import 'package:mazid/core/widget/ProductCardRating.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
-/// ⭐ ويدجت التقييم
-class ProductCardRating extends StatelessWidget {
-  final double rating;
-
-  const ProductCardRating({super.key, required this.rating});
-
-  @override
-  Widget build(BuildContext context) {
-    int fullStars = rating.floor(); // النجوم الكاملة
-    bool hasHalfStar = (rating - fullStars) >= 0.5; // نص نجمة لو باقي >= 0.5
-
-    return Row(
-      children: List.generate(5, (index) {
-        if (index < fullStars) {
-          return const Icon(Icons.star, color: Colors.amber, size: 18);
-        } else if (index == fullStars && hasHalfStar) {
-          return const Icon(Icons.star_half, color: Colors.amber, size: 18);
-        } else {
-          return const Icon(Icons.star_border, color: Colors.amber, size: 18);
-        }
-      }),
-    );
-  }
-}
 
 /// 🛒 كارت المنتجات العادية
 class ProductCard extends StatelessWidget {
