@@ -7,6 +7,18 @@ import 'package:mazid/pages/Auction/ui/product_detail_page.dart';
 
 class AuctionHomePage extends StatelessWidget {
   const AuctionHomePage({super.key});
+  SwapStatus _mapStatus(dynamic status) {
+    if (status is SwapStatus) return status;
+    switch (status.toString().toLowerCase()) {
+      case "pending":
+        return SwapStatus.pending;
+      case "sold":
+        return SwapStatus.sold;
+      case "available":
+      default:
+        return SwapStatus.available;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +37,7 @@ class AuctionHomePage extends StatelessWidget {
           final SwapProductModel product = dummySwapProducts[index];
           return SwapProductCard(
             product: product,
+            status: _mapStatus(product.status), // ✅ تحويل String → Enum
             onTap: () {
               Navigator.push(
                 context,
@@ -33,7 +46,6 @@ class AuctionHomePage extends StatelessWidget {
                 ),
               );
             },
-            status: SwapStatus.other,
           );
         },
       ),
