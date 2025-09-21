@@ -12,5 +12,5 @@ void main() async {
     authOptions: const FlutterAuthClientOptions(detectSessionInUri: true),
   );
 
-  runApp(const mazid());
+  runApp(const Mazid());
 }
