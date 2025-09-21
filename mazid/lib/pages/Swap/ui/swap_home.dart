@@ -1,9 +1,9 @@
+// swap_home.dart
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/swap/swap_request_model.dart';
 import 'package:mazid/core/models/swap/swap_status.dart';
-import 'package:mazid/core/widget/product_card.dart';
+import 'package:mazid/pages/Swap/widgets/swap_lists.dart';
 import 'package:mazid/pages/Swap/widgets/swaptabar.dart';
-import 'package:mazid/pages/Swap/widgets/custom_product_card.dart';
+import 'package:mazid/core/models/swap/swap_request_model.dart';
 
 class SwapHome extends StatefulWidget {
   const SwapHome({super.key});
@@ -15,7 +15,7 @@ class SwapHome extends StatefulWidget {
 class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
   late TabController _tabController;
 
-  // بيانات المنتجات
+  // بيانات المنتجات (مؤقتة للتجربة)
   final List<SwapProductModel> allProducts = [
     SwapProductModel(
       id: "1",
@@ -71,172 +71,24 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
           child: TabBarView(
             controller: _tabController,
             children: [
-              _buildProductList(SwapStatus.myProducts), // منتجات
-              _buildProductList(SwapStatus.accepted), // مقبولة
-              _buildProductList(SwapStatus.pending), // معلقة
-              _buildRequestList(), // موافقة
-              _buildHistoryList(), // السجل
+              ProductListView(
+                products: allProducts,
+                status: SwapStatus.myProducts,
+              ),
+              ProductListView(
+                products: allProducts,
+                status: SwapStatus.accepted,
+              ),
+              ProductListView(
+                products: allProducts,
+                status: SwapStatus.pending,
+              ),
+              RequestListView(products: allProducts),
+              HistoryListView(products: allProducts),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildProductList(SwapStatus status) {
-    final filtered = allProducts.where((p) {
-      switch (status) {
-        case SwapStatus.myProducts:
-          return true;
-        case SwapStatus.accepted:
-          return p.status == "accepted";
-        case SwapStatus.pending:
-          return p.status == "pending";
-        case SwapStatus.request:
-          return p.status == "request";
-        case SwapStatus.completed:
-          return false;
-        case SwapStatus.approved:
-        case SwapStatus.other:
-          throw UnimplementedError();
-      }
-    }).toList();
-
-    if (filtered.isEmpty) {
-      return const Center(
-        child: Text(
-          "لا يوجد منتجات هنا",
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),
-      );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: filtered.length,
-      itemBuilder: (context, index) {
-        return ProductCardswap(product: filtered[index], status: status);
-      },
-    );
-  }
-
-  /// تبويب طلبات الموافقة (نفس كارت المنتج مع أزرار)
-  Widget _buildRequestList() {
-    final requests = allProducts.where((p) => p.status == "request").toList();
-
-    if (requests.isEmpty) {
-      return const Center(
-        child: Text(
-          "لا يوجد طلبات تبديل",
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),
-      );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: requests.length,
-      itemBuilder: (context, index) {
-        final req = requests[index];
-        return ProductCardswap(
-          product: req,
-          status: SwapStatus.request,
-          extraActions: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    req.status = "accepted";
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("تم قبول طلب التبديل للمنتج ${req.name}"),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                child: const Text("قبول"),
-              ),
-              const SizedBox(width: 8),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    req.status = "rejected";
-                  });
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("تم رفض طلب التبديل للمنتج ${req.name}"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                child: const Text("رفض"),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  /// تبويب السجل (نفس كارت المنتج مع حالة ملونة)
-  Widget _buildHistoryList() {
-    final history = allProducts
-        .where(
-          (p) =>
-              p.status == "accepted" ||
-              p.status == "rejected" ||
-              p.status == "completed",
-        )
-        .toList();
-
-    if (history.isEmpty) {
-      return const Center(
-        child: Text(
-          "لا توجد سجلات طلبات",
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),
-      );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(12),
-      itemCount: history.length,
-      itemBuilder: (context, index) {
-        final item = history[index];
-        Color statusColor;
-        String statusText;
-
-        switch (item.status) {
-          case "accepted":
-            statusColor = Colors.green;
-            statusText = "✔ تم القبول";
-            break;
-          case "rejected":
-            statusColor = Colors.red;
-            statusText = "❌ مرفوض";
-            break;
-          case "completed":
-            statusColor = Colors.blue;
-            statusText = "✅ مكتمل";
-            break;
-          default:
-            statusColor = Colors.grey;
-            statusText = "غير معروف";
-        }
-
-        return ProductCard(
-          product: product,
-          status: SwapStatus.completed,
-          extraActions: Text(
-            statusText,
-            style: TextStyle(color: statusColor, fontWeight: FontWeight.bold),
-          ),
-        );
-      },
     );
   }
 }
