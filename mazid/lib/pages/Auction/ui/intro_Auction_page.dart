@@ -1,9 +1,11 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:mazid/pages/Auction/home/auction_home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuctionTermsPage extends StatefulWidget {
-  const AuctionTermsPage({super.key});
+  const AuctionTermsPage({super.key}); // صفحة مستقلة عادية
 
   @override
   _AuctionTermsPageState createState() => _AuctionTermsPageState();
@@ -32,9 +34,9 @@ class _AuctionTermsPageState extends State<AuctionTermsPage> {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  child: Text('''
-
+                  child: const Text('''
 شروط وأحكام المزايدة:
+
 1. التسجيل والمشاركة: للمشاركة في أي مزاد داخل هذا التطبيق، يجب على المستخدم أن يكون مسجلاً ومصدقًا على حسابه بشكل كامل. عملية التسجيل تهدف إلى ضمان نزاهة المزادات ومنع أي استخدام احتيالي للحسابات الوهمية، كما تساعد في متابعة الفائزين بالمزايدات ومحاسبتهم عند الحاجة.
 
 2. الالتزام بالمزايدة: جميع المزايدات المقدمة من قبل المستخدمين تُعد ملزمة بشكل كامل بعد إرسالها. لا يمكن التراجع عن أي مزايدة بمجرد تقديمها، وذلك لضمان العدالة لجميع المشاركين والحفاظ على نزاهة المزاد. الالتزام بالمزايدة يعكس احترام المستخدم للقوانين والشروط المتفق عليها.
@@ -64,7 +66,6 @@ class _AuctionTermsPageState extends State<AuctionTermsPage> {
 14. السرية وحماية البيانات: يلتزم التطبيق بحماية بيانات المستخدمين وعدم مشاركتها مع أي جهة خارجية بدون موافقة صريحة. كما يجب على المستخدمين احترام سرية المعلومات وعدم استخدامها لأي أغراض غير قانونية أو مخالفة للشروط.
 
 15. الموافقة: باستخدامك لهذا التطبيق والمشاركة في المزاد، فإنك توافق بشكل كامل على الالتزام بكل ما سبق من شروط وأحكام، وتقر بأنك قرأت وفهمت جميع الفقرات أعلاه وأنك موافق على جميع الالتزامات القانونية والمالية المذكورة.
-
 ''', style: TextStyle(color: Colors.white, fontSize: 16, height: 1.8)),
                 ),
               ),
@@ -78,7 +79,7 @@ class _AuctionTermsPageState extends State<AuctionTermsPage> {
                       });
                     },
                   ),
-                  Expanded(
+                  const Expanded(
                     child: Text(
                       "أنا أوافق على الشروط والأحكام",
                       style: TextStyle(color: Colors.white),
