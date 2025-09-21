@@ -10,6 +10,7 @@ class ProductCardRating extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: List.generate(5, (index) {
         if (index < rating.floor()) {
           return const Icon(Icons.star, color: Colors.amber, size: 18);
