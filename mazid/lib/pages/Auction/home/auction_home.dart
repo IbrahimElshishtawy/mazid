@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/core/data/dummyProducts.dart';
 import 'package:mazid/core/models/swap/swap_request_model.dart';
+import 'package:mazid/core/models/swap/swap_status.dart';
 import 'package:mazid/pages/Auction/ui/product_detail_page.dart';
 import 'package:mazid/core/widget/product_card.dart';
 
@@ -22,7 +23,7 @@ class AuctionHomePage extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           final SwapProductModel product = dummySwapProducts[index];
-          return ProductCard(
+          return SwapProductCard(
             product: product,
             onTap: () {
               Navigator.push(
@@ -32,6 +33,7 @@ class AuctionHomePage extends StatelessWidget {
                 ),
               );
             },
+            status: SwapStatus.other,
           );
         },
       ),
