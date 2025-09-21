@@ -13,8 +13,9 @@ import 'package:mazid/pages/auth/ui/Register_page.dart';
 import 'package:mazid/pages/spa/ui/intro_page.dart';
 import 'package:mazid/pages/home/ui/home_page.dart';
 
-class mazid extends StatelessWidget {
-  const mazid({super.key});
+// في ملف main.dart أو أي صفحة رئيسية
+class Mazid extends StatelessWidget {
+  const Mazid({super.key});
 
   Future<Widget> _determineStartPage() async {
     final prefs = await SharedPreferences.getInstance();
@@ -24,15 +25,12 @@ class mazid extends StatelessWidget {
         prefs.getBool('auction_terms_accepted') ?? false;
 
     if (loggedIn) {
-      // إذا المستخدم مسجل الدخول
       if (!auctionTermsAccepted) {
-        // إذا لم يقبل الشروط، أظهر صفحة الشروط أولاً
-        return const AuctionTermsPage();
+        return const AuctionTermsPage(); // صفحة الشروط كمثال
       } else {
         return const HomePage();
       }
     } else {
-      // إذا المستخدم غير مسجل الدخول
       if (!introSeen) {
         return const IntroPage();
       } else {
@@ -63,7 +61,7 @@ class mazid extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: "Mazid",
             theme: ThemeData.dark(),
-            home: snapshot.data,
+            home: snapshot.data, // صفحة الشروط أو الصفحة التالية
             routes: {
               '/intro': (_) => const IntroPage(),
               '/login': (_) => const LoginPage(),
