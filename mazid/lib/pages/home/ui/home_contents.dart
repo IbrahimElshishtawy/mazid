@@ -53,7 +53,7 @@ class _HomeContentsState extends State<HomeContents> {
     }
 
     if (_showTermsPage) {
-      return const AuctionTermsPage();
+      return AuctionTermsPage();
     }
 
     return ChangeNotifierProvider(
