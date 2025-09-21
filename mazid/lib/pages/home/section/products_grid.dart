@@ -1,7 +1,8 @@
 // lib/pages/home/widget/products_grid.dart
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/prouduct/product_models.dart';
-import 'package:mazid/pages/home/widget/product_card.dart';
+import 'package:mazid/core/widget/product_card.dart';
+import 'package:mazid/pages/home/Details/Product_Details_Page.dart';
 
 class ProductsGrid extends StatelessWidget {
   final List<ProductModel> products;
@@ -23,7 +24,17 @@ class ProductsGrid extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         final product = products[index];
-        return ProductCard(product: product);
+        return ProductCard(
+          product: product,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => ProductDetailsPage(product: product),
+              ),
+            );
+          },
+        );
       },
     );
   }
