@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/swap/swap_request_model.dart';
 import 'package:mazid/core/models/swap/swap_status.dart';
+import 'package:mazid/core/widget/product_card.dart';
 import 'package:mazid/pages/Swap/widgets/swaptabar.dart';
 import 'package:mazid/pages/Swap/widgets/custom_product_card.dart';
 
@@ -227,8 +228,8 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
             statusText = "غير معروف";
         }
 
-        return ProductCardswap(
-          product: item,
+        return ProductCard(
+          product: product,
           status: SwapStatus.completed,
           extraActions: Text(
             statusText,
