@@ -17,5 +17,7 @@ enum SwapStatus {
   approved,
 
   /// accept seles product swap [هنا المستخدم المنتج كد اتوافق عليها  هيرعض يدخل الصفحه ]
-  other, // حالة افتراضية/أخرى
+  other,
+  available,
+  sold, // حالة افتراضية/أخرى
 }
