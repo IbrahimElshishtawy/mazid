@@ -32,8 +32,8 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String displayName = product.title.isNotEmpty
-        ? _shortenText(product.title, maxLength: 14)
-        : _shortenText(product.name, maxLength: 14);
+        ? _shortenText(product.title, maxLength: 12)
+        : _shortenText(product.name, maxLength: 12);
 
     final String imageUrl = (product.images.isNotEmpty)
         ? product.images.first
@@ -90,7 +90,7 @@ class ProductCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 6),
+            const SizedBox(height: 3),
 
             // الاسم
             Padding(
