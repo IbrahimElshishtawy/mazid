@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mazid/pages/Auction/ui/intro_Auction_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mazid/pages/Auction/home/auction_home.dart';
+import 'package:mazid/pages/Auction/home/auction_home_page.dart';
 import 'package:mazid/pages/Notifications/NotificationsPage.dart';
 import 'package:mazid/pages/Swap/ui/swap_home.dart';
 import 'package:mazid/pages/home/controller/home_controller.dart';
