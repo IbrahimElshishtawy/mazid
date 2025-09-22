@@ -1,8 +1,10 @@
-// ignore_for_file: library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, file_names
 
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/Auction/home/auction_home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'package:mazid/pages/Auction/home/auction_home_page.dart';
 
 class AuctionTermsPage extends StatefulWidget {
   const AuctionTermsPage({super.key}); // صفحة مستقلة عادية
@@ -13,10 +15,51 @@ class AuctionTermsPage extends StatefulWidget {
 
 class _AuctionTermsPageState extends State<AuctionTermsPage> {
   bool accepted = false;
+  bool _checking = true; // لتحضير فحص أول مرة
+
+  String _prefsKeyForUser() {
+    try {
+      final uid = Supabase.instance.client.auth.currentUser?.id;
+      return 'auction_terms_accepted_${uid ?? 'global'}';
+    } catch (_) {
+      // في حال Supabase لسه مش متهيّأ
+      return 'auction_terms_accepted_global';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkIfAlreadyAccepted();
+  }
+
+  Future<void> _checkIfAlreadyAccepted() async {
+    final prefs = await SharedPreferences.getInstance();
+    final key = _prefsKeyForUser();
+    final hasAccepted = prefs.getBool(key) ?? false;
+
+    if (!mounted) return;
+    if (hasAccepted) {
+      // المستخدم وافق قبل كده → نروح مباشرة للهوم
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const AuctionHomePage()),
+        );
+      });
+    } else {
+      setState(() => _checking = false);
+    }
+  }
 
   Future<void> _acceptTerms() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('auction_terms_accepted', true); // حفظ الموافقة
+    await prefs.setBool(
+      _prefsKeyForUser(),
+      true,
+    ); // حفظ الموافقة للمستخدم الحالي
+
+    if (!mounted) return;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => const AuctionHomePage()),
@@ -25,6 +68,13 @@ class _AuctionTermsPageState extends State<AuctionTermsPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_checking) {
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -73,11 +123,11 @@ class _AuctionTermsPageState extends State<AuctionTermsPage> {
                 children: [
                   Checkbox(
                     value: accepted,
-                    onChanged: (value) {
-                      setState(() {
-                        accepted = value ?? false;
-                      });
-                    },
+                    onChanged: (value) =>
+                        setState(() => accepted = value ?? false),
+                    side: const BorderSide(color: Colors.white54),
+                    checkColor: Colors.black,
+                    activeColor: Colors.white,
                   ),
                   const Expanded(
                     child: Text(
@@ -94,6 +144,9 @@ class _AuctionTermsPageState extends State<AuctionTermsPage> {
                   backgroundColor: Colors.orange,
                   foregroundColor: Colors.black,
                   minimumSize: const Size(double.infinity, 50),
+                  textStyle: const TextStyle(fontWeight: FontWeight.w700),
+                  disabledBackgroundColor: Colors.white24,
+                  disabledForegroundColor: Colors.black54,
                 ),
                 child: const Text("ابدأ المزايدة"),
               ),
