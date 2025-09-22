@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:mazid/pages/Auction/ui/intro_Auction_page.dart';
 import 'package:provider/provider.dart';

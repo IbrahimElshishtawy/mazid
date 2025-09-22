@@ -1,4 +1,6 @@
 // ----- SwapGrid (inline) -----
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:mazid/core/models/swap/swap_request_model.dart';
 import 'package:mazid/core/models/swap/swap_status.dart';
