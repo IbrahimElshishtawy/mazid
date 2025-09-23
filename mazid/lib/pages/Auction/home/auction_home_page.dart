@@ -7,9 +7,8 @@ import 'package:mazid/core/models/swap/swap_status.dart';
 import 'package:mazid/pages/Auction/ui/product_detail_page.dart';
 import 'package:mazid/pages/Auction/widget/Swap_Grid.dart';
 import 'package:mazid/pages/Auction/widget/status_filter_bar.dart';
-import 'package:mazid/pages/Auction/widget/swap_search_field.dart';
 
-/// الصفحة الرئيسية للمزاد (مقسّمة لمكوّنات)
+/// قسم المزاد لعرضه داخل الـ Home body (بدون Scaffold / AppBar)
 class AuctionHomePage extends StatefulWidget {
   const AuctionHomePage({super.key});
 
@@ -21,7 +20,7 @@ enum StatusFilter { all, available, pending, sold }
 
 class _AuctionHomePageState extends State<AuctionHomePage> {
   StatusFilter _filter = StatusFilter.all;
-  String _query = '';
+  final String _query = '';
 
   SwapStatus _mapStatus(dynamic status) {
     if (status is SwapStatus) return status;
@@ -48,7 +47,6 @@ class _AuctionHomePageState extends State<AuctionHomePage> {
   bool _applySearch(SwapProductModel p) {
     if (_query.isEmpty) return true;
     final q = _query.toLowerCase();
-    // حاول نلاقي اسم/عنوان المنتج. عدّل الحقول حسب موديلك لو مختلفة.
     final title = (p.title).toString().toLowerCase();
     return title.contains(q);
   }
@@ -60,16 +58,12 @@ class _AuctionHomePageState extends State<AuctionHomePage> {
         .where((p) => _applyFilter(p) && _applySearch(p))
         .toList();
 
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: const Text('Mazid Auctions'),
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        elevation: 0,
-      ),
-      body: Column(
+    // مفيش Scaffold — ده محتوى مباشر للـ body
+    return Container(
+      color: Colors.black,
+      child: Column(
         children: [
+          // فلترة الحالات
           StatusFilterBar(
             current: _filter,
             onChanged: (f) => setState(() => _filter = f),
