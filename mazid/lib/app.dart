@@ -4,39 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mazid/core/cubit/auth/auth_cubit.dart';
 import 'package:mazid/core/cubit/auth/auth_service.dart';
-import 'package:mazid/pages/Auction/ui/intro_Auction_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Pages
 import 'package:mazid/pages/auth/ui/login.dart';
 import 'package:mazid/pages/auth/ui/Register_page.dart';
 import 'package:mazid/pages/spa/ui/intro_page.dart';
 import 'package:mazid/pages/home/ui/home_page.dart';
+import 'package:mazid/pages/Auction/ui/intro_Auction_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-// في ملف main.dart أو أي صفحة رئيسية
 class Mazid extends StatelessWidget {
   const Mazid({super.key});
-
   Future<Widget> _determineStartPage() async {
     final prefs = await SharedPreferences.getInstance();
-    final loggedIn = prefs.getBool('isLoggedIn') ?? false;
-    final introSeen = prefs.getBool('introSeen') ?? false;
-    final auctionTermsAccepted =
-        prefs.getBool('auction_terms_accepted') ?? false;
-
-    if (loggedIn) {
-      if (!auctionTermsAccepted) {
-        return const AuctionTermsPage(); // صفحة الشروط كمثال
-      } else {
-        return const HomePage();
-      }
-    } else {
-      if (!introSeen) {
-        return const IntroPage();
-      } else {
-        return const LoginPage();
-      }
-    }
+    await prefs.setBool('introSeen', true);
+    return const HomePage();
   }
 
   @override
@@ -61,7 +43,7 @@ class Mazid extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: "Mazid",
             theme: ThemeData.dark(),
-            home: snapshot.data, // صفحة الشروط أو الصفحة التالية
+            home: snapshot.data, // ← HomePage
             routes: {
               '/intro': (_) => const IntroPage(),
               '/login': (_) => const LoginPage(),
