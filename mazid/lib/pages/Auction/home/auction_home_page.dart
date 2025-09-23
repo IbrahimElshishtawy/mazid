@@ -70,15 +70,6 @@ class _AuctionHomePageState extends State<AuctionHomePage> {
       ),
       body: Column(
         children: [
-          // شريط البحث
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-            child: SwapSearchField(
-              hintText: 'ابحث عن منتج…',
-              onChanged: (v) => setState(() => _query = v),
-            ),
-          ),
-          // شريط الفلترة بالحالة
           StatusFilterBar(
             current: _filter,
             onChanged: (f) => setState(() => _filter = f),
@@ -89,7 +80,7 @@ class _AuctionHomePageState extends State<AuctionHomePage> {
             child: SwapGrid(
               products: filtered,
               childAspectRatio: 0.65,
-              statusOf: _mapStatus, // ✅ المهم
+              statusOf: _mapStatus,
               onTap: (product) {
                 Navigator.push(
                   context,
