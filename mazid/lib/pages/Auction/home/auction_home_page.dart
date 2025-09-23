@@ -8,7 +8,7 @@ import 'package:mazid/pages/Auction/ui/product_detail_page.dart';
 import 'package:mazid/pages/Auction/widget/Swap_Grid.dart';
 import 'package:mazid/pages/Auction/widget/status_filter_bar.dart';
 
-/// قسم المزاد لعرضه داخل الـ Home body (بدون Scaffold / AppBar)
+/// قسم/صفحة المزاد لعرضه داخل الـ Home body (بدون Scaffold)
 class AuctionHomePage extends StatefulWidget {
   const AuctionHomePage({super.key});
 
@@ -58,34 +58,38 @@ class _AuctionHomePageState extends State<AuctionHomePage> {
         .where((p) => _applyFilter(p) && _applySearch(p))
         .toList();
 
-    // مفيش Scaffold — ده محتوى مباشر للـ body
-    return Container(
-      color: Colors.black,
-      child: Column(
-        children: [
-          // فلترة الحالات
-          StatusFilterBar(
-            current: _filter,
-            onChanged: (f) => setState(() => _filter = f),
-          ),
-
-          // الشبكة
-          Expanded(
-            child: SwapGrid(
-              products: filtered,
-              childAspectRatio: 0.65,
-              statusOf: _mapStatus,
-              onTap: (product) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ProductDetailPagemazid(product: product),
-                  ),
-                );
-              },
+    // محتوى “صفحة عادية” للعرض داخل body الهوم
+    return SafeArea(
+      top: false, // سيب الهوم يتحكم في الـ AppBar لو موجود
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          children: [
+            // فلترة الحالات
+            StatusFilterBar(
+              current: _filter,
+              onChanged: (f) => setState(() => _filter = f),
             ),
-          ),
-        ],
+            const SizedBox(height: 8),
+
+            // الشبكة
+            Expanded(
+              child: SwapGrid(
+                products: filtered,
+                childAspectRatio: 1,
+                statusOf: _mapStatus,
+                onTap: (product) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ProductDetailPagemazid(product: product),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
