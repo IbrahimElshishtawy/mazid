@@ -2,33 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:mazid/core/service/auth/facebook_auth_service.dart';
 import 'package:mazid/core/service/auth/google_auth_service.dart';
 
-// لو صفحة الشروط اسمها/مسارها مختلف عدّل الاستيراد ده
-import 'package:mazid/pages/Auction/ui/intro_Auction_page.dart'; // يفترض أنها تحتوي على class AuctionTermsPage
-
 class LoginSocialButtons extends StatelessWidget {
   const LoginSocialButtons({super.key});
 
-  /// بعد تسجيل الدخول: شيّك موافقة الشروط الخاصة بالمستخدم الحالي
+  /// بعد تسجيل الدخول: ادخل الهوم مباشرة
   Future<void> _routeAfterLogin(BuildContext context) async {
-    final prefs = await SharedPreferences.getInstance();
-    final uid = Supabase.instance.client.auth.currentUser?.id ?? 'global';
-    final accepted = prefs.getBool('auction_terms_accepted_$uid') ?? false;
-
     if (!context.mounted) return;
-    if (accepted) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const AuctionTermsPage()),
-      );
-    }
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   void _showFailSnack(BuildContext context, [String? msg]) {
@@ -61,7 +46,6 @@ class LoginSocialButtons extends StatelessWidget {
             try {
               await GoogleAuthService.signInWithGoogle();
 
-              // بدل res.user: اعتمد على Supabase.currentUser
               final user = Supabase.instance.client.auth.currentUser;
               if (user != null) {
                 await _routeAfterLogin(context);
@@ -96,7 +80,6 @@ class LoginSocialButtons extends StatelessWidget {
             try {
               await FacebookAuthService.signInWithFacebook();
 
-              // اعتمد على Supabase.currentUser بعد الرجوع من المتصفح
               final user =
                   FacebookAuthService.currentUser ??
                   Supabase.instance.client.auth.currentUser;
