@@ -70,7 +70,6 @@ class AuthService {
     required String password,
   }) async {
     try {
-      // ✅ تسجيل دخول الأدمن
       if (email.trim() == AdminData.email &&
           password.trim() == AdminData.password) {
         return UserModel(
@@ -85,7 +84,6 @@ class AuthService {
         );
       }
 
-      // ✅ مستخدم عادي
       final response = await supabase.auth.signInWithPassword(
         email: email.trim(),
         password: password,
