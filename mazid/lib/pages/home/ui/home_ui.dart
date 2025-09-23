@@ -1,7 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/Auction/ui/intro_Auction_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mazid/pages/Auction/home/auction_home_page.dart';
@@ -50,7 +49,7 @@ class _HomeUIState extends State<HomeUI> {
     }
 
     if (_showTermsPage) {
-      return AuctionTermsPage();
+      return const AuctionHomePage();
     }
 
     return Consumer<HomeController>(
