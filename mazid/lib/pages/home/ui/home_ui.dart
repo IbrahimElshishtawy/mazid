@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:mazid/pages/Auction/home/auction_home_page.dart';
 import 'package:mazid/pages/Notifications/NotificationsPage.dart';
 import 'package:mazid/pages/Swap/ui/swap_home.dart';
@@ -42,31 +43,29 @@ class _HomeUIState extends State<HomeUI> {
 
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return const Center(
-        child: CircularProgressIndicator(color: Colors.orange),
-      );
-    }
+    // ✅ Scaffold واحد ثابت، وكل المحتوى جواه
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: _loading
+          ? const Center(child: CircularProgressIndicator(color: Colors.orange))
+          : _showTermsPage
+          ? const AuctionHomePage()
+          : Consumer<HomeController>(
+              builder: (context, controller, child) {
+                final pages = <Widget>[
+                  NotificationsPage(),
+                  const AuctionHomePage(),
+                  _buildHomePage(controller, context),
+                  _buildSwapPage(controller),
+                  _buildProfilePage(controller),
+                ];
 
-    if (_showTermsPage) {
-      return const AuctionHomePage();
-    }
-
-    return Consumer<HomeController>(
-      builder: (context, controller, child) {
-        List<Widget> pages = [
-          NotificationsPage(),
-          const AuctionHomePage(),
-          _buildHomePage(controller, context),
-          _buildSwapPage(controller),
-          _buildProfilePage(controller),
-        ];
-
-        return Scaffold(
-          backgroundColor: Colors.black,
-          body: pages[controller.currentIndex],
-        );
-      },
+                return IndexedStack(
+                  index: controller.currentIndex,
+                  children: pages,
+                );
+              },
+            ),
     );
   }
 
@@ -109,6 +108,7 @@ class _HomeUIState extends State<HomeUI> {
     );
   }
 
+  /// قسم الـ Swap (بدون Scaffold)
   Widget _buildSwapPage(HomeController controller) {
     if (controller.isUserLoading) {
       return const Center(
@@ -118,6 +118,7 @@ class _HomeUIState extends State<HomeUI> {
     return const SwapHome();
   }
 
+  /// قسم البروفايل (بدون Scaffold)
   Widget _buildProfilePage(HomeController controller) {
     if (controller.isUserLoading) {
       return const Center(
