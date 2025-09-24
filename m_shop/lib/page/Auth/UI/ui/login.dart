@@ -1,0 +1,174 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:m_shop/core/Animation/auth/animation/login_animation.dart';
+import 'package:m_shop/core/cubit/auth/auth_cubit.dart';
+import 'package:m_shop/core/cubit/auth/auth_state.dart';
+import 'package:m_shop/core/data/admin_data.dart';
+import 'package:m_shop/core/widget/Auth/widget_form/login_form_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
+  late final AnimationController _animController;
+  late final AnimationController _entryController;
+  late final Animation<Offset> _slideAnimation;
+  late final Animation<double> _fadeAnimation;
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  bool _obscurePassword = true;
+  bool _isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _animController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+
+    _entryController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, -0.2),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _entryController, curve: Curves.easeOut));
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _entryController, curve: Curves.easeIn));
+
+    _entryController.forward();
+    _checkLoginStatus();
+  }
+
+  @override
+  void dispose() {
+    _animController.dispose();
+    _entryController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _checkLoginStatus() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+      if (isLoggedIn && mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const HomePage()),
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      debugPrint("❌ SharedPreferences Error: $e");
+    }
+  }
+
+  Future<void> _saveLoginStatus(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', true);
+    await prefs.setString('userEmail', email);
+  }
+
+  void _handleLogin(BuildContext context) async {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    setState(() => _isLoading = true);
+    await _animController.forward();
+
+    // تحقق من الأدمن
+    if (email == AdminData.email && password == AdminData.password) {
+      await _saveLoginStatus(email);
+      if (!mounted) return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => const HomePage(),
+        ), // ممكن تعمل AdminHomePage هنا
+        (route) => false,
+      );
+    } else {
+      // تسجيل دخول عادي عبر الكيوبت
+      context.read<AuthCubit>().loginWithEmail(
+        email: email,
+        password: password,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: BackgroundAnimation(
+          child: SafeArea(
+            child: BlocConsumer<AuthCubit, AuthState>(
+              listener: (context, state) async {
+                _animController.reverse();
+                if (!mounted) return;
+
+                if (state is Authenticated) {
+                  await _saveLoginStatus(emailController.text.trim());
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => const HomePage()),
+                    (route) => false,
+                  );
+                } else if (state is AuthFailure) {
+                  FocusScope.of(context).unfocus();
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.message)));
+
+                  // اهتزاز الصفحة عند الخطأ
+                  _entryController.forward(from: 0.0);
+                }
+
+                setState(() => _isLoading = false);
+              },
+              builder: (context, state) {
+                return Center(
+                  child: SlideTransition(
+                    position: _slideAnimation,
+                    child: FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: LoginFormWidget(
+                        emailController: emailController,
+                        passwordController: passwordController,
+                        obscurePassword: _obscurePassword,
+                        onTogglePassword: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                        onLoginPressed: () => _handleLogin(context),
+                        isLoading: _isLoading,
+                        animController: _animController,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
