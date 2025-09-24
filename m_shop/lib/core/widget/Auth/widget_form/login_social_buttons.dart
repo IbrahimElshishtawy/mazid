@@ -2,10 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:m_shop/core/service/auth/facebook_auth_service.dart';
+import 'package:m_shop/core/service/auth/google_auth_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'package:mazid/core/service/auth/facebook_auth_service.dart';
-import 'package:mazid/core/service/auth/google_auth_service.dart';
 
 class LoginSocialButtons extends StatelessWidget {
   const LoginSocialButtons({super.key});
