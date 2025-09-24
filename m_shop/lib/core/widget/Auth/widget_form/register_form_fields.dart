@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:m_shop/core/models/user/user_model.dart';
 
 class RegisterFormFields extends StatefulWidget {
   final TextEditingController emailController;
