@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mazid/pages/spa/widget/CurvedTopClipper.dart';
+import 'package:m_shop/core/widget/spa/widget/CurvedTopClipper.dart';
 
 class IntroPage2 extends StatelessWidget {
   final Color textColor;
