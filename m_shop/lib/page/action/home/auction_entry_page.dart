@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/Auction/ui/intro_Auction_page.dart';
+import 'package:m_shop/page/action/ui/intro_Auction_page.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'auction_home_page.dart';
