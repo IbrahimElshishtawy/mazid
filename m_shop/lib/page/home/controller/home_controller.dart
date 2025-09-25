@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/core/cubit/auth/auth_Excption.dart';
-import 'package:mazid/core/data/admin_data.dart';
-import 'package:mazid/core/models/prouduct/product_models.dart';
-import 'package:mazid/core/models/user/user_model.dart';
-import 'package:mazid/core/service/product/product_service.dart';
+import 'package:m_shop/core/cubit/auth/auth_Excption.dart';
+import 'package:m_shop/core/data/admin_data.dart';
+import 'package:m_shop/core/models/prouduct/product_models.dart';
+import 'package:m_shop/core/models/user/user_model.dart';
+import 'package:m_shop/core/service/product/product_service.dart';
 
 class HomeController extends ChangeNotifier {
   final AuthService _authService = AuthService();
