@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:liquid_swipe/liquid_swipe.dart';
-import 'package:mazid/pages/spa/page/intro_page1.dart';
-import 'package:mazid/pages/spa/page/intro_page2.dart';
-import 'package:mazid/pages/spa/page/inrto_page3.dart';
-import 'package:mazid/pages/spa/widget/page_indicator.dart';
-import 'package:mazid/pages/auth/ui/login.dart';
+import 'package:m_shop/core/widget/spa/widget/page_indicator.dart';
+import 'package:m_shop/page/Auth/UI/ui/login.dart';
+import 'package:m_shop/page/spa/ui/page/inrto_page3.dart';
+import 'package:m_shop/page/spa/ui/page/intro_page1.dart';
+import 'package:m_shop/page/spa/ui/page/intro_page2.dart';
 
 class PageData {
   final Color bgColor;
