@@ -43,6 +43,8 @@ dependencies:
   equatable: ^2.0.7
   google_sign_in: ^7.2.0
   shelf: ^1.4.2
+  liquid_swipe: ^3.1.0
+  curved_navigation_bar: ^1.0.6
 
 dev_dependencies:
   flutter_test:
