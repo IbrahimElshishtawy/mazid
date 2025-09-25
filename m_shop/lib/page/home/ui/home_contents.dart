@@ -1,14 +1,13 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/Auction/ui/intro_Auction_page.dart';
+import 'package:m_shop/core/widget/home/widget/AppBar_widget.dart';
+import 'package:m_shop/core/widget/home/widget/bottom_NavigationBar.dart';
+import 'package:m_shop/page/home/controller/home_controller.dart';
+import 'package:m_shop/page/home/drawer/ui/drawer_menu.dart';
+import 'package:m_shop/page/home/ui/home_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mazid/pages/home/controller/home_controller.dart';
-import 'package:mazid/pages/home/ui/home_ui.dart';
-import 'package:mazid/pages/home/widget/AppBar_widget.dart';
-import 'package:mazid/pages/home/widget/bottom_NavigationBar.dart';
-import 'package:mazid/pages/home/drawer/ui/drawer_menu.dart';
 
 class HomeContents extends StatefulWidget {
   const HomeContents({super.key});
@@ -18,7 +17,6 @@ class HomeContents extends StatefulWidget {
 }
 
 class _HomeContentsState extends State<HomeContents> {
-  bool _showTermsPage = false;
   bool _loading = true;
 
   @override
@@ -33,12 +31,10 @@ class _HomeContentsState extends State<HomeContents> {
 
     if (!accepted) {
       setState(() {
-        _showTermsPage = true;
         _loading = false;
       });
     } else {
       setState(() {
-        _showTermsPage = false;
         _loading = false;
       });
     }
@@ -50,10 +46,6 @@ class _HomeContentsState extends State<HomeContents> {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator(color: Colors.orange)),
       );
-    }
-
-    if (_showTermsPage) {
-      return AuctionTermsPage();
     }
 
     return ChangeNotifierProvider(
