@@ -1,18 +1,15 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:m_shop/core/widget/home/widget/error_view.dart';
+import 'package:m_shop/page/Notifications/NotificationsPage.dart';
+import 'package:m_shop/page/home/controller/home_controller.dart';
+import 'package:m_shop/page/home/section/banner_section.dart';
+import 'package:m_shop/page/home/section/categories_section.dart';
+import 'package:m_shop/page/home/section/products_grid.dart';
+import 'package:m_shop/page/profile/ui/Profile_Page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:mazid/pages/Auction/home/auction_home_page.dart';
-import 'package:mazid/pages/Notifications/NotificationsPage.dart';
-import 'package:mazid/pages/Swap/ui/swap_home.dart';
-import 'package:mazid/pages/home/controller/home_controller.dart';
-import 'package:mazid/pages/home/section/banner_section.dart';
-import 'package:mazid/pages/home/section/categories_section.dart';
-import 'package:mazid/pages/home/section/products_grid.dart';
-import 'package:mazid/pages/home/widget/error_view.dart';
-import 'package:mazid/pages/profile/ui/Profile_Page.dart';
 
 class HomeUI extends StatefulWidget {
   const HomeUI({super.key});
@@ -49,12 +46,12 @@ class _HomeUIState extends State<HomeUI> {
       body: _loading
           ? const Center(child: CircularProgressIndicator(color: Colors.orange))
           : _showTermsPage
-          ? const AuctionHomePage()
+          ? null //const AuctionHomePage()
           : Consumer<HomeController>(
               builder: (context, controller, child) {
                 final pages = <Widget>[
                   NotificationsPage(),
-                  const AuctionHomePage(),
+                  // const AuctionHomePage(),
                   _buildHomePage(controller, context),
                   _buildSwapPage(controller),
                   _buildProfilePage(controller),
