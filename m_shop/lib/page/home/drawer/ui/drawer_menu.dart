@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/prouduct/product_models.dart';
-import 'package:mazid/core/models/user/user_model.dart';
-import 'package:mazid/pages/home/drawer/Favorites/ui/FavoritesPage.dart';
-import 'package:mazid/pages/profile/ui/Profile_Page.dart';
+import 'package:m_shop/core/models/prouduct/product_models.dart';
+import 'package:m_shop/core/models/user/user_model.dart';
+import 'package:m_shop/page/home/drawer/Favorites/ui/FavoritesPage.dart';
+import 'package:m_shop/page/profile/ui/Profile_Page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
