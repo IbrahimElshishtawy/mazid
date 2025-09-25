@@ -1,12 +1,12 @@
 // ignore_for_file: dead_code
 
 import 'package:flutter/material.dart';
-import 'package:mazid/core/data/dummyProducts.dart';
-import 'package:mazid/core/models/swap/swap_request_model.dart';
-import 'package:mazid/core/models/swap/swap_status.dart';
-import 'package:mazid/pages/Auction/ui/product_detail_page.dart';
-import 'package:mazid/pages/Auction/widget/Swap_Grid.dart';
-import 'package:mazid/pages/Auction/widget/status_filter_bar.dart';
+import 'package:m_shop/core/data/dummyProducts.dart';
+import 'package:m_shop/core/models/swap/swap_request_model.dart';
+import 'package:m_shop/core/models/swap/swap_status.dart';
+import 'package:m_shop/core/widget/action/widget/Swap_Grid.dart';
+import 'package:m_shop/core/widget/action/widget/status_filter_bar.dart';
+import 'package:m_shop/page/action/ui/product_detail_page.dart';
 
 /// قسم/صفحة المزاد لعرضه داخل الـ Home body (بدون Scaffold)
 class AuctionHomePage extends StatefulWidget {
