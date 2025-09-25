@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:m_shop/core/models/swap/swap_request_model.dart';
+import 'package:m_shop/core/models/prouduct/product_models.dart'
+    as pm; // <-- مهم نفس المسار
 import 'package:m_shop/core/models/swap/swap_status.dart';
+import 'package:m_shop/core/service/product/Product_Details_Page.dart';
 
 /// زر الكارت بيتغير حسب الحالة، مع إضافة إمكانية الموافقة على طلب التبديل
 class ProductCardButton extends StatelessWidget {
   final SwapStatus status;
-  final SwapProductModel product;
+  final pm.BaseProduct
+  product; // <-- بدّلناها من SwapProductModel إلى BaseProduct
 
   const ProductCardButton({
     super.key,
@@ -23,7 +26,7 @@ class ProductCardButton extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ProductDetailPage(product: product),
+                builder: (context) => ProductDetailsPage(product: product),
               ),
             );
           },
@@ -42,7 +45,6 @@ class ProductCardButton extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                // منطق الموافقة على الطلب
                 if (kDebugMode) {
                   print("تم قبول طلب التبديل للمنتج ${product.name}");
                 }
@@ -53,7 +55,6 @@ class ProductCardButton extends StatelessWidget {
             const SizedBox(width: 8),
             ElevatedButton(
               onPressed: () {
-                // منطق رفض الطلب
                 if (kDebugMode) {
                   print("تم رفض طلب التبديل للمنتج ${product.name}");
                 }

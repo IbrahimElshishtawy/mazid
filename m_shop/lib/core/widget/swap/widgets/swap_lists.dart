@@ -27,6 +27,12 @@ class ProductListView extends StatelessWidget {
           return p.status == "accepted";
         case SwapStatus.pending:
           return p.status == "pending";
+        case SwapStatus.request:
+          return p.status == "request";
+        case SwapStatus.completed:
+          return p.status == "completed";
+        case SwapStatus.approved:
+          return p.status == "approved";
         default:
           return false;
       }
@@ -58,10 +64,13 @@ class RequestListView extends StatefulWidget {
 }
 
 class _RequestListViewState extends State<RequestListView> {
+  // ماب بسيطة لتتبع الحالة محليًا بدون الاعتماد على تعديل الموديل نفسه
+  final Map<String, String> _statusOverride = {};
+
   @override
   Widget build(BuildContext context) {
     final requests = widget.products
-        .where((p) => p.status == "request")
+        .where((p) => (_statusOverride[p.id] ?? p.status) == "request")
         .toList();
 
     if (requests.isEmpty) {
@@ -78,6 +87,8 @@ class _RequestListViewState extends State<RequestListView> {
       itemCount: requests.length,
       itemBuilder: (context, index) {
         final req = requests[index];
+        final currentStatus = _statusOverride[req.id] ?? req.status;
+
         return SwapProductCard(
           product: req,
           status: SwapStatus.request,
@@ -85,29 +96,33 @@ class _RequestListViewState extends State<RequestListView> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ElevatedButton(
-                onPressed: () {
-                  setState(() => req.status = "accepted");
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("✔ تم قبول ${req.name}"),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                },
+                onPressed: currentStatus == "accepted"
+                    ? null
+                    : () {
+                        setState(() => _statusOverride[req.id] = "accepted");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("✔ تم قبول ${req.name}"),
+                            backgroundColor: Colors.green,
+                          ),
+                        );
+                      },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                 child: const Text("قبول"),
               ),
               const SizedBox(width: 8),
               ElevatedButton(
-                onPressed: () {
-                  setState(() => req.status = "rejected");
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("❌ تم رفض ${req.name}"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                },
+                onPressed: currentStatus == "rejected"
+                    ? null
+                    : () {
+                        setState(() => _statusOverride[req.id] = "rejected");
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("❌ تم رفض ${req.name}"),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                 child: const Text("رفض"),
               ),

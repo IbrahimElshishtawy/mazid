@@ -1,6 +1,7 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, await_only_futures
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:m_shop/core/models/user/user_model.dart';
 import 'auth_service.dart';
 import 'auth_state.dart';
 
@@ -87,7 +88,9 @@ class AuthCubit extends Cubit<AuthState> {
       final user = await authService.currentUser();
       if (user != null) {
         print("✅ [AuthCubit] Current user: ${user.email}");
-        emit(Authenticated(user)); // يذهب مباشرة للصفحة الرئيسية بدل Intro
+        emit(
+          Authenticated(user as UserModel),
+        ); // يذهب مباشرة للصفحة الرئيسية بدل Intro
       } else {
         print("❌ [AuthCubit] No user logged in");
         emit(Unauthenticated()); // المستخدم سيبقى في LoginPage بدل Intro

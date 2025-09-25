@@ -91,5 +91,10 @@ final List<SwapProductModel> dummySwapProducts = dummyProducts.map((p) {
     createdAt: DateTime.now(),
     price: p.price,
     rating: p.rating,
+    title: '',
+    image: '',
+    images: [],
+    swapId: '',
+    requesterId: '',
   );
 }).toList();

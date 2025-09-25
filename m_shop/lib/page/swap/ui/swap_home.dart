@@ -1,9 +1,9 @@
 // swap_home.dart
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/swap/swap_status.dart';
-import 'package:mazid/pages/Swap/widgets/swap_lists.dart';
-import 'package:mazid/pages/Swap/widgets/swaptabar.dart';
-import 'package:mazid/core/models/swap/swap_request_model.dart';
+import 'package:m_shop/core/models/swap/swap_request_model.dart';
+import 'package:m_shop/core/models/swap/swap_status.dart';
+import 'package:m_shop/core/widget/swap/widgets/swap_lists.dart';
+import 'package:m_shop/core/widget/swap/widgets/swaptabar.dart';
 
 class SwapHome extends StatefulWidget {
   const SwapHome({super.key});
@@ -27,6 +27,11 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
       createdAt: DateTime.now(),
       price: 4500,
       rating: 4.5,
+      title: '',
+      image: '',
+      images: [],
+      swapId: '',
+      requesterId: '',
     ),
     SwapProductModel(
       id: "2",
@@ -38,6 +43,11 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
       createdAt: DateTime.now(),
       price: 12000,
       rating: 4.8,
+      title: '',
+      image: '',
+      images: [],
+      swapId: '',
+      requesterId: '',
     ),
     SwapProductModel(
       id: "3",
@@ -49,6 +59,11 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
       createdAt: DateTime.now(),
       price: 800,
       rating: 4.2,
+      title: '',
+      image: '',
+      images: [],
+      swapId: '',
+      requesterId: '',
     ),
   ];
 

@@ -1,84 +1,104 @@
-/// موديل لمنتجات التبديل
-class SwapProductModel {
+// lib/core/models/swap/swap_request_model.dart
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
+import 'package:m_shop/core/models/prouduct/product_models.dart' as pm;
+
+class SwapProductModel implements pm.BaseProduct {
+  @override
   final String id;
+  @override
+  final String title;
+  @override
   final String name;
-  final String description;
+  @override
+  final String image;
+  @override
+  final List<String> images;
+
+  // حقول خاصة بالتبديل / المنتج
+  final String swapId;
+  final String requesterId;
+  final String ownerId;
   final String imageUrl;
-  final String ownerId; // (user id)
-  String status; // (pending, accepted, rejected, completed)
-  final DateTime createdAt;
+  final String description;
+  final String status;
   final double price;
   final double rating;
+  final DateTime? createdAt;
 
   SwapProductModel({
     required this.id,
+    required this.title,
     required this.name,
-    required this.description,
-    required this.imageUrl,
-    required this.ownerId,
-    required this.status,
-    required this.createdAt,
-    required this.price,
-    required this.rating,
+    required this.image,
+    required this.images,
+    required this.swapId,
+    required this.requesterId,
+    this.ownerId = '',
+    this.imageUrl = '',
+    this.description = '',
+    this.status = '',
+    this.price = 0.0,
+    this.rating = 0.0,
+    this.createdAt,
   });
 
   factory SwapProductModel.fromJson(Map<String, dynamic> json) {
+    String _s(dynamic v) => v == null ? '' : v.toString();
+
+    double _toDouble(dynamic v) {
+      if (v == null) return 0.0;
+      if (v is num) return v.toDouble();
+      if (v is String) return double.tryParse(v) ?? 0.0;
+      return 0.0;
+    }
+
+    List<String> _ls(dynamic v) {
+      if (v is List) {
+        return v.map((e) => _s(e)).toList();
+      }
+      return const <String>[];
+    }
+
+    DateTime? _toDate(dynamic v) {
+      if (v == null) return null;
+      if (v is DateTime) return v;
+      if (v is String) return DateTime.tryParse(v);
+      return null;
+    }
+
     return SwapProductModel(
-      id: json['id']?.toString() ?? '',
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      imageUrl: json['image_url'] ?? '',
-      ownerId: json['owner_id'] ?? '',
-      status: json['status'] ?? 'pending',
-      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
-      price: (json['price'] is int)
-          ? (json['price'] as int).toDouble()
-          : (json['price'] ?? 0.0).toDouble(),
-      rating: (json['rating'] is int)
-          ? (json['rating'] as int).toDouble()
-          : (json['rating'] ?? 0.0).toDouble(),
+      id: _s(json['_id'] ?? json['id']),
+      title: _s(json['title'] ?? json['name']),
+      name: _s(json['name'] ?? json['title']),
+      image: _s(json['image'] ?? json['thumbnail']),
+      images: _ls(json['images']),
+      swapId: _s(json['swapId']),
+      requesterId: _s(json['requesterId']),
+      ownerId: _s(json['ownerId']),
+      imageUrl: _s(json['imageUrl']),
+      description: _s(json['description']),
+      status: _s(json['status']),
+      price: _toDouble(json['price']),
+      rating: _toDouble(json['rating']),
+      createdAt: _toDate(json['createdAt']),
     );
   }
 
-  String get image => imageUrl;
-  double get currentPrice => price;
-  String get title => name;
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'image_url': imageUrl,
-      'owner_id': ownerId,
-      'status': status,
-      'created_at': createdAt.toIso8601String(),
-      'price': price,
-      'rating': rating,
-    };
-  }
-
-  SwapProductModel copyWith({
-    String? id,
-    String? name,
-    String? description,
-    String? imageUrl,
-    String? ownerId,
-    String? status,
-    DateTime? createdAt,
-    double? price,
-    double? rating,
-  }) {
-    return SwapProductModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      imageUrl: imageUrl ?? this.imageUrl,
-      ownerId: ownerId ?? this.ownerId,
-      status: status ?? this.status,
-      createdAt: createdAt ?? this.createdAt,
-      price: price ?? this.price,
-      rating: rating ?? this.rating,
-    );
-  }
+  Map<String, dynamic> toJson() => {
+    '_id': id,
+    'title': title,
+    'name': name,
+    'image': image,
+    'images': images,
+    'swapId': swapId,
+    'requesterId': requesterId,
+    'ownerId': ownerId,
+    'imageUrl': imageUrl,
+    'description': description,
+    'status': status,
+    'price': price,
+    'rating': rating,
+    'createdAt': createdAt?.toIso8601String(),
+  };
 }

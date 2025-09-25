@@ -1,5 +1,5 @@
 // lib/core/auth/google_auth_service.dart
-// ignore_for_file: unnecessary_null_comparison, dead_code
+// ignore_for_file: unnecessary_null_comparison, dead_code, await_only_futures
 
 import 'package:flutter/foundation.dart' show kIsWeb, debugPrint;
 import 'package:google_sign_in/google_sign_in.dart';

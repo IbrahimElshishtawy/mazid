@@ -8,6 +8,7 @@ import 'package:m_shop/page/home/section/banner_section.dart';
 import 'package:m_shop/page/home/section/categories_section.dart';
 import 'package:m_shop/page/home/section/products_grid.dart';
 import 'package:m_shop/page/profile/ui/Profile_Page.dart';
+import 'package:m_shop/page/swap/ui/swap_home.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

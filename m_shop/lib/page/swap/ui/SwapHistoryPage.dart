@@ -1,7 +1,7 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/swap/swap_request_model.dart';
+import 'package:m_shop/core/models/swap/swap_request_model.dart';
 
 class SwapHistoryPage extends StatelessWidget {
   final List<SwapProductModel> allProducts;

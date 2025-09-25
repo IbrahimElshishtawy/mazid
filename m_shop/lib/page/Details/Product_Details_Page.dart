@@ -2,11 +2,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/prouduct/product_models.dart';
-import 'package:mazid/pages/home/Details/widget/Carouse_lImages_Widget.dart';
-
-import 'package:mazid/pages/home/Details/widget/ProductInfo_Widget.dart';
-import 'package:mazid/pages/home/Details/widget/Product_Description_Widget.dart';
+import 'package:m_shop/core/models/prouduct/product_models.dart';
+import 'package:m_shop/page/Details/widget/Carouse_lImages_Widget.dart';
+import 'package:m_shop/page/Details/widget/ProductInfo_Widget.dart';
+import 'package:m_shop/page/Details/widget/Product_Description_Widget.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final ProductModel product;

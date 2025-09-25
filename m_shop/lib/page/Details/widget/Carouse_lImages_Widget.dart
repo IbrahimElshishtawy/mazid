@@ -1,5 +1,5 @@
 // ignore: file_names
-// ignore_for_file: file_names, duplicate_ignore
+// ignore_for_file: file_names, duplicate_ignore, unnecessary_import
 
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';

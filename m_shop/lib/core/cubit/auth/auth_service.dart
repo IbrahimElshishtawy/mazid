@@ -1,11 +1,52 @@
 // lib/core/service/auth_service.dart
 // ignore_for_file: avoid_print
 
+import 'package:m_shop/core/data/admin_data.dart';
 import 'package:m_shop/core/models/user/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
   final supabase = Supabase.instance.client;
+
+  /// هل المستخدم الحالي هو الأدمن؟
+  bool isAdminLogin() {
+    final user = supabase.auth.currentUser;
+    final emailNow = user?.email?.toLowerCase();
+    final adminEmail = AdminData.email.toLowerCase();
+    return emailNow != null && emailNow == adminEmail;
+  }
+
+  /// المستخدم الحالي من Supabase (متزامنة)
+  /// استخدمها لما تحتاج user.id أو user.email بدون await
+  User? currentUser() {
+    return supabase.auth.currentUser;
+  }
+
+  /// بروفايل المستخدم من جدول users (غير متزامنة)
+  /// استخدمها لما تحتاج بيانات التطبيق من الجدول (name/phone/role...)
+  Future<UserModel?> currentUserProfile() async {
+    final user = supabase.auth.currentUser;
+    if (user == null) {
+      print("❌ [AuthService] No user logged in");
+      return null;
+    }
+    try {
+      final data = await supabase
+          .from('users')
+          .select()
+          .eq('id', user.id)
+          .maybeSingle();
+
+      if (data != null) {
+        return UserModel.fromJson(data);
+      }
+      print("❌ [AuthService] User not found in 'users' table");
+      return null;
+    } catch (e, st) {
+      print("🔥 [AuthService] currentUserProfile exception: $e\n$st");
+      return null;
+    }
+  }
 
   Future<UserModel?> register({
     required String name,
@@ -32,6 +73,7 @@ class AuthService {
           'email': email.trim(),
           'phone': phone.trim(),
           'avatar': '',
+          'role': 'user',
           'created_at': DateTime.now().toUtc().toIso8601String(),
         }).select();
 
@@ -45,7 +87,7 @@ class AuthService {
           phone: phone.trim(),
           password: '',
           imageUrl: '',
-          role: '',
+          role: 'user',
         );
       } else {
         print("❌ [AuthService] Registration failed for $email");
@@ -112,34 +154,7 @@ class AuthService {
     }
   }
 
-  /// جلب المستخدم الحالي
-  Future<UserModel?> currentUser() async {
-    final user = supabase.auth.currentUser;
-    print("🔄 [AuthService] Checking current user: $user");
-
-    if (user != null) {
-      try {
-        final data = await supabase
-            .from('users')
-            .select()
-            .eq('id', user.id)
-            .maybeSingle();
-
-        print("🟢 [AuthService] Current user data from DB: $data");
-
-        if (data != null) {
-          return UserModel.fromJson(data);
-        }
-      } catch (e, st) {
-        print("🔥 [AuthService] Current user fetch exception: $e\n$st");
-      }
-    }
-
-    print("❌ [AuthService] No user logged in");
-    return null;
-  }
-
-  /// جلب بيانات أي مستخدم بواسطة userId
+  /// جلب بيانات أي مستخدم بواسطة userId من جدول users
   Future<UserModel?> getUserData(String userId) async {
     try {
       final data = await supabase

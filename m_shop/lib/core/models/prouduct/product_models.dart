@@ -1,12 +1,27 @@
-class ProductModel {
+// lib/core/models/prouduct/product_models.dart
+
+abstract class BaseProduct {
+  String get id;
+  String get title;
+  String get name;
+  String get image;
+  List<String> get images;
+}
+
+class ProductModel implements BaseProduct {
+  @override
   final String id;
   final String status;
   final String category;
+  @override
   final String name;
+  @override
   final String title;
   final double price;
   final String description;
+  @override
   final String image;
+  @override
   final List<String> images;
   final String company;
   final int countInStock;
@@ -59,24 +74,16 @@ class ProductModel {
 
     return ProductModel(
       id: _safeString(json['_id'] ?? json['id']),
-      status: _safeString(
-        json['status'] ?? '',
-      ), // DummyJSON و FakeStore مفيهمش status
+      status: _safeString(json['status'] ?? ''),
       category: _safeString(json['category']),
-      name: _safeString(
-        json['name'] ?? json['title'],
-      ), // DummyJSON و FakeStore عندهم title
+      name: _safeString(json['name'] ?? json['title']),
       title: _safeString(json['title'] ?? json['name']),
       price: _toDouble(json['price']),
       description: _safeString(json['description']),
-      image: _safeString(
-        json['image'] ?? json['thumbnail'],
-      ), // DummyJSON عنده thumbnail
+      image: _safeString(json['image'] ?? json['thumbnail']),
       images:
           (json['images'] as List?)?.map((e) => _safeString(e)).toList() ?? [],
-      company: _safeString(
-        json['company'] ?? json['brand'],
-      ), // DummyJSON عنده brand
+      company: _safeString(json['company'] ?? json['brand']),
       countInStock:
           (json['countInStock'] as num?)?.toInt() ??
           (json['stock'] as num?)?.toInt() ??
@@ -148,7 +155,6 @@ class ProductModel {
     return 'ProductModel(id: $id, title: $title, price: $price, rating: $rating, count: $ratingCount)';
   }
 
-  /// helper methods
   static String _safeString(dynamic value) {
     if (value == null) return '';
     if (value is String) return value;
