@@ -7,6 +7,7 @@ import 'package:m_shop/core/cubit/auth/auth_cubit.dart';
 import 'package:m_shop/core/cubit/auth/auth_state.dart';
 import 'package:m_shop/core/data/admin_data.dart';
 import 'package:m_shop/core/widget/Auth/widget_form/login_form_widget.dart';
+import 'package:m_shop/page/home/ui/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -89,11 +90,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   void _handleLogin(BuildContext context) async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
-
     setState(() => _isLoading = true);
     await _animController.forward();
-
-    // تحقق من الأدمن
     if (email == AdminData.email && password == AdminData.password) {
       await _saveLoginStatus(email);
       if (!mounted) return;
