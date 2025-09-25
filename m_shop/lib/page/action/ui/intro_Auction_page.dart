@@ -1,10 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api, file_names
 
 import 'package:flutter/material.dart';
+import 'package:m_shop/page/action/home/auction_home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'package:mazid/pages/Auction/home/auction_home_page.dart';
 
 class AuctionTermsPage extends StatefulWidget {
   const AuctionTermsPage({super.key}); // صفحة مستقلة عادية
