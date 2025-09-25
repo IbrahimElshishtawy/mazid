@@ -1,6 +1,6 @@
 // lib/pages/home/widget/banner_section.dart
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/home/widget/banner.dart';
+import 'package:m_shop/core/widget/home/widget/banner.dart';
 
 class BannerSection extends StatelessWidget {
   const BannerSection({super.key});
