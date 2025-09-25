@@ -2,9 +2,9 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/swap/swap_request_model.dart';
-import 'package:mazid/core/models/swap/swap_status.dart';
-import 'package:mazid/core/widget/product_swap_card.dart';
+import 'package:m_shop/core/models/swap/swap_request_model.dart';
+import 'package:m_shop/core/models/swap/swap_status.dart';
+import 'package:m_shop/core/widget/widget/product_swap_card.dart';
 
 class SwapGrid extends StatelessWidget {
   final List<SwapProductModel> products;
