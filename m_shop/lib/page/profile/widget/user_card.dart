@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:mazid/core/models/user/user_model.dart';
+import 'package:m_shop/core/models/user/user_model.dart';
 
 class UserCard extends StatelessWidget {
   final UserModel user;
