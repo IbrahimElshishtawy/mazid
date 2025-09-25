@@ -45,6 +45,10 @@ dependencies:
   shelf: ^1.4.2
   liquid_swipe: ^3.1.0
   curved_navigation_bar: ^1.0.6
+  lottie: ^3.3.2
+  carousel_slider: ^5.1.1
+  smooth_page_indicator: ^1.2.1
+  provider: ^6.1.5+1
 
 dev_dependencies:
   flutter_test:
