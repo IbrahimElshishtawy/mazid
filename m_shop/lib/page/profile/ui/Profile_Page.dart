@@ -1,11 +1,11 @@
 // ignore_for_file: file_names
 import 'package:flutter/material.dart';
-import 'package:mazid/core/data/admin_data.dart';
-import 'package:mazid/core/models/user/user_model.dart';
-import 'package:mazid/pages/profile/data/profile_data.dart';
-import 'package:mazid/pages/profile/widget/stats_grid.dart';
-import 'package:mazid/pages/profile/widget/user_card.dart';
-import 'package:mazid/pages/profile/widget/wallet_section.dart';
+import 'package:m_shop/core/data/admin_data.dart';
+import 'package:m_shop/core/models/user/user_model.dart';
+import 'package:m_shop/page/profile/data/profile_data.dart';
+import 'package:m_shop/page/profile/widget/stats_grid.dart';
+import 'package:m_shop/page/profile/widget/user_card.dart';
+import 'package:m_shop/page/profile/widget/wallet_section.dart';
 
 class ProfilePage extends StatelessWidget {
   final String userId;
