@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mazid/pages/home/ui/home_contents.dart';
+import 'package:m_shop/page/home/ui/home_contents.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
