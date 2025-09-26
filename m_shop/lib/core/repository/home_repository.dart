@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:m_shop/core/cubit/auth/auth_service.dart';
-import 'package:m_shop/core/service/product/product_service.dart';
+import 'package:m_shop/core/service/api/product_service.dart';
 import 'package:m_shop/core/data/admin_data.dart';
 import 'package:m_shop/core/models/user/user_model.dart';
 import 'package:m_shop/core/models/prouduct/product_models.dart';
