@@ -1,3 +1,5 @@
+// ignore_for_file: dead_code
+
 import 'package:flutter/material.dart';
 
 import 'package:m_shop/core/cubit/auth/auth_service.dart';
@@ -13,33 +15,60 @@ class HomeController extends ChangeNotifier {
   List<ProductModel> products = [];
   List<ProductModel> filteredProducts = [];
 
-  bool isLoading = true;
-  bool isUserLoading = true;
+  bool isLoading = true; // تحميل المنتجات
+  bool isUserLoading = true; // تحميل المستخدم
 
   UserModel? currentUser;
-  int currentIndex = 0;
+  int currentIndex = 2;
 
   String? selectedCategory;
   String errorMessage = "";
 
+  bool _disposed = false; // حارس الـ dispose
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+
+  void _safeNotifyListeners() {
+    if (!_disposed) {
+      notifyListeners();
+    }
+  }
+
+  /// بداية التحميل (منتجات + بيانات المستخدم) بالتوازي
   Future<void> init(BuildContext context) async {
-    await _loadProducts();
-    _loadUserData();
+    isLoading = true;
+    isUserLoading = true;
+    errorMessage = "";
+    _safeNotifyListeners();
+
+    try {
+      await Future.wait([_loadProducts(), _loadUserData()]);
+    } catch (e) {
+      // لو في خطأ غير متوقع
+      debugPrint("❌ خطأ عام أثناء التهيئة: $e");
+    } finally {
+      _safeNotifyListeners();
+    }
   }
 
   Future<void> _loadProducts() async {
     try {
       products = await _productService.fetchAllProducts();
-      filteredProducts = products;
+      filteredProducts = products; // افتراضيًا كل المنتجات
     } catch (e) {
       errorMessage = "❌ خطأ أثناء تحميل المنتجات: $e";
       debugPrint(errorMessage);
+    } finally {
+      isLoading = false;
+      _safeNotifyListeners();
     }
-    isLoading = false;
-    _safeNotifyListeners();
   }
 
-  void _loadUserData() async {
+  Future<void> _loadUserData() async {
     try {
       if (_authService.isAdminLogin()) {
         currentUser = UserModel(
@@ -56,55 +85,63 @@ class HomeController extends ChangeNotifier {
         final user = _authService.currentUser();
         if (user != null) {
           final userData = await _authService.getUserData(user.id);
-          if (userData != null) {
-            currentUser = userData;
-          }
+          if (userData != null) currentUser = userData;
         }
       }
     } catch (e) {
       debugPrint("❌ خطأ أثناء تحميل بيانات المستخدم: $e");
+    } finally {
+      isUserLoading = false;
+      _safeNotifyListeners();
     }
-
-    isUserLoading = false;
-    _safeNotifyListeners();
   }
 
   /// البحث
   void onSearchChanged(String query) {
-    if (query.isEmpty) {
-      filteredProducts = products;
+    final q = query.trim().toLowerCase();
+    if (q.isEmpty) {
+      filteredProducts = _applyCategoryFilter(products, selectedCategory);
     } else {
-      filteredProducts = products
-          .where(
-            (p) =>
-                p.name.toLowerCase().contains(query.toLowerCase()) ||
-                p.description.toLowerCase().contains(query.toLowerCase()),
-          )
-          .toList();
+      final base = _applyCategoryFilter(products, selectedCategory);
+      filteredProducts = base.where((p) {
+        final name = (p.name ?? '').toLowerCase();
+        final desc = (p.description ?? '').toLowerCase();
+        return name.contains(q) || desc.contains(q);
+      }).toList();
     }
     _safeNotifyListeners();
   }
 
+  /// فلترة بالفئة
   void filterByCategory(String? category) {
-    selectedCategory = category;
+    selectedCategory = (category?.trim().isEmpty ?? true) ? null : category;
+    filteredProducts = _applyCategoryFilter(products, selectedCategory);
 
-    if (category == null || category.isEmpty) {
-      filteredProducts = products;
-    } else {
-      filteredProducts = products.where((p) => p.category == category).toList();
-    }
-
+    // لو فيه نص بحث مفعّل، نعيد تطبيقه
+    // (اختياري: خزن آخر query لو محتاج)
     _safeNotifyListeners();
   }
 
+  List<ProductModel> _applyCategoryFilter(
+    List<ProductModel> source,
+    String? category,
+  ) {
+    if (category == null) return List<ProductModel>.from(source);
+    return source.where((p) => (p.category ?? '') == category).toList();
+  }
+
+  /// تغيير التاب
   void changeTab(int index) {
+    if (index < 0) return;
     currentIndex = index;
     _safeNotifyListeners();
   }
 
-  void _safeNotifyListeners() {
-    if (hasListeners) {
-      notifyListeners();
-    }
+  /// إعادة تحميل يدوي (مثلاً Pull-to-Refresh)
+  Future<void> refresh() async {
+    isLoading = true;
+    errorMessage = "";
+    _safeNotifyListeners();
+    await _loadProducts();
   }
 }
