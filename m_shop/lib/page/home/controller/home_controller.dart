@@ -1,10 +1,12 @@
+// lib/page/home/controller/home_controller.dart
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:m_shop/core/cubit/auth/auth_service.dart';
+
 import 'package:m_shop/core/data/admin_data.dart';
-import 'package:m_shop/core/models/prouduct/product_models.dart';
 import 'package:m_shop/core/models/user/user_model.dart';
-import 'package:m_shop/core/service/product/product_service.dart';
+import 'package:m_shop/core/models/prouduct/product_models.dart';
+import 'package:m_shop/core/service/api/product_service.dart';
 
 class HomeController extends ChangeNotifier {
   HomeController({AuthService? authService, ProductService? productService})
@@ -55,7 +57,7 @@ class HomeController extends ChangeNotifier {
       await Future.wait([_loadProducts(), _loadUserData()]);
     } catch (e) {
       errorMessage = "حدث خطأ أثناء التهيئة. حاول لاحقاً.";
-      debugPrint("❌ خطأ عام أثناء التهيئة: $e");
+      debugPrint("Init error: $e");
     } finally {
       _safeNotifyListeners();
     }
@@ -74,7 +76,7 @@ class HomeController extends ChangeNotifier {
       products = list;
       _recomputeFiltered();
     } catch (e) {
-      errorMessage = "❌ خطأ أثناء تحميل المنتجات: $e";
+      errorMessage = "خطأ أثناء تحميل المنتجات: $e";
       debugPrint(errorMessage);
     } finally {
       isLoading = false;
@@ -105,7 +107,7 @@ class HomeController extends ChangeNotifier {
         }
       }
     } catch (e) {
-      debugPrint("❌ خطأ أثناء تحميل بيانات المستخدم: $e");
+      debugPrint("Load user error: $e");
     } finally {
       isUserLoading = false;
       _safeNotifyListeners();
@@ -119,19 +121,36 @@ class HomeController extends ChangeNotifier {
   }
 
   void filterByCategory(String? category) {
-    final normalized = category?.trim();
-    selectedCategory = (normalized == null || normalized.isEmpty)
-        ? null
-        : normalized;
+    final normalized = (category ?? '').trim();
+    if (normalized.isEmpty || normalized.toLowerCase() == 'all') {
+      selectedCategory = null;
+    } else {
+      selectedCategory = normalized;
+    }
     _recomputeFiltered();
   }
 
   void _recomputeFiltered() {
     List<ProductModel> base = products;
 
+    final Map<String, Set<String>> aliases = {
+      'electronics': {'electronics'},
+      'clothes': {"men's clothing", "women's clothing", 'clothes', 'apparel'},
+      'perfume': {'fragrances', 'perfume'},
+      'cosmetic': {'beauty', 'cosmetics', 'skincare', 'makeup'},
+      'laptops': {'laptops', 'laptop', 'notebook'},
+    };
+
     if (selectedCategory != null) {
-      final cat = selectedCategory!;
-      base = base.where((p) => p.category == cat).toList();
+      final uiKey = selectedCategory!.toLowerCase();
+      final accept = aliases[uiKey];
+      base = base.where((p) {
+        final c = p.category.toLowerCase();
+        if (accept != null && accept.isNotEmpty) {
+          return accept.contains(c);
+        }
+        return c == uiKey;
+      }).toList();
     }
 
     final q = _searchQuery.trim().toLowerCase();
