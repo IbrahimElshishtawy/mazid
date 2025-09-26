@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_if_null_operators
+
 import 'package:flutter/foundation.dart';
 import 'package:m_shop/core/models/prouduct/product_models.dart';
 import 'package:m_shop/core/models/user/user_model.dart';
