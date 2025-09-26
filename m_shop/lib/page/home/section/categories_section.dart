@@ -21,7 +21,7 @@ class CategoriesSection extends StatelessWidget {
       {"icon": Icons.shopping_bag, "title": "Clothes"},
       {"icon": Icons.laptop, "title": "Laptops"},
       {"icon": Icons.devices_other, "title": "Electronics"},
-      {"icon": Icons.watch, "title": "Accessories"},
+      {"icon": Icons.spa, "title": "Perfume"},
     ];
 
     return SizedBox(
@@ -32,14 +32,16 @@ class CategoriesSection extends StatelessWidget {
         separatorBuilder: (_, __) => const SizedBox(width: 12),
         itemBuilder: (context, index) {
           final cat = categories[index];
+          final title = cat["title"] as String;
+
           return GestureDetector(
-            onTap: () => onCategorySelected(cat["title"] as String),
+            onTap: () => onCategorySelected(title),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircleAvatar(
                   radius: 28,
-                  backgroundColor: selectedCategory == cat["title"]
+                  backgroundColor: selectedCategory == title
                       ? Colors.orange
                       : Colors.grey[800],
                   child: Icon(
@@ -50,9 +52,9 @@ class CategoriesSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  cat["title"] as String,
+                  title,
                   style: TextStyle(
-                    color: selectedCategory == cat["title"]
+                    color: selectedCategory == title
                         ? Colors.orange
                         : Colors.white,
                     fontSize: 13,
