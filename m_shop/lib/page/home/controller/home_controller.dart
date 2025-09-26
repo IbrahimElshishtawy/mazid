@@ -1,5 +1,6 @@
 // ignore_for_file: dead_code
 
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:m_shop/core/cubit/auth/auth_service.dart';
@@ -9,35 +10,43 @@ import 'package:m_shop/core/models/user/user_model.dart';
 import 'package:m_shop/core/service/product/product_service.dart';
 
 class HomeController extends ChangeNotifier {
-  final AuthService _authService = AuthService();
-  final ProductService _productService = ProductService();
+  HomeController({AuthService? authService, ProductService? productService})
+    : _authService = authService ?? AuthService(),
+      _productService = productService ?? ProductService();
 
+  final AuthService _authService;
+  final ProductService _productService;
+
+  // ======= State =======
   List<ProductModel> products = [];
   List<ProductModel> filteredProducts = [];
 
   bool isLoading = true; // تحميل المنتجات
   bool isUserLoading = true; // تحميل المستخدم
+  String errorMessage = "";
 
   UserModel? currentUser;
   int currentIndex = 2;
 
   String? selectedCategory;
-  String errorMessage = "";
+  String _searchQuery = '';
 
-  bool _disposed = false; // حارس الـ dispose
+  bool _disposed = false;
+  Timer? _debounce;
 
+  // ======= Lifecycle =======
   @override
   void dispose() {
     _disposed = true;
+    _debounce?.cancel();
     super.dispose();
   }
 
   void _safeNotifyListeners() {
-    if (!_disposed) {
-      notifyListeners();
-    }
+    if (!_disposed) notifyListeners();
   }
 
+  // ======= Init / Refresh =======
   /// بداية التحميل (منتجات + بيانات المستخدم) بالتوازي
   Future<void> init(BuildContext context) async {
     isLoading = true;
@@ -48,17 +57,27 @@ class HomeController extends ChangeNotifier {
     try {
       await Future.wait([_loadProducts(), _loadUserData()]);
     } catch (e) {
-      // لو في خطأ غير متوقع
       debugPrint("❌ خطأ عام أثناء التهيئة: $e");
+      errorMessage = "حدث خطأ أثناء التهيئة. حاول لاحقاً.";
     } finally {
       _safeNotifyListeners();
     }
   }
 
+  /// إعادة تحميل يدوي (مثلاً Pull-to-Refresh)
+  Future<void> refresh() async {
+    isLoading = true;
+    errorMessage = "";
+    _safeNotifyListeners();
+    await _loadProducts();
+  }
+
+  // ======= Data Loads =======
   Future<void> _loadProducts() async {
     try {
-      products = await _productService.fetchAllProducts();
-      filteredProducts = products; // افتراضيًا كل المنتجات
+      final list = await _productService.fetchAllProducts();
+      products = list;
+      _recomputeFiltered();
     } catch (e) {
       errorMessage = "❌ خطأ أثناء تحميل المنتجات: $e";
       debugPrint(errorMessage);
@@ -96,52 +115,65 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  /// البحث
+  // ======= Filters & Search =======
+  /// البحث مع Debounce لتقليل إعادة البناء أثناء الكتابة
   void onSearchChanged(String query) {
-    final q = query.trim().toLowerCase();
-    if (q.isEmpty) {
-      filteredProducts = _applyCategoryFilter(products, selectedCategory);
-    } else {
-      final base = _applyCategoryFilter(products, selectedCategory);
-      filteredProducts = base.where((p) {
-        final name = (p.name ?? '').toLowerCase();
-        final desc = (p.description ?? '').toLowerCase();
+    _searchQuery = query;
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 250), _recomputeFiltered);
+  }
+
+  /// فلترة بالفئة (category)
+  void filterByCategory(String? category) {
+    final normalized = category?.trim();
+    selectedCategory = (normalized == null || normalized.isEmpty)
+        ? null
+        : normalized;
+    _recomputeFiltered();
+  }
+
+  /// إعادة حساب القائمة المعروضة بناءً على (الفئة + البحث)
+  void _recomputeFiltered() {
+    List<ProductModel> base = products;
+
+    // فلترة بالفئة لو محددة
+    if (selectedCategory != null) {
+      final cat = selectedCategory!;
+      base = base.where((p) => p.category == cat).toList();
+    }
+
+    // تطبيق البحث بعد الفئة
+    final q = _searchQuery.trim().toLowerCase();
+    if (q.isNotEmpty) {
+      base = base.where((p) {
+        final name = p.name.toLowerCase();
+        final desc = p.description.toLowerCase();
         return name.contains(q) || desc.contains(q);
       }).toList();
     }
+
+    filteredProducts = base;
     _safeNotifyListeners();
   }
 
-  /// فلترة بالفئة
-  void filterByCategory(String? category) {
-    selectedCategory = (category?.trim().isEmpty ?? true) ? null : category;
-    filteredProducts = _applyCategoryFilter(products, selectedCategory);
-
-    // لو فيه نص بحث مفعّل، نعيد تطبيقه
-    // (اختياري: خزن آخر query لو محتاج)
+  /// مسح الفلاتر والبحث
+  void clearFilters() {
+    selectedCategory = null;
+    _searchQuery = '';
+    filteredProducts = products;
     _safeNotifyListeners();
   }
 
-  List<ProductModel> _applyCategoryFilter(
-    List<ProductModel> source,
-    String? category,
-  ) {
-    if (category == null) return List<ProductModel>.from(source);
-    return source.where((p) => (p.category ?? '') == category).toList();
-  }
-
+  // ======= UI State =======
   /// تغيير التاب
   void changeTab(int index) {
-    if (index < 0) return;
+    if (index == currentIndex || index < 0) return;
     currentIndex = index;
     _safeNotifyListeners();
   }
 
-  /// إعادة تحميل يدوي (مثلاً Pull-to-Refresh)
-  Future<void> refresh() async {
-    isLoading = true;
-    errorMessage = "";
-    _safeNotifyListeners();
-    await _loadProducts();
-  }
+  // Getters مساعدة (اختيارية للاستخدام في الـ UI)
+  bool get hasError => errorMessage.isNotEmpty;
+  bool get isBusy => isLoading || isUserLoading;
+  bool get isEmpty => !isBusy && filteredProducts.isEmpty;
 }
