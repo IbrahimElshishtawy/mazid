@@ -41,7 +41,7 @@ class IntroPage3 extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Lottie.asset(
-                    "asset/animation/intro3.json",
+                    "assets/asset/animation/intro3.json",
                     width: 330,
                     height: 330,
                     fit: BoxFit.contain,
