@@ -18,12 +18,11 @@ class HomeContents extends StatefulWidget {
 }
 
 class _HomeContentsState extends State<HomeContents> {
-  bool _booting = true; // أثناء فحص شروط المزاد
+  bool _booting = true;
 
   @override
   void initState() {
     super.initState();
-    // نفصل فحص الشروط عن build الأول
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await _checkAuctionTerms();
       if (!mounted) return;
@@ -34,7 +33,6 @@ class _HomeContentsState extends State<HomeContents> {
   Future<void> _checkAuctionTerms() async {
     final prefs = await SharedPreferences.getInstance();
     final accepted = prefs.getBool('auction_terms_accepted') ?? false;
-
     if (accepted || !mounted) return;
 
     await showModalBottomSheet<void>(
@@ -85,7 +83,9 @@ class _HomeContentsState extends State<HomeContents> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
-                        await prefs.setBool('auction_terms_accepted', true);
+                        await SharedPreferences.getInstance().then(
+                          (p) => p.setBool('auction_terms_accepted', true),
+                        );
                         if (context.mounted) Navigator.of(ctx).pop();
                       },
                       child: const Text('موافقة'),
@@ -103,7 +103,6 @@ class _HomeContentsState extends State<HomeContents> {
 
   @override
   Widget build(BuildContext context) {
-    // لود خفيف أثناء فحص الشروط
     if (_booting) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator(color: Colors.orange)),
@@ -113,20 +112,18 @@ class _HomeContentsState extends State<HomeContents> {
     return ChangeNotifierProvider<HomeController>(
       create: (_) => HomeController(),
       builder: (context, child) {
-        // بعد إنشاء البروفايدر، نشغّل initOnce بعد أول فريم
+        // شغّل initOnce بعد ما الـ Provider يبقى جاهز
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          final c = context.read<HomeController>();
-          c.initOnce();
+          context.read<HomeController>().initOnce();
         });
 
         return Consumer<HomeController>(
           builder: (context, controller, _) {
             return Scaffold(
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               appBar: AppbarWidget(onSearchChanged: controller.onSearchChanged),
+              backgroundColor: Colors.black,
               drawer: const DrawerMenu(favoriteProducts: []),
               body: const HomeUI(),
-              // قلل إعادة البناء باستخدام Selector للتاب بس
               bottomNavigationBar: Selector<HomeController, int>(
                 selector: (_, c) => c.currentIndex,
                 builder: (_, currentIndex, __) {
