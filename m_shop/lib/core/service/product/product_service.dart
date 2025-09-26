@@ -3,29 +3,24 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:m_shop/core/models/prouduct/product_models.dart';
 
-/// Service مسؤول عن جلب المنتجات من أكثر من مصدر خارجي
-/// ElWekala / FakeStore / DummyJSON
 class ProductService {
   final Dio _dio;
 
-  // ========== Endpoints ==========
   static const String _elWekalaUrl =
       "https://elwekala.onrender.com/product/Laptops";
   static const String _fakeStoreUrl = "https://fakestoreapi.com/products";
   static const String _dummyListUrl = "https://dummyjson.com/products?limit=10";
   static const String _dummySearchUrl = "https://dummyjson.com/products/search";
 
-  // ========== Ctor & Dio Setup ==========
   ProductService({Dio? dio}) : _dio = dio ?? _buildDefaultDio();
 
   static Dio _buildDefaultDio() {
     final dio = Dio(
       BaseOptions(
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 12),
-        sendTimeout: const Duration(seconds: 12),
+        connectTimeout: const Duration(seconds: 20), // ← كان 10
+        receiveTimeout: const Duration(seconds: 25), // ← كان 12
+        sendTimeout: const Duration(seconds: 20), // ← كان 12
         responseType: ResponseType.json,
-        // اعتبر 2xx و 3xx “ناجحة”
         validateStatus: (code) => code != null && code >= 200 && code < 400,
       ),
     );
@@ -33,31 +28,33 @@ class ProductService {
     dio.interceptors.addAll([
       if (kDebugMode)
         LogInterceptor(
-          requestBody: true,
-          responseBody: false, // لو عايز تشوف الـ body خليها true
+          requestBody: false,
+          responseBody: false,
           requestHeader: false,
           responseHeader: false,
         ),
+      _RetryInterceptor(
+        dio,
+        retries: 2,
+        retryDelay: const Duration(seconds: 2),
+      ),
     ]);
 
     return dio;
   }
 
-  // ========== Public API ==========
-
-  /// جلب منتجات ElWekala (لابتوبات)
   Future<List<ProductModel>> fetchElWekalaLaptops() async {
     try {
       final res = await _dio.get(_elWekalaUrl);
       final data = res.data;
 
-      // متوقع: { product: [ {...}, {...} ] }
       final list = (data is Map && data['product'] is List)
           ? data['product'] as List
           : const <dynamic>[];
 
       return list
-          .map((e) => _mapElWekalaToProduct(e))
+          .whereType<Map<String, dynamic>>()
+          .map(_mapElWekalaToProduct)
           .whereType<ProductModel>()
           .toList();
     } catch (e) {
@@ -66,13 +63,11 @@ class ProductService {
     }
   }
 
-  /// جلب منتجات FakeStore
   Future<List<ProductModel>> fetchFakeStoreProducts() async {
     try {
       final res = await _dio.get(_fakeStoreUrl);
       final data = res.data;
 
-      // متوقع: [ {...}, {...} ]
       if (data is! List) return [];
       return data
           .whereType<Map<String, dynamic>>()
@@ -103,7 +98,6 @@ class ProductService {
     }
   }
 
-  /// دمج النتائج بالتوازي + إزالة تكرار (حسب id)
   Future<List<ProductModel>> fetchAllProducts() async {
     try {
       final results = await Future.wait<List<ProductModel>>([
@@ -117,9 +111,8 @@ class ProductService {
 
       for (final list in results) {
         for (final p in list) {
-          final id = p.id;
-          if (id.isEmpty) continue;
-          if (seen.add(id)) merged.add(p); // إزالة التكرار
+          if (p.id.isEmpty) continue;
+          if (seen.add(p.id)) merged.add(p);
         }
       }
       return merged;
@@ -129,7 +122,6 @@ class ProductService {
     }
   }
 
-  /// بحث في DummyJSON (يمكن توسعتها لاحقًا لباقي المصادر)
   Future<List<ProductModel>> searchDummyJsonProducts(String query) async {
     try {
       final res = await _dio.get(
@@ -152,37 +144,24 @@ class ProductService {
     }
   }
 
-  // ========== Private Mappers ==========
-
-  /// توحيد JSON من ElWekala إلى المفاتيح التي يفهمها ProductModel.fromJson
-  ProductModel? _mapElWekalaToProduct(dynamic raw) {
-    if (raw is! Map) return null;
-
-    final imgFallback =
-        (raw['images'] is List && (raw['images'] as List).isNotEmpty)
-        ? (raw['images'] as List).first
-        : null;
+  ProductModel? _mapElWekalaToProduct(Map<String, dynamic> raw) {
+    final images = (raw['images'] is List) ? (raw['images'] as List) : const [];
+    final imgFallback = images.isNotEmpty ? images.first : null;
 
     final mapped = <String, dynamic>{
-      // مُعرّف
       'id': raw['_id'] ?? raw['id'] ?? raw['sku']?.toString(),
-      // حقول عامة
       'status': raw['status'] ?? '',
       'category': raw['category'] ?? 'Laptops',
       'name': raw['name'] ?? raw['title'] ?? 'Laptop',
       'title': raw['title'] ?? raw['name'] ?? 'Laptop',
       'price': raw['price'] ?? raw['salePrice'] ?? raw['finalPrice'] ?? 0,
       'description': raw['description'] ?? raw['desc'] ?? '',
-      // صور
       'image': raw['image'] ?? raw['thumbnail'] ?? imgFallback,
-      'images': raw['images'] is List ? raw['images'] : const [],
-      // شركة / براند
+      'images': images,
       'company': raw['company'] ?? raw['brand'] ?? raw['manufacturer'] ?? '',
-      // مخزون/نسخة/مبيعات
       'countInStock': raw['countInStock'] ?? raw['stock'] ?? 0,
       '__v': raw['__v'] ?? 0,
       'sales': raw['sales'] ?? 0,
-      // Rating قد يجي بأشكال مختلفة
       'rating':
           raw['rating'] ??
           {
@@ -192,5 +171,59 @@ class ProductService {
     };
 
     return ProductModel.fromJson(mapped);
+  }
+}
+
+class _RetryInterceptor extends Interceptor {
+  _RetryInterceptor(
+    this._dio, {
+    this.retries = 2,
+    this.retryDelay = const Duration(seconds: 2),
+  });
+  final Dio _dio;
+  final int retries;
+  final Duration retryDelay;
+
+  @override
+  void onError(DioException err, ErrorInterceptorHandler handler) async {
+    final shouldRetry =
+        err.type == DioExceptionType.connectionTimeout ||
+        err.type == DioExceptionType.receiveTimeout ||
+        err.type == DioExceptionType.unknown;
+
+    if (!shouldRetry) return handler.next(err);
+
+    final req = err.requestOptions;
+    final attempt = (req.extra['retry_attempt'] as int?) ?? 0;
+
+    if (attempt >= retries) return handler.next(err);
+
+    await Future.delayed(retryDelay * (attempt + 1));
+
+    final newOptions = Options(
+      method: req.method,
+      headers: req.headers,
+      responseType: req.responseType,
+      contentType: req.contentType,
+      followRedirects: req.followRedirects,
+      receiveDataWhenStatusError: req.receiveDataWhenStatusError,
+      validateStatus: req.validateStatus,
+    );
+
+    try {
+      req.extra['retry_attempt'] = attempt + 1;
+      final response = await _dio.request(
+        req.path,
+        data: req.data,
+        queryParameters: req.queryParameters,
+        options: newOptions,
+        cancelToken: req.cancelToken,
+        onReceiveProgress: req.onReceiveProgress,
+        onSendProgress: req.onSendProgress,
+      );
+      return handler.resolve(response);
+    } catch (e) {
+      return handler.next(e as DioException);
+    }
   }
 }
