@@ -1,49 +1,68 @@
-// lib/core/service/auth_service.dart
-// ignore_for_file: avoid_print
+import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'package:m_shop/core/data/admin_data.dart';
 import 'package:m_shop/core/models/user/user_model.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
-  final supabase = Supabase.instance.client;
+  final SupabaseClient supabase = Supabase.instance.client;
 
-  /// هل المستخدم الحالي هو الأدمن؟
+  static const String _spKeyAdmin = 'admin_logged_in';
+
+  bool _initialized = false;
+  bool _isAdmin = false;
+
+  Future<void> init() async {
+    if (_initialized) return;
+    final prefs = await SharedPreferences.getInstance();
+    _isAdmin = prefs.getBool(_spKeyAdmin) ?? false;
+    _initialized = true;
+  }
+
   bool isAdminLogin() {
-    final user = supabase.auth.currentUser;
-    final emailNow = user?.email?.toLowerCase();
     final adminEmail = AdminData.email.toLowerCase();
-    return emailNow != null && emailNow == adminEmail;
+    final supaEmail = supabase.auth.currentUser?.email?.toLowerCase();
+    return _isAdmin || (supaEmail != null && supaEmail == adminEmail);
   }
 
-  /// المستخدم الحالي من Supabase (متزامنة)
-  /// استخدمها لما تحتاج user.id أو user.email بدون await
-  User? currentUser() {
-    return supabase.auth.currentUser;
-  }
+  User? currentUser() => supabase.auth.currentUser;
 
-  /// بروفايل المستخدم من جدول users (غير متزامنة)
-  /// استخدمها لما تحتاج بيانات التطبيق من الجدول (name/phone/role...)
   Future<UserModel?> currentUserProfile() async {
+    await init();
+
+    if (isAdminLogin()) {
+      return UserModel(
+        id: AdminData.id,
+        name: AdminData.name,
+        email: AdminData.email,
+        phone: AdminData.phone,
+        avatar: AdminData.avatar,
+        imageUrl: AdminData.imageUrl,
+        role: AdminData.role,
+        password: '',
+      );
+    }
+
     final user = supabase.auth.currentUser;
     if (user == null) {
-      print("❌ [AuthService] No user logged in");
+      debugPrint("[AuthService] No user logged in");
       return null;
     }
+
     try {
       final data = await supabase
           .from('users')
           .select()
           .eq('id', user.id)
           .maybeSingle();
-
       if (data != null) {
         return UserModel.fromJson(data);
       }
-      print("❌ [AuthService] User not found in 'users' table");
+      debugPrint("[AuthService] User not found in 'users' table");
       return null;
     } catch (e, st) {
-      print("🔥 [AuthService] currentUserProfile exception: $e\n$st");
+      debugPrint("[AuthService] currentUserProfile exception: $e\n$st");
       return null;
     }
   }
@@ -54,19 +73,13 @@ class AuthService {
     required String password,
     String phone = '',
   }) async {
-    print("🔄 [AuthService] Registering: $email");
-
     try {
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
       );
-
-      print("🟢 [AuthService] signUp response: $response");
-
       if (response.user != null) {
         final userId = response.user!.id;
-
         final insertResponse = await supabase.from('users').insert({
           'id': userId,
           'name': name.trim(),
@@ -76,9 +89,10 @@ class AuthService {
           'role': 'user',
           'created_at': DateTime.now().toUtc().toIso8601String(),
         }).select();
-
-        print("✅ [AuthService] User inserted in DB: $insertResponse");
-
+        debugPrint("[AuthService] User inserted in DB: $insertResponse");
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(_spKeyAdmin, false);
+        _isAdmin = false;
         return UserModel(
           id: userId,
           name: name.trim(),
@@ -89,72 +103,58 @@ class AuthService {
           imageUrl: '',
           role: 'user',
         );
-      } else {
-        print("❌ [AuthService] Registration failed for $email");
-        return null;
       }
+      return null;
     } catch (e, st) {
-      print("🔥 [AuthService] Registration exception: $e\n$st");
+      debugPrint("[AuthService] Registration exception: $e\n$st");
       return null;
     }
   }
 
-  /// تسجيل الدخول بالبريد
   Future<UserModel?> loginWithEmail({
     required String email,
     required String password,
   }) async {
-    print("🔄 [AuthService] Login with email: $email");
-
     try {
       final response = await supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
-
-      print("🟢 [AuthService] signIn response: $response");
-
       if (response.user != null) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(_spKeyAdmin, false);
+        _isAdmin = false;
+
         final data = await supabase
             .from('users')
             .select()
             .eq('id', response.user!.id)
             .maybeSingle();
-
-        print("🟢 [AuthService] User data from DB: $data");
-
         if (data != null) {
           return UserModel.fromJson(data);
-        } else {
-          print(
-            "❌ [AuthService] User not found in 'users' table. "
-            "تأكد من سياسة RLS على جدول users",
-          );
-          return null;
         }
-      } else {
-        print("❌ [AuthService] Invalid email or password");
+        debugPrint("[AuthService] User not found in 'users' table");
         return null;
       }
+      return null;
     } catch (e, st) {
-      print("🔥 [AuthService] Login exception: $e\n$st");
+      debugPrint("[AuthService] Login exception: $e\n$st");
       return null;
     }
   }
 
-  /// تسجيل الخروج
   Future<void> logout() async {
-    print("🔄 [AuthService] Logging out...");
     try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_spKeyAdmin, false);
+      _isAdmin = false;
       await supabase.auth.signOut();
-      print("✅ [AuthService] Logout success");
     } catch (e, st) {
-      print("❌ [AuthService] Logout failed: $e\n$st");
+      debugPrint("[AuthService] Logout failed: $e\n$st");
       rethrow;
     }
   }
 
-  /// جلب بيانات أي مستخدم بواسطة userId من جدول users
   Future<UserModel?> getUserData(String userId) async {
     try {
       final data = await supabase
@@ -162,25 +162,45 @@ class AuthService {
           .select()
           .eq('id', userId)
           .maybeSingle();
-
       if (data != null) {
-        print("🟢 [AuthService] Fetched user data for $userId: $data");
         return UserModel.fromJson(data);
       } else {
-        print("❌ [AuthService] User with id $userId not found");
+        debugPrint("[AuthService] User with id $userId not found");
         return null;
       }
     } catch (e, st) {
-      print("🔥 [AuthService] getUserData exception: $e\n$st");
+      debugPrint("[AuthService] getUserData exception: $e\n$st");
       return null;
     }
   }
 
-  /// تسجيل دخول شامل (بريد)
   Future<UserModel?> login({
     required String email,
     required String password,
   }) async {
+    await init();
+
+    final isAdminCreds =
+        email.trim().toLowerCase() == AdminData.email.toLowerCase() &&
+        password == AdminData.password;
+
+    if (isAdminCreds) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_spKeyAdmin, true);
+      _isAdmin = true;
+
+      return UserModel(
+        id: AdminData.id,
+        name: AdminData.name,
+        email: AdminData.email,
+        phone: AdminData.phone,
+        avatar: AdminData.avatar,
+        imageUrl: AdminData.imageUrl,
+        role: AdminData.role,
+        password: '',
+      );
+    }
+
     return await loginWithEmail(email: email, password: password);
   }
 }
