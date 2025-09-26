@@ -11,9 +11,12 @@ class BannerSection extends StatelessWidget {
       height: 150,
       child: PageView(
         children: const [
-          BannerWidget("", imageUrl: 'asset/image/offer50.png'),
-          BannerWidget("", imageUrl: 'asset/image/download.jpg'),
-          BannerWidget("", imageUrl: 'asset/image/sell-used-electronics.jpg'),
+          BannerWidget("", imageUrl: 'assets/asset/image/offer50.png'),
+          BannerWidget("", imageUrl: 'assets/asset/image/download.jpg'),
+          BannerWidget(
+            "",
+            imageUrl: 'assets/asset/image/sell-used-electronics.jpg',
+          ),
         ],
       ),
     );
