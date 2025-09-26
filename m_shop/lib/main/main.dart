@@ -1,18 +1,15 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:m_shop/core/cubit/auth/auth_service.dart';
 import 'package:m_shop/main/approot.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-import 'package:m_shop/core/cubit/auth/auth_service.dart';
 import 'package:m_shop/core/service/product/product_service.dart';
 import 'package:m_shop/core/repository/home_repository.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Global error handling
   FlutterError.onError = (details) {
     FlutterError.presentError(details);
     Zone.current.handleUncaughtError(
@@ -23,7 +20,6 @@ Future<void> main() async {
 
   await runZonedGuarded<Future<void>>(
     () async {
-      // يُفضَّل تمرير القيم من --dart-define، وإلا هنستخدم الافتراضيات دي
       const supabaseUrl = String.fromEnvironment(
         'SUPABASE_URL',
         defaultValue: 'https://zfmvvfobherprpcyqkqe.supabase.co',
@@ -39,20 +35,17 @@ Future<void> main() async {
         anonKey: supabaseAnonKey,
         debug: kDebugMode,
         authOptions: const FlutterAuthClientOptions(
-          // ملاحظة: لا يوجد persistSession هنا
           autoRefreshToken: true,
           detectSessionInUri: true,
         ),
       );
 
-      // تهيئة الـ Repository + Prefetch لتحسين زمن الفتح الأول
       final repo = HomeRepository(
         authService: AuthService(),
         productService: ProductService(),
       );
       await repo.prefetchProducts();
 
-      // استخدم factory withRepo المعرّفة في AppRoot
       runApp(AppRoot.withRepo(repo));
     },
     (error, stack) {
