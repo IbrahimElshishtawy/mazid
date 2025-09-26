@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:m_shop/core/cubit/auth/auth_service.dart';
 import 'package:m_shop/main/approot.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:m_shop/core/service/product/product_service.dart';
+import 'package:m_shop/core/service/api/product_service.dart';
 import 'package:m_shop/core/repository/home_repository.dart';
 
 Future<void> main() async {
