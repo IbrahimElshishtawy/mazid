@@ -32,6 +32,7 @@ class HomeController extends ChangeNotifier {
   String _searchQuery = '';
 
   bool _disposed = false;
+  bool _initialized = false;
   Timer? _debounce;
 
   // ======= Lifecycle =======
@@ -47,8 +48,11 @@ class HomeController extends ChangeNotifier {
   }
 
   // ======= Init / Refresh =======
-  /// بداية التحميل (منتجات + بيانات المستخدم) بالتوازي
-  Future<void> init(BuildContext context) async {
+  /// استدعِها مرة واحدة بعد تركيب الـ Provider (post-frame)
+  Future<void> initOnce() async {
+    if (_initialized) return;
+    _initialized = true;
+
     isLoading = true;
     isUserLoading = true;
     errorMessage = "";
@@ -57,14 +61,13 @@ class HomeController extends ChangeNotifier {
     try {
       await Future.wait([_loadProducts(), _loadUserData()]);
     } catch (e) {
-      debugPrint("❌ خطأ عام أثناء التهيئة: $e");
       errorMessage = "حدث خطأ أثناء التهيئة. حاول لاحقاً.";
+      debugPrint("❌ خطأ عام أثناء التهيئة: $e");
     } finally {
       _safeNotifyListeners();
     }
   }
 
-  /// إعادة تحميل يدوي (مثلاً Pull-to-Refresh)
   Future<void> refresh() async {
     isLoading = true;
     errorMessage = "";
