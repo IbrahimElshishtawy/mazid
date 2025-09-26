@@ -1,8 +1,5 @@
-// ignore_for_file: dead_code
-
 import 'dart:async';
 import 'package:flutter/material.dart';
-
 import 'package:m_shop/core/cubit/auth/auth_service.dart';
 import 'package:m_shop/core/data/admin_data.dart';
 import 'package:m_shop/core/models/prouduct/product_models.dart';
@@ -17,12 +14,11 @@ class HomeController extends ChangeNotifier {
   final AuthService _authService;
   final ProductService _productService;
 
-  // ======= State =======
   List<ProductModel> products = [];
   List<ProductModel> filteredProducts = [];
 
-  bool isLoading = true; // تحميل المنتجات
-  bool isUserLoading = true; // تحميل المستخدم
+  bool isLoading = true;
+  bool isUserLoading = true;
   String errorMessage = "";
 
   UserModel? currentUser;
@@ -35,7 +31,6 @@ class HomeController extends ChangeNotifier {
   bool _initialized = false;
   Timer? _debounce;
 
-  // ======= Lifecycle =======
   @override
   void dispose() {
     _disposed = true;
@@ -47,8 +42,6 @@ class HomeController extends ChangeNotifier {
     if (!_disposed) notifyListeners();
   }
 
-  // ======= Init / Refresh =======
-  /// استدعِها مرة واحدة بعد تركيب الـ Provider (post-frame)
   Future<void> initOnce() async {
     if (_initialized) return;
     _initialized = true;
@@ -75,7 +68,6 @@ class HomeController extends ChangeNotifier {
     await _loadProducts();
   }
 
-  // ======= Data Loads =======
   Future<void> _loadProducts() async {
     try {
       final list = await _productService.fetchAllProducts();
@@ -92,6 +84,8 @@ class HomeController extends ChangeNotifier {
 
   Future<void> _loadUserData() async {
     try {
+      await _authService.init();
+
       if (_authService.isAdminLogin()) {
         currentUser = UserModel(
           id: AdminData.id,
@@ -100,7 +94,7 @@ class HomeController extends ChangeNotifier {
           role: AdminData.role,
           avatar: AdminData.avatar,
           phone: AdminData.phone,
-          password: AdminData.password,
+          password: '',
           imageUrl: AdminData.imageUrl,
         );
       } else {
@@ -118,15 +112,12 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  // ======= Filters & Search =======
-  /// البحث مع Debounce لتقليل إعادة البناء أثناء الكتابة
   void onSearchChanged(String query) {
     _searchQuery = query;
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 250), _recomputeFiltered);
   }
 
-  /// فلترة بالفئة (category)
   void filterByCategory(String? category) {
     final normalized = category?.trim();
     selectedCategory = (normalized == null || normalized.isEmpty)
@@ -135,17 +126,14 @@ class HomeController extends ChangeNotifier {
     _recomputeFiltered();
   }
 
-  /// إعادة حساب القائمة المعروضة بناءً على (الفئة + البحث)
   void _recomputeFiltered() {
     List<ProductModel> base = products;
 
-    // فلترة بالفئة لو محددة
     if (selectedCategory != null) {
       final cat = selectedCategory!;
       base = base.where((p) => p.category == cat).toList();
     }
 
-    // تطبيق البحث بعد الفئة
     final q = _searchQuery.trim().toLowerCase();
     if (q.isNotEmpty) {
       base = base.where((p) {
@@ -159,7 +147,6 @@ class HomeController extends ChangeNotifier {
     _safeNotifyListeners();
   }
 
-  /// مسح الفلاتر والبحث
   void clearFilters() {
     selectedCategory = null;
     _searchQuery = '';
@@ -167,15 +154,12 @@ class HomeController extends ChangeNotifier {
     _safeNotifyListeners();
   }
 
-  // ======= UI State =======
-  /// تغيير التاب
   void changeTab(int index) {
     if (index == currentIndex || index < 0) return;
     currentIndex = index;
     _safeNotifyListeners();
   }
 
-  // Getters مساعدة (اختيارية للاستخدام في الـ UI)
   bool get hasError => errorMessage.isNotEmpty;
   bool get isBusy => isLoading || isUserLoading;
   bool get isEmpty => !isBusy && filteredProducts.isEmpty;
