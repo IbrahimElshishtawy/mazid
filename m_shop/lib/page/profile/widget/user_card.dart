@@ -37,7 +37,7 @@ class UserCard extends StatelessWidget {
                 child: user.avatar.isEmpty
                     ? ClipOval(
                         child: Image.asset(
-                          'assets/images/placeholder.png',
+                          'assets/asset/icon/iconimage.jpg',
                           width: 110,
                           height: 110,
                           fit: BoxFit.cover,
