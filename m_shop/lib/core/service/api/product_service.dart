@@ -1,6 +1,4 @@
-// lib/core/services/product_service.dart
-// ignore_for_file: unnecessary_cast
-
+// lib/core/service/product/product_service.dart
 import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +23,10 @@ class ProductService {
         sendTimeout: const Duration(seconds: 20),
         responseType: ResponseType.json,
         validateStatus: (code) => code != null && code >= 200 && code < 400,
+        headers: {
+          // أحيانًا بعض السيرفرات بتحب يكون فيه UA
+          'User-Agent': 'MShop/1.0 (Dart; Flutter)',
+        },
       ),
     );
 
@@ -59,18 +61,13 @@ class ProductService {
       final data = res.data;
 
       final list = (data is Map && data['product'] is List)
-          ? data['product'] as List
-          : const <dynamic>[];
-      final mapped = list
-          .whereType<Map<String, dynamic>>()
-          .map<ProductModel?>(
-            _mapElWekalaToProduct,
-          ) // <-- نوع صريح لتفادي مشاكل الـ tear-off
+          ? List<Map<String, dynamic>>.from(data['product'] as List)
+          : const <Map<String, dynamic>>[];
+
+      return list
+          .map<ProductModel?>((e) => _mapElWekalaToProduct(e))
           .whereType<ProductModel>()
           .toList();
-
-      if (kDebugMode) debugPrint('ElWekala loaded: ${mapped.length}');
-      return mapped;
     } on DioException catch (e) {
       if (CancelToken.isCancel(e)) {
         if (kDebugMode) debugPrint("⏱️ ElWekala skipped: ${e.message}");
@@ -91,14 +88,11 @@ class ProductService {
       final res = await _dio.get(_fakeStoreUrl);
       final data = res.data;
 
-      if (data is! List) return [];
-      final mapped = data
-          .whereType<Map<String, dynamic>>()
-          .map(ProductModel.fromJson)
-          .toList();
+      final list = (data is List)
+          ? List<Map<String, dynamic>>.from(data)
+          : const <Map<String, dynamic>>[];
 
-      if (kDebugMode) debugPrint('FakeStore loaded: ${mapped.length}');
-      return mapped;
+      return list.map(ProductModel.fromJson).toList();
     } catch (e) {
       if (kDebugMode) debugPrint("❌ FakeStore error: $e");
       return [];
@@ -111,15 +105,10 @@ class ProductService {
       final data = res.data;
 
       final list = (data is Map && data['products'] is List)
-          ? data['products'] as List
-          : const <dynamic>[];
-      final mapped = list
-          .whereType<Map<String, dynamic>>()
-          .map(ProductModel.fromJson)
-          .toList();
+          ? List<Map<String, dynamic>>.from(data['products'] as List)
+          : const <Map<String, dynamic>>[];
 
-      if (kDebugMode) debugPrint('DummyJSON loaded: ${mapped.length}');
-      return mapped;
+      return list.map(ProductModel.fromJson).toList();
     } catch (e) {
       if (kDebugMode) debugPrint("❌ DummyJSON error: $e");
       return [];
@@ -143,10 +132,6 @@ class ProductService {
           if (seen.add(p.id)) merged.add(p);
         }
       }
-
-      if (kDebugMode) {
-        debugPrint('ALL loaded (merged unique): ${merged.length}');
-      }
       return merged;
     } catch (e) {
       if (kDebugMode) debugPrint("❌ fetchAllProducts error: $e");
@@ -163,50 +148,41 @@ class ProductService {
       final data = res.data;
 
       final list = (data is Map && data['products'] is List)
-          ? data['products'] as List
-          : const <dynamic>[];
-      final mapped = list
-          .whereType<Map<String, dynamic>>()
-          .map(ProductModel.fromJson)
-          .toList();
+          ? List<Map<String, dynamic>>.from(data['products'] as List)
+          : const <Map<String, dynamic>>[];
 
-      if (kDebugMode) {
-        debugPrint('DummyJSON search("$query"): ${mapped.length}');
-      }
-      return mapped;
+      return list.map(ProductModel.fromJson).toList();
     } catch (e) {
       if (kDebugMode) debugPrint("❌ Search DummyJSON error: $e");
       return [];
     }
   }
 
-  // ← خلي البراميتر dynamic لتفادي مشاكل الـ tear-off
-  ProductModel? _mapElWekalaToProduct(dynamic raw) {
-    if (raw is! Map) return null;
-    final map = raw as Map;
-
-    final images = (map['images'] is List) ? (map['images'] as List) : const [];
+  ProductModel? _mapElWekalaToProduct(Map<String, dynamic> raw) {
+    final images = (raw['images'] is List)
+        ? List<String>.from(raw['images'] as List)
+        : const <String>[];
     final imgFallback = images.isNotEmpty ? images.first : null;
 
     final mapped = <String, dynamic>{
-      'id': map['_id'] ?? map['id'] ?? map['sku']?.toString(),
-      'status': map['status'] ?? '',
-      'category': map['category'] ?? 'Laptops',
-      'name': map['name'] ?? map['title'] ?? 'Laptop',
-      'title': map['title'] ?? map['name'] ?? 'Laptop',
-      'price': map['price'] ?? map['salePrice'] ?? map['finalPrice'] ?? 0,
-      'description': map['description'] ?? map['desc'] ?? '',
-      'image': map['image'] ?? map['thumbnail'] ?? imgFallback,
+      'id': raw['_id'] ?? raw['id'] ?? raw['sku']?.toString(),
+      'status': raw['status'] ?? '',
+      'category': raw['category'] ?? 'Laptops',
+      'name': raw['name'] ?? raw['title'] ?? 'Laptop',
+      'title': raw['title'] ?? raw['name'] ?? 'Laptop',
+      'price': raw['price'] ?? raw['salePrice'] ?? raw['finalPrice'] ?? 0,
+      'description': raw['description'] ?? raw['desc'] ?? '',
+      'image': raw['image'] ?? raw['thumbnail'] ?? imgFallback,
       'images': images,
-      'company': map['company'] ?? map['brand'] ?? map['manufacturer'] ?? '',
-      'countInStock': map['countInStock'] ?? map['stock'] ?? 0,
-      '__v': map['__v'] ?? 0,
-      'sales': map['sales'] ?? 0,
+      'company': raw['company'] ?? raw['brand'] ?? raw['manufacturer'] ?? '',
+      'countInStock': raw['countInStock'] ?? raw['stock'] ?? 0,
+      '__v': raw['__v'] ?? 0,
+      'sales': raw['sales'] ?? 0,
       'rating':
-          map['rating'] ??
+          raw['rating'] ??
           {
-            'rate': map['rate'],
-            'count': map['ratingCount'] ?? map['reviewsCount'],
+            'rate': raw['rate'],
+            'count': raw['ratingCount'] ?? raw['reviewsCount'],
           },
     };
 
@@ -241,23 +217,25 @@ class _RetryInterceptor extends Interceptor {
 
     await Future.delayed(retryDelay * (attempt + 1));
 
+    final newOptions = Options(
+      method: req.method,
+      headers: req.headers,
+      responseType: req.responseType,
+      contentType: req.contentType,
+      followRedirects: req.followRedirects,
+      receiveDataWhenStatusError: req.receiveDataWhenStatusError,
+      validateStatus: req.validateStatus,
+      sendTimeout: req.sendTimeout,
+      receiveTimeout: req.receiveTimeout,
+    );
+
     try {
       req.extra['retry_attempt'] = attempt + 1;
       final response = await _dio.request(
         req.path,
         data: req.data,
         queryParameters: req.queryParameters,
-        options: Options(
-          method: req.method,
-          headers: req.headers,
-          responseType: req.responseType,
-          contentType: req.contentType,
-          followRedirects: req.followRedirects,
-          receiveDataWhenStatusError: req.receiveDataWhenStatusError,
-          validateStatus: req.validateStatus,
-          sendTimeout: req.sendTimeout,
-          receiveTimeout: req.receiveTimeout,
-        ),
+        options: newOptions,
         cancelToken: req.cancelToken,
         onReceiveProgress: req.onReceiveProgress,
         onSendProgress: req.onSendProgress,
