@@ -73,6 +73,7 @@ class HomeController extends ChangeNotifier {
   Future<void> _loadProducts() async {
     try {
       final list = await _productService.fetchAllProducts();
+      debugPrint('LOADED products: ${list.length}');
       products = list;
       _recomputeFiltered();
     } catch (e) {
