@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:m_shop/core/models/prouduct/product_models.dart';
 import 'package:m_shop/core/models/user/user_model.dart';
 import 'package:m_shop/page/home/drawer/Favorites/ui/FavoritesPage.dart';
+import 'package:m_shop/page/home/drawer/Orders/ui/OrdersPage.dart';
 import 'package:m_shop/page/profile/ui/Profile_Page.dart';
+import 'package:m_shop/page/profile/ui/about_page.dart';
+import 'package:m_shop/page/profile/ui/settings_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -102,7 +105,10 @@ class DrawerMenu extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.shopping_cart, color: Colors.orange),
             title: const Text("Orders", style: TextStyle(color: Colors.white)),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const OrdersPage()));
+            },
           ),
 
           // تاريخ الطلبات
@@ -124,14 +130,20 @@ class DrawerMenu extends StatelessWidget {
               "Settings",
               style: TextStyle(color: Colors.white),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsPage()));
+            },
           ),
 
           // عن البرنامج
           ListTile(
             leading: const Icon(Icons.info, color: Colors.orange),
             title: const Text("About", style: TextStyle(color: Colors.white)),
-            onTap: () {},
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutPage()));
+            },
           ),
 
           const Divider(color: Colors.white24),

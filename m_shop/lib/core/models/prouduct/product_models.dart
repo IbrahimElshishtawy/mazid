@@ -29,6 +29,7 @@ class ProductModel implements BaseProduct {
   final int sales;
   final double rating;
   final int ratingCount;
+  final double discountPercentage;
 
   const ProductModel({
     required this.id,
@@ -46,6 +47,7 @@ class ProductModel implements BaseProduct {
     required this.sales,
     this.rating = 0.0,
     this.ratingCount = 0,
+    this.discountPercentage = 0.0,
   });
 
   String get firstImage => (images.isNotEmpty && images.first.isNotEmpty)
@@ -92,6 +94,7 @@ class ProductModel implements BaseProduct {
       sales: (json['sales'] as num?)?.toInt() ?? 0,
       rating: rate,
       ratingCount: count,
+      discountPercentage: _toDouble(json['discountPercentage']),
     );
   }
 
@@ -111,6 +114,7 @@ class ProductModel implements BaseProduct {
       '__v': v,
       'sales': sales,
       'rating': {'rate': rating, 'count': ratingCount},
+      'discountPercentage': discountPercentage,
     };
   }
 
@@ -130,6 +134,7 @@ class ProductModel implements BaseProduct {
     int? sales,
     double? rating,
     int? ratingCount,
+    double? discountPercentage,
   }) {
     return ProductModel(
       id: id ?? this.id,
@@ -147,6 +152,7 @@ class ProductModel implements BaseProduct {
       sales: sales ?? this.sales,
       rating: rating ?? this.rating,
       ratingCount: ratingCount ?? this.ratingCount,
+      discountPercentage: discountPercentage ?? this.discountPercentage,
     );
   }
 
