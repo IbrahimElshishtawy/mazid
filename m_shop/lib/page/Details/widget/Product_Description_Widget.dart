@@ -1,8 +1,12 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:m_shop/core/cubit/order/order_cubit.dart';
+import 'package:m_shop/core/cubit/order/order_state.dart';
 import 'package:m_shop/core/models/prouduct/product_models.dart';
 import 'package:m_shop/page/Details/widget/Expandable_Text.dart';
+import 'package:m_shop/page/home/drawer/Orders/ui/OrdersPage.dart';
 
 class ProductDescriptionWidget extends StatelessWidget {
   final ProductModel product;
@@ -53,16 +57,65 @@ class AddToCartButton extends StatelessWidget {
         child: ElevatedButton.icon(
           onPressed: product.countInStock > 0 ? () {} : null,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.orange,
+            backgroundColor: Colors.grey[800],
             elevation: 8,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(14),
             ),
           ),
-          icon: const Icon(Icons.add_shopping_cart, size: 24),
+          icon: const Icon(Icons.add_shopping_cart, size: 24, color: Colors.orange),
           label: const Text(
             "Add to Cart",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class BuyNowButton extends StatelessWidget {
+  final ProductModel product;
+  const BuyNowButton({super.key, required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<OrderCubit, OrderState>(
+      listener: (context, state) {
+        if (state is OrderPlacedSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Order placed successfully!"), backgroundColor: Colors.green),
+          );
+          Navigator.push(context, MaterialPageRoute(builder: (_) => const OrdersPage()));
+        } else if (state is OrderError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: SizedBox(
+          width: double.infinity,
+          height: 55,
+          child: ElevatedButton.icon(
+            onPressed: product.countInStock > 0
+                ? () {
+                    context.read<OrderCubit>().placeOrder(product, 1);
+                  }
+                : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orange,
+              elevation: 8,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+            ),
+            icon: const Icon(Icons.bolt, size: 24, color: Colors.black),
+            label: const Text(
+              "Buy Now",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
+            ),
           ),
         ),
       ),

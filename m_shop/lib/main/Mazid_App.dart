@@ -7,6 +7,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:m_shop/core/cubit/auth/auth_cubit.dart';
 import 'package:m_shop/core/cubit/auth/auth_service.dart' as svc;
+import 'package:m_shop/core/cubit/order/order_cubit.dart';
+import 'package:m_shop/core/cubit/seller/seller_cubit.dart';
 
 import 'package:m_shop/page/Auth/UI/ui/Register_page.dart';
 import 'package:m_shop/page/Auth/UI/ui/login.dart';
@@ -35,6 +37,12 @@ class Mazid extends StatelessWidget {
         BlocProvider<AuthCubit>(
           create: (_) =>
               AuthCubit(authService: svc.AuthService())..checkAuthStatus(),
+        ),
+        BlocProvider<SellerCubit>(
+          create: (_) => SellerCubit()..loadSellerStats(),
+        ),
+        BlocProvider<OrderCubit>(
+          create: (_) => OrderCubit()..fetchOrders(),
         ),
       ],
       child: MaterialApp(

@@ -69,6 +69,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             ProductDescriptionWidget(product: widget.product),
             const SizedBox(height: 24),
             AddToCartButton(product: widget.product),
+            const SizedBox(height: 12),
+            BuyNowButton(product: widget.product),
             const SizedBox(height: 24),
           ],
         ),

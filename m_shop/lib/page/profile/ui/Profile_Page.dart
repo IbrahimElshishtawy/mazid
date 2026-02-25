@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:m_shop/core/data/admin_data.dart';
 import 'package:m_shop/core/models/user/user_model.dart';
 import 'package:m_shop/page/profile/data/profile_data.dart';
+import 'package:m_shop/page/profile/ui/seller_dashboard.dart';
+import 'package:m_shop/page/profile/ui/seller_verification_page.dart';
+import 'package:m_shop/page/profile/ui/settings_page.dart';
 import 'package:m_shop/page/profile/widget/stats_grid.dart';
 import 'package:m_shop/page/profile/widget/user_card.dart';
 import 'package:m_shop/page/profile/widget/wallet_section.dart';
@@ -16,6 +19,19 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
+      appBar: AppBar(
+        title: const Text("Profile"),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings, color: Colors.white),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsPage()));
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -28,7 +44,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   // ✅ بيانات الأدمن
-  Widget _buildAdminProfile() {
+  Widget _buildAdminProfile(BuildContext context) {
     final adminUser = UserModel(
       id: AdminData.id,
       name: AdminData.name,
@@ -67,6 +83,8 @@ class ProfilePage extends StatelessWidget {
           totalSpent: adminUser.totalSpent,
           totalEarned: adminUser.totalEarned,
         ),
+        const SizedBox(height: 24),
+        _buildSellerSection(context, adminUser),
       ],
     );
   }
@@ -106,7 +124,7 @@ class ProfilePage extends StatelessWidget {
 
         // ✅ لو المستخدم أدمن
         if (user.email == AdminData.email) {
-          return _buildAdminProfile();
+          return _buildAdminProfile(context);
         }
 
         // ✅ مستخدم عادي
@@ -127,9 +145,56 @@ class ProfilePage extends StatelessWidget {
               totalSpent: user.totalSpent,
               totalEarned: user.totalEarned,
             ),
+            const SizedBox(height: 24),
+            _buildSellerSection(context, user),
           ],
         );
       },
+    );
+  }
+
+  Widget _buildSellerSection(BuildContext context, UserModel user) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Seller Tools",
+            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.grey[900],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.dashboard, color: Colors.orange),
+                  title: const Text("Seller Dashboard", style: TextStyle(color: Colors.white)),
+                  subtitle: const Text("View sales, inventory, and profits", style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const SellerDashboardPage()));
+                  },
+                ),
+                const Divider(color: Colors.white10, height: 1),
+                ListTile(
+                  leading: Icon(user.isVerified ? Icons.verified : Icons.admin_panel_settings, color: Colors.orange),
+                  title: Text(user.isVerified ? "Verified Seller" : "Verify Seller Account", style: const TextStyle(color: Colors.white)),
+                  subtitle: Text(user.isVerified ? "Your account is fully verified" : "Submit documents for verification", style: const TextStyle(color: Colors.grey, fontSize: 12)),
+                  trailing: user.isVerified ? const Icon(Icons.check_circle, color: Colors.green) : const Icon(Icons.chevron_right, color: Colors.grey),
+                  onTap: user.isVerified ? null : () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const SellerVerificationPage()));
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
