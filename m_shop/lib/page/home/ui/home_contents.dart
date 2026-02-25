@@ -1,12 +1,13 @@
 // ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:m_shop/core/cubit/navigation/navigation_cubit.dart';
+import 'package:m_shop/core/cubit/product/product_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:m_shop/core/widget/home/widget/AppBar_widget.dart';
 import 'package:m_shop/core/widget/home/widget/bottom_NavigationBar.dart';
-import 'package:m_shop/page/home/controller/home_controller.dart';
 import 'package:m_shop/page/home/drawer/ui/drawer_menu.dart';
 import 'package:m_shop/page/home/ui/home_ui.dart';
 
@@ -109,32 +110,19 @@ class _HomeContentsState extends State<HomeContents> {
       );
     }
 
-    return ChangeNotifierProvider<HomeController>(
-      create: (_) => HomeController(),
-      builder: (context, child) {
-        // شغّل initOnce بعد ما الـ Provider يبقى جاهز
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          context.read<HomeController>().initOnce();
-        });
-
-        return Consumer<HomeController>(
-          builder: (context, controller, _) {
-            return Scaffold(
-              appBar: AppbarWidget(onSearchChanged: controller.onSearchChanged),
-              backgroundColor: Colors.black,
-              drawer: const DrawerMenu(favoriteProducts: []),
-              body: const HomeUI(),
-              bottomNavigationBar: Selector<HomeController, int>(
-                selector: (_, c) => c.currentIndex,
-                builder: (_, currentIndex, __) {
-                  return BottomNavigationbarWidget(
-                    currentIndex: currentIndex,
-                    onTap: context.read<HomeController>().changeTab,
-                  );
-                },
-              ),
-            );
-          },
+    return BlocBuilder<NavigationCubit, int>(
+      builder: (context, currentIndex) {
+        return Scaffold(
+          appBar: AppbarWidget(
+            onSearchChanged: (query) => context.read<ProductCubit>().filterProducts(query, null),
+          ),
+          backgroundColor: Colors.black,
+          drawer: const DrawerMenu(favoriteProducts: []),
+          body: const HomeUI(),
+          bottomNavigationBar: BottomNavigationbarWidget(
+            currentIndex: currentIndex,
+            onTap: (index) => context.read<NavigationCubit>().setIndex(index),
+          ),
         );
       },
     );

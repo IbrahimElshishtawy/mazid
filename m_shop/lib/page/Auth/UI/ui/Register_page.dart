@@ -9,6 +9,8 @@ import 'package:m_shop/core/widget/Auth/widget/register_terms.dart';
 import 'package:m_shop/core/widget/Auth/widget/success_dialog.dart';
 import 'package:m_shop/core/widget/Auth/widget_form/register_form_fields.dart';
 import 'package:m_shop/core/widget/Auth/widget_header/register_header.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:m_shop/page/profile/ui/seller_verification_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -27,6 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final phoneController = TextEditingController();
 
   bool agreeTerms = false;
+  bool isSeller = false;
 
   @override
   void dispose() {
@@ -86,6 +89,13 @@ class _RegisterPageState extends State<RegisterPage> {
                         phoneController: phoneController,
                       ),
                       const SizedBox(height: 10),
+                      SwitchListTile(
+                        title: const Text("Register as Seller", style: TextStyle(color: Colors.white, fontSize: 14)),
+                        value: isSeller,
+                        onChanged: (val) => setState(() => isSeller = val),
+                        activeColor: Colors.orangeAccent,
+                      ),
+                      const SizedBox(height: 10),
                       RegisterTerms(
                         agreeTerms: agreeTerms,
                         onChanged: (val) {
@@ -127,6 +137,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                   phone: phoneController.text.trim(),
                                   password: passwordController.text.trim(),
                                 );
+
+                                if (isSeller) {
+                                  Navigator.push(context, MaterialPageRoute(builder: (_) => const SellerVerificationPage()));
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: theme.primaryColor,
@@ -138,6 +152,33 @@ class _RegisterPageState extends State<RegisterPage> {
                               ),
                               child: const Text("Sign up"),
                             ),
+                      const SizedBox(height: 20),
+                      const Center(
+                        child: Text(
+                          "OR",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _socialButton(
+                            icon: FontAwesomeIcons.google,
+                            color: Colors.redAccent,
+                            onTap: () {},
+                          ),
+                          const SizedBox(width: 20),
+                          _socialButton(
+                            icon: FontAwesomeIcons.facebook,
+                            color: Colors.blueAccent,
+                            onTap: () {},
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 10),
                       TextButton(
                         onPressed: () {
@@ -155,6 +196,24 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _socialButton({
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white24),
+        ),
+        child: Icon(icon, color: color, size: 24),
       ),
     );
   }

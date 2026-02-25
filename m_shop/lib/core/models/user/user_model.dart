@@ -11,6 +11,9 @@ class UserModel {
   final String password;
   final String imageUrl;
   final String role;
+  final bool isVerified;
+  final bool isProfessional;
+  final List<String> favorites;
 
   // محفظة المستخدم
   final double walletBalance;
@@ -37,6 +40,9 @@ class UserModel {
     required this.password,
     required this.imageUrl,
     required this.role,
+    this.isVerified = false,
+    this.isProfessional = false,
+    this.favorites = const [],
     this.walletBalance = 0,
     this.pendingOrders = 0,
     this.totalCancelledOrders = 0,
@@ -59,7 +65,10 @@ class UserModel {
       password: json['password'] ?? '',
       imageUrl: json['imageUrl'] ?? '',
       role: json['role'] ?? 'user',
-      walletBalance: json['walletBalance'] ?? 0,
+      isVerified: json['isVerified'] ?? false,
+      isProfessional: json['isProfessional'] ?? false,
+      favorites: List<String>.from(json['favorites'] ?? []),
+      walletBalance: (json['walletBalance'] ?? 0).toDouble(),
       pendingOrders: json['pendingOrders'] ?? 0,
       totalCancelledOrders: json['totalCancelledOrders'] ?? 0,
       receivedOrders: json['receivedOrders'] ?? 0,
@@ -82,6 +91,9 @@ class UserModel {
       'password': password,
       'imageUrl': imageUrl,
       'role': role,
+      'isVerified': isVerified,
+      'isProfessional': isProfessional,
+      'favorites': favorites,
       'walletBalance': walletBalance,
       'pendingOrders': pendingOrders,
       'totalCancelledOrders': totalCancelledOrders,
@@ -105,7 +117,10 @@ class UserModel {
       password: map['password'] as String? ?? '',
       imageUrl: map['imageUrl'] as String? ?? '',
       role: map['role'] as String? ?? 'user',
-      walletBalance: map['walletBalance'] as double? ?? 0,
+      isVerified: map['isVerified'] as bool? ?? false,
+      isProfessional: map['isProfessional'] as bool? ?? false,
+      favorites: List<String>.from(map['favorites'] as List? ?? []),
+      walletBalance: (map['walletBalance'] as num?)?.toDouble() ?? 0.0,
       pendingOrders: map['pendingOrders'] as int? ?? 0,
       totalCancelledOrders: map['totalCancelledOrders'] as int? ?? 0,
       receivedOrders: map['receivedOrders'] as int? ?? 0,

@@ -6,6 +6,13 @@ import 'package:m_shop/page/profile/data/profile_data.dart';
 import 'package:m_shop/page/profile/widget/stats_grid.dart';
 import 'package:m_shop/page/profile/widget/user_card.dart';
 import 'package:m_shop/page/profile/widget/wallet_section.dart';
+import 'package:m_shop/page/profile/ui/settings_page.dart';
+import 'package:m_shop/page/profile/ui/about_page.dart';
+import 'package:m_shop/page/profile/ui/legal_terms_page.dart';
+import 'package:m_shop/page/profile/ui/sims_control_page.dart';
+import 'package:m_shop/page/profile/ui/seller_dashboard.dart';
+import 'package:m_shop/page/profile/ui/seller_product_management.dart';
+import 'package:m_shop/page/profile/ui/order_history_page.dart';
 
 class ProfilePage extends StatelessWidget {
   final String userId;
@@ -19,9 +26,15 @@ class ProfilePage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(vertical: 16),
-          child: (userId == "guest")
-              ? _buildGuestProfile()
-              : _buildUserProfile(),
+          child: Column(
+            children: [
+              (userId == "guest")
+                  ? _buildGuestProfile()
+                  : _buildUserProfile(),
+              const SizedBox(height: 24),
+              _buildNavigationMenu(context),
+            ],
+          ),
         ),
       ),
     );
@@ -130,6 +143,80 @@ class ProfilePage extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildNavigationMenu(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade900.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        children: [
+          _buildMenuItem(
+            context,
+            icon: Icons.settings,
+            title: "Settings",
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingsPage())),
+          ),
+          _buildMenuItem(
+            context,
+            icon: Icons.info_outline,
+            title: "About",
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AboutPage())),
+          ),
+          _buildMenuItem(
+            context,
+            icon: Icons.gavel,
+            title: "Legal Terms",
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LegalTermsPage())),
+          ),
+          _buildMenuItem(
+            context,
+            icon: Icons.store,
+            title: "Seller Dashboard",
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SellerDashboard())),
+          ),
+          _buildMenuItem(
+            context,
+            icon: Icons.inventory_2,
+            title: "Manage My Products",
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SellerProductManagement())),
+          ),
+          _buildMenuItem(
+            context,
+            icon: Icons.shopping_bag,
+            title: "My Orders",
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const OrderHistoryPage())),
+          ),
+          _buildMenuItem(
+            context,
+            icon: Icons.tune,
+            title: "Sims Control",
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const SimsControlPage())),
+          ),
+          _buildMenuItem(
+            context,
+            icon: Icons.edit,
+            title: "Edit Profile",
+            onTap: () {
+              // Placeholder for edit profile logic
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Edit Profile feature coming soon!")));
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuItem(BuildContext context, {required IconData icon, required String title, required VoidCallback onTap}) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.orangeAccent),
+      title: Text(title, style: const TextStyle(color: Colors.white)),
+      trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white24, size: 16),
+      onTap: onTap,
     );
   }
 

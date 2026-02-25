@@ -82,7 +82,7 @@ class _AuctionHomePageState extends State<AuctionHomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => ProductDetailPagemazid(product: product),
+                      builder: (_) => ProductDetailPage(product: product),
                     ),
                   );
                 },

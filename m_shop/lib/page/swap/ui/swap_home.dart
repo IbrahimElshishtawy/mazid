@@ -73,6 +73,65 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
     _tabController = TabController(length: 5, vsync: this);
   }
 
+  void _showExchangeRequestForm() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.grey[900],
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          left: 20,
+          right: 20,
+          top: 20,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text("Request Exchange", style: TextStyle(color: Colors.orangeAccent, fontSize: 20, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 20),
+            TextField(
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: "What do you want to exchange?",
+                hintStyle: const TextStyle(color: Colors.white24),
+                filled: true,
+                fillColor: Colors.black,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: "Description of your item",
+                hintStyle: const TextStyle(color: Colors.white24),
+                filled: true,
+                fillColor: Colors.black,
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Exchange request submitted!")));
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orangeAccent,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text("Submit Request", style: TextStyle(color: Colors.black)),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -81,6 +140,11 @@ class _SwapHomeState extends State<SwapHome> with TickerProviderStateMixin {
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: SwapTabBar(controller: _tabController),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _showExchangeRequestForm,
+          backgroundColor: Colors.orangeAccent,
+          child: const Icon(Icons.swap_horiz, color: Colors.black),
         ),
         body: SafeArea(
           child: TabBarView(

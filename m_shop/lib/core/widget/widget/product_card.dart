@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:m_shop/core/models/prouduct/product_models.dart';
 import 'package:m_shop/core/service/cart/cart_service.dart';
 import 'package:m_shop/core/widget/widget/ProductCardRating.dart';
+import 'package:m_shop/core/cubit/product/product_cubit.dart';
+import 'package:m_shop/core/cubit/product/product_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -63,30 +66,79 @@ class ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // الصورة
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(12),
-              ),
-              child: AspectRatio(
-                aspectRatio: 1, // مربع
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => const Center(
-                    child: CircularProgressIndicator(color: Colors.orange),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(12),
                   ),
-                  errorWidget: (context, url, error) => Container(
-                    color: Colors.grey[700],
-                    child: const Center(
-                      child: Icon(
-                        Icons.broken_image,
-                        color: Colors.white70,
-                        size: 40,
+                  child: AspectRatio(
+                    aspectRatio: 1, // مربع
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Center(
+                        child: CircularProgressIndicator(color: Colors.orange),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey[700],
+                        child: const Center(
+                          child: Icon(
+                            Icons.broken_image,
+                            color: Colors.white70,
+                            size: 40,
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
+                // Favorite Icon
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: BlocBuilder<ProductCubit, ProductState>(
+                    builder: (context, state) {
+                      bool isFavorite = false;
+                      if (state is ProductLoaded) {
+                        isFavorite = state.favorites.contains(product.id);
+                      }
+                      return GestureDetector(
+                        onTap: () => context.read<ProductCubit>().toggleFavorite(product.id),
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: isFavorite ? Colors.red : Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                // Discount Badge
+                if (product.discountPercentage > 0)
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: Colors.redAccent,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        "-${product.discountPercentage.toInt()}%",
+                        style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+              ],
             ),
 
             const SizedBox(height: 3),
