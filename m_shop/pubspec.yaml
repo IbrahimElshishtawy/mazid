@@ -1,5 +1,5 @@
 ﻿name: m_shop
-description: "A new Flutter project."
+description: "Factory dashboard app"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -39,6 +39,8 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/images/
+    - assets/icons/
     - assets/asset/icon/iconimage.jpg
     - assets/asset/image/
     - assets/asset/animation/
