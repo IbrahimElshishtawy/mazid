@@ -1,13 +1,31 @@
-﻿class EmployeeModel {
-  const EmployeeModel({
+﻿class UserModel {
+  const UserModel({
     required this.name,
+    required this.email,
     required this.role,
-    required this.efficiency,
+    required this.status,
   });
 
   final String name;
+  final String email;
   final String role;
-  final int efficiency;
+  final String status;
+}
+
+class AttendanceRecord {
+  const AttendanceRecord({
+    required this.name,
+    required this.checkIn,
+    required this.checkOut,
+    required this.workedHours,
+    required this.present,
+  });
+
+  final String name;
+  final String checkIn;
+  final String checkOut;
+  final double workedHours;
+  final bool present;
 }
 
 class TaskModel {
@@ -15,11 +33,17 @@ class TaskModel {
     required this.title,
     required this.description,
     required this.progress,
+    required this.assignedTo,
+    required this.status,
+    required this.dueDate,
   });
 
   final String title;
   final String description;
   final double progress;
+  final String assignedTo;
+  final String status;
+  final String dueDate;
 }
 
 class ProductionPoint {
@@ -34,24 +58,32 @@ class ProductionPoint {
   final double target;
 }
 
-class ProductionModel {
-  const ProductionModel({
-    required this.label,
-    required this.actual,
-    required this.target,
+class InventoryItem {
+  const InventoryItem({
+    required this.name,
+    required this.quantity,
+    required this.minimum,
+    required this.unit,
   });
 
-  final String label;
-  final double actual;
-  final double target;
+  final String name;
+  final int quantity;
+  final int minimum;
+  final String unit;
+}
 
-  ProductionPoint toPoint() {
-    return ProductionPoint(
-      label: label,
-      actual: actual,
-      target: target,
-    );
-  }
+class FinancialReport {
+  const FinancialReport({
+    required this.period,
+    required this.income,
+    required this.expenses,
+    required this.profit,
+  });
+
+  final String period;
+  final double income;
+  final double expenses;
+  final double profit;
 }
 
 class AlertModel {
