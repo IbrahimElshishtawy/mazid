@@ -1,22 +1,19 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
 
-class ChartWidget extends StatelessWidget {
-  const ChartWidget({super.key, required this.data});
+class ProductionChart extends StatelessWidget {
+  const ProductionChart({super.key, required this.data});
 
   final List<ProductionPoint> data;
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _ChartPainter(data),
-      child: const SizedBox.expand(),
-    );
+    return CustomPaint(painter: _ProductionChartPainter(data));
   }
 }
 
-class _ChartPainter extends CustomPainter {
-  const _ChartPainter(this.data);
+class _ProductionChartPainter extends CustomPainter {
+  const _ProductionChartPainter(this.data);
 
   final List<ProductionPoint> data;
 
@@ -28,51 +25,48 @@ class _ChartPainter extends CustomPainter {
     const min = 60.0;
     const max = 110.0;
 
-    double scaleY(double value) =>
-        height - ((value - min) / (max - min) * height);
+    double scaleY(double value) => height - ((value - min) / (max - min) * height);
 
     final grid = Paint()
       ..color = const Color(0xFFE2ECE8)
       ..strokeWidth = 1;
-
     for (var i = 0; i < 5; i++) {
       final y = height * i / 4;
       canvas.drawLine(Offset(left, y), Offset(size.width, y), grid);
     }
 
     final slot = width / data.length;
-    final barWidth = slot * 0.4;
+    final barWidth = slot * 0.42;
     final barPaint = Paint()..color = const Color(0xFF0F766E);
     final path = Path();
 
     for (var i = 0; i < data.length; i++) {
-      final x = left + slot * i + (slot - barWidth) / 2;
-      final y = scaleY(data[i].actual);
+      final barX = left + slot * i + (slot - barWidth) / 2;
+      final barY = scaleY(data[i].actual);
       canvas.drawRRect(
         RRect.fromRectAndRadius(
-          Rect.fromLTWH(x, y, barWidth, height - y),
+          Rect.fromLTWH(barX, barY, barWidth, height - barY),
           const Radius.circular(4),
         ),
         barPaint,
       );
 
-      final lineX = left + slot * i + slot / 2;
-      final lineY = scaleY(data[i].target);
+      final targetX = left + slot * i + slot / 2;
+      final targetY = scaleY(data[i].target);
       if (i == 0) {
-        path.moveTo(lineX, lineY);
+        path.moveTo(targetX, targetY);
       } else {
-        path.lineTo(lineX, lineY);
+        path.lineTo(targetX, targetY);
       }
 
-      final label = TextPainter(
+      final textPainter = TextPainter(
         text: TextSpan(
           text: data[i].label,
           style: const TextStyle(color: Color(0xFF677C76), fontSize: 11),
         ),
         textDirection: TextDirection.rtl,
       )..layout();
-
-      label.paint(canvas, Offset(lineX - label.width / 2, size.height - 18));
+      textPainter.paint(canvas, Offset(targetX - textPainter.width / 2, size.height - 18));
     }
 
     canvas.drawPath(
