@@ -1,28 +1,12 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:m_shop/widgets/stat_card.dart';
+import 'package:m_shop/features/auth/presentation/login_screen.dart';
 
 void main() {
-  testWidgets('stat card renders title and value', (tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: Scaffold(
-          body: SizedBox(
-            width: 250,
-            height: 180,
-            child: StatCard(
-              title: 'الإنتاج',
-              value: '100',
-              subtitle: 'وحدة',
-              icon: Icons.factory,
-              color: Colors.teal,
-            ),
-          ),
-        ),
-      ),
-    );
+  testWidgets('login screen renders title and button', (tester) async {
+    await tester.pumpWidget(const MaterialApp(home: LoginScreen()));
 
-    expect(find.text('الإنتاج'), findsOneWidget);
-    expect(find.text('100'), findsOneWidget);
+    expect(find.text('تسجيل الدخول'), findsOneWidget);
+    expect(find.text('دخول إلى الداشبورد'), findsOneWidget);
   });
 }

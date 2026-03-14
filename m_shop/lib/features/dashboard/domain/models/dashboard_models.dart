@@ -34,6 +34,26 @@ class ProductionPoint {
   final double target;
 }
 
+class ProductionModel {
+  const ProductionModel({
+    required this.label,
+    required this.actual,
+    required this.target,
+  });
+
+  final String label;
+  final double actual;
+  final double target;
+
+  ProductionPoint toPoint() {
+    return ProductionPoint(
+      label: label,
+      actual: actual,
+      target: target,
+    );
+  }
+}
+
 class AlertModel {
   const AlertModel({
     required this.title,

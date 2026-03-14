@@ -1,10 +1,11 @@
 ﻿import 'package:flutter_test/flutter_test.dart';
-import 'package:m_shop/services/api_service.dart';
+import 'package:m_shop/features/dashboard/application/dashboard_store.dart';
 
 void main() {
-  test('api service returns production data', () async {
-    final api = ApiService();
-    final data = await api.fetchProduction();
-    expect(data.isNotEmpty, isTrue);
+  test('dashboard store starts with seeded data', () async {
+    final store = await createDashboardStore();
+    expect(store.state.production.isNotEmpty, isTrue);
+    expect(store.state.tasks.isNotEmpty, isTrue);
+    expect(store.state.employees.isNotEmpty, isTrue);
   });
 }
