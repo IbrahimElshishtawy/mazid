@@ -1,15 +1,18 @@
-import 'package:m_shop/features/dashboard/data/dashboard_seed.dart';
+﻿import 'package:m_shop/features/dashboard/data/dashboard_seed.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
 import 'package:redux/redux.dart';
 
 enum DashboardTab {
   overview,
+  profile,
   users,
   attendance,
   productivity,
+  results,
   tasks,
   inventory,
   finance,
+  settings,
 }
 
 enum ShiftType { morning, evening, night }
