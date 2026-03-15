@@ -1,4 +1,7 @@
-﻿part of 'dashboard_sections.dart';
+import 'package:flutter/material.dart';
+import 'package:m_shop/core/widgets/section_card.dart';
+import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
+import '../../../../core/widgets/section_components.dart';
 
 class ProfileSection extends StatelessWidget {
   const ProfileSection({super.key, required this.user, required this.users});
@@ -8,7 +11,7 @@ class ProfileSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeUsers = users.where((item) => item.status == 'نشط' || item.status == 'في الوردية').length;
+    final activeUsers = users.where((item) => item.status == '???' || item.status == '?? ???????').length;
     final managers = users.where((item) => item.role == 'Manager').length;
     final workers = users.where((item) => item.role == 'Worker').length;
     const availableBalance = 184500.0;
@@ -20,8 +23,8 @@ class ProfileSection extends StatelessWidget {
     return Column(
       children: [
         SectionCard(
-          title: 'البروفايل الإداري',
-          subtitle: 'لوحة مدير تنفيذية تشمل الهوية، الماليات، الخسائر، وخطط التطوير.',
+          title: '????????? ???????',
+          subtitle: '???? ???? ??????? ???? ??????? ????????? ???????? ???? ???????.',
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -31,11 +34,11 @@ class ProfileSection extends StatelessWidget {
                 spacing: 12,
                 runSpacing: 12,
                 children: [
-                  _ProfileBadge(title: 'الدور', value: user.role, color: const Color(0xFF0F766E)),
-                  _ProfileBadge(title: 'الحالة', value: user.status, color: const Color(0xFF2563EB)),
-                  _ProfileBadge(title: 'مستخدمون نشطون', value: '$activeUsers', color: const Color(0xFF059669)),
-                  _ProfileBadge(title: 'عمال تحت المتابعة', value: '$workers', color: const Color(0xFFF59E0B)),
-                  _ProfileBadge(title: 'المديرون', value: '$managers', color: const Color(0xFF7C3AED)),
+                  ProfileBadge(title: '?????', value: user.role, color: const Color(0xFF0F766E)),
+                  ProfileBadge(title: '??????', value: user.status, color: const Color(0xFF2563EB)),
+                  ProfileBadge(title: '???????? ?????', value: '$activeUsers', color: const Color(0xFF059669)),
+                  ProfileBadge(title: '???? ??? ????????', value: '$workers', color: const Color(0xFFF59E0B)),
+                  ProfileBadge(title: '????????', value: '$managers', color: const Color(0xFF7C3AED)),
                 ],
               ),
               const SizedBox(height: 18),
@@ -52,17 +55,17 @@ class ProfileSection extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('الرصيد التشغيلي المتاح', style: TextStyle(color: Color(0xD7FFFFFF), fontWeight: FontWeight.w700)),
+                    const Text('?????? ???????? ??????', style: TextStyle(color: Color(0xD7FFFFFF), fontWeight: FontWeight.w700)),
                     const SizedBox(height: 8),
-                    Text('${availableBalance.toStringAsFixed(0)} جنيه', style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w900)),
+                    Text('${availableBalance.toStringAsFixed(0)} ????', style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w900)),
                     const SizedBox(height: 12),
-                    const Text('يغطي مصاريف تشغيلية قصيرة المدى ويعطي الإدارة مرونة في المناورة واتخاذ القرار.', style: TextStyle(color: Color(0xD7FFFFFF), height: 1.6)),
+                    const Text('???? ?????? ??????? ????? ????? ????? ??????? ????? ?? ???????? ?????? ??????.', style: TextStyle(color: Color(0xD7FFFFFF), height: 1.6)),
                     const SizedBox(height: 16),
                     Row(
                       children: [
-                        Expanded(child: _FinanceHighlight(label: 'صافي الربح', value: '${netProfit.toStringAsFixed(0)}', color: const Color(0xFF6EE7B7))),
+                        Expanded(child: _FinanceHighlight(label: '???? ?????', value: '${netProfit.toStringAsFixed(0)}', color: const Color(0xFF6EE7B7))),
                         const SizedBox(width: 12),
-                        Expanded(child: _FinanceHighlight(label: 'الخسائر المقدرة', value: '${losses.toStringAsFixed(0)}', color: const Color(0xFFFCA5A5))),
+                        Expanded(child: _FinanceHighlight(label: '??????? ???????', value: '${losses.toStringAsFixed(0)}', color: const Color(0xFFFCA5A5))),
                       ],
                     ),
                   ],
@@ -73,56 +76,56 @@ class ProfileSection extends StatelessWidget {
                 spacing: 12,
                 runSpacing: 12,
                 children: [
-                  _FinanceInfoCard(title: 'إيرادات شهرية', value: '${monthlyIncome.toStringAsFixed(0)} جنيه', note: 'أداء جيد مقابل الخطة', accent: const Color(0xFF0F766E)),
-                  _FinanceInfoCard(title: 'مصروفات شهرية', value: '${monthlyExpenses.toStringAsFixed(0)} جنيه', note: 'تشمل التشغيل والرواتب', accent: const Color(0xFFF59E0B)),
-                  _FinanceInfoCard(title: 'الخسائر التشغيلية', value: '${losses.toStringAsFixed(0)} جنيه', note: 'ناتجة عن هدر وتأخير جزئي', accent: const Color(0xFFDC2626)),
+                  _FinanceInfoCard(title: '??????? ?????', value: '${monthlyIncome.toStringAsFixed(0)} ????', note: '???? ??? ????? ?????', accent: const Color(0xFF0F766E)),
+                  _FinanceInfoCard(title: '??????? ?????', value: '${monthlyExpenses.toStringAsFixed(0)} ????', note: '???? ??????? ????????', accent: const Color(0xFFF59E0B)),
+                  _FinanceInfoCard(title: '??????? ?????????', value: '${losses.toStringAsFixed(0)} ????', note: '????? ?? ??? ?????? ????', accent: const Color(0xFFDC2626)),
                 ],
               ),
               const SizedBox(height: 18),
               SectionCard(
-                title: 'تعديل معلومات الإدارة',
-                subtitle: 'واجهة سريعة لتحديث المعلومات الأساسية للحساب الإداري.',
+                title: '????? ??????? ???????',
+                subtitle: '????? ????? ?????? ????????? ???????? ?????? ???????.',
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const _AdminEditField(label: 'الاسم الإداري', value: 'تحديث اسم الحساب أو المسمى الوظيفي'),
+                    const _AdminEditField(label: '????? ???????', value: '????? ??? ?????? ?? ?????? ???????'),
                     const SizedBox(height: 12),
-                    _AdminEditField(label: 'البريد الإلكتروني', value: user.email),
+                    _AdminEditField(label: '?????? ??????????', value: user.email),
                     const SizedBox(height: 12),
-                    const _AdminEditField(label: 'رقم الهاتف', value: '+20 109 555 8201'),
+                    const _AdminEditField(label: '??? ??????', value: '+20 109 555 8201'),
                     const SizedBox(height: 12),
-                    const _AdminEditField(label: 'الوصف الإداري', value: 'مدير مسؤول عن التشغيل، النتائج، الجرد، والملفات المالية'),
+                    const _AdminEditField(label: '????? ???????', value: '???? ????? ?? ???????? ???????? ?????? ???????? ???????'),
                     const SizedBox(height: 14),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: FilledButton.icon(onPressed: () {}, icon: const Icon(Icons.save_outlined), label: const Text('حفظ التعديلات')),
+                      child: FilledButton.icon(onPressed: () {}, icon: const Icon(Icons.save_outlined), label: const Text('??? ?????????')),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 18),
               SectionCard(
-                title: 'معلومات الإدارة الأساسية',
-                subtitle: 'بيانات الاتصال والوصول والمسؤوليات التنفيذية.',
+                title: '??????? ??????? ????????',
+                subtitle: '?????? ??????? ??????? ??????????? ?????????.',
                 child: Column(
                   children: [
-                    SimpleTile(title: 'البريد الإلكتروني', subtitle: user.email, trailing: 'موثق'),
-                    const SimpleTile(title: 'رقم الهاتف', subtitle: '+20 109 555 8201', trailing: 'متاح'),
-                    const SimpleTile(title: 'الصلاحيات', subtitle: 'إدارة المستخدمين، النتائج، الجرد، الأرباح', trailing: 'كاملة'),
-                    const SimpleTile(title: 'نطاق المراقبة', subtitle: 'تشغيل، مستخدمون، أداء مالي، ومخزون', trailing: 'شامل'),
+                    SimpleTile(title: '?????? ??????????', subtitle: user.email, trailing: '????'),
+                    const SimpleTile(title: '??? ??????', subtitle: '+20 109 555 8201', trailing: '????'),
+                    const SimpleTile(title: '?????????', subtitle: '????? ??????????? ???????? ?????? ???????', trailing: '?????'),
+                    const SimpleTile(title: '???? ????????', subtitle: '?????? ????????? ???? ????? ??????', trailing: '????'),
                   ],
                 ),
               ),
               const SizedBox(height: 18),
               const SectionCard(
-                title: 'خطط استراتيجية للتطوير',
-                subtitle: 'خطوات عملية مقترحة لتقليل الخسائر وتحسين الربحية والنمو.',
+                title: '??? ?????????? ???????',
+                subtitle: '????? ????? ?????? ?????? ??????? ?????? ??????? ??????.',
                 child: Column(
                   children: [
-                    _StrategyTile(title: 'تقليل الفاقد التشغيلي', description: 'إعادة ضبط نقاط الهدر في خطوط التعبئة وتقليل التوقفات القصيرة.'),
-                    _StrategyTile(title: 'رفع كفاءة المستخدمين', description: 'تدريب المشرفين والعمال على التنفيذ الأسرع ومراقبة الأخطاء بشكل يومي.'),
-                    _StrategyTile(title: 'تحسين القرار المالي', description: 'مراجعة المصروفات عالية الأثر وربطها بالعائد الفعلي على التشغيل.'),
-                    _StrategyTile(title: 'تنشيط الرقابة على الجرد', description: 'إنشاء دورة مراجعة أسرع للعناصر الحرجة لتقليل نفاد المخزون المفاجئ.'),
+                    StrategyTile(title: '????? ?????? ????????', description: '????? ??? ???? ????? ?? ???? ??????? ?????? ???????? ???????.'),
+                    StrategyTile(title: '??? ????? ??????????', description: '????? ???????? ??????? ??? ??????? ?????? ??????? ??????? ???? ????.'),
+                    StrategyTile(title: '????? ?????? ??????', description: '?????? ????????? ????? ????? ?????? ??????? ?????? ??? ???????.'),
+                    StrategyTile(title: '????? ??????? ??? ?????', description: '????? ???? ?????? ???? ??????? ?????? ?????? ???? ??????? ???????.'),
                   ],
                 ),
               ),
@@ -269,7 +272,7 @@ class _AdminEditField extends StatelessWidget {
                   color: const Color(0x140F766E),
                   borderRadius: BorderRadius.circular(999),
                 ),
-                child: const Text('قابل للتعديل', style: TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w800, fontSize: 12)),
+                child: const Text('???? ???????', style: TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w800, fontSize: 12)),
               ),
             ],
           ),
@@ -279,8 +282,8 @@ class _AdminEditField extends StatelessWidget {
   }
 }
 
-class _StrategyTile extends StatelessWidget {
-  const _StrategyTile({required this.title, required this.description});
+class _LegacyStrategyTile extends StatelessWidget {
+  const _LegacyStrategyTile({required this.title, required this.description});
 
   final String title;
   final String description;
@@ -322,7 +325,7 @@ class _StrategyTile extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       decoration: BoxDecoration(color: const Color(0x140F766E), borderRadius: BorderRadius.circular(999)),
-                      child: const Text('أولوية عالية', style: TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w800, fontSize: 12)),
+                      child: const Text('?????? ?????', style: TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w800, fontSize: 12)),
                     ),
                   ],
                 ),
@@ -337,8 +340,8 @@ class _StrategyTile extends StatelessWidget {
   }
 }
 
-class _ProfileBadge extends StatelessWidget {
-  const _ProfileBadge({required this.title, required this.value, required this.color});
+class _LegacyProfileBadge extends StatelessWidget {
+  const _LegacyProfileBadge({required this.title, required this.value, required this.color});
 
   final String title;
   final String value;
@@ -374,3 +377,8 @@ class _ProfileBadge extends StatelessWidget {
     );
   }
 }
+
+
+
+
+

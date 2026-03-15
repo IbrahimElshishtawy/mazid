@@ -1,7 +1,16 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:m_shop/features/attendance/presentation/widgets/attendance_section.dart';
 import 'package:m_shop/features/dashboard/application/dashboard_store.dart';
 import 'package:m_shop/features/dashboard/presentation/dashboard_vm.dart';
-import 'package:m_shop/features/dashboard/presentation/widgets/sections/dashboard_sections.dart';
+import 'package:m_shop/features/finance/presentation/widgets/finance_section.dart';
+import 'package:m_shop/features/inventory/presentation/widgets/inventory_section.dart';
+import 'package:m_shop/features/overview/presentation/widgets/overview_section.dart';
+import 'package:m_shop/features/productivity/presentation/widgets/productivity_section.dart';
+import 'package:m_shop/features/profile/presentation/widgets/profile_section.dart';
+import 'package:m_shop/features/results/presentation/widgets/results_section.dart';
+import 'package:m_shop/features/settings/presentation/widgets/settings_section.dart';
+import 'package:m_shop/features/tasks/presentation/widgets/tasks_section.dart';
+import 'package:m_shop/features/users/presentation/widgets/users_section.dart';
 
 class DashboardContent extends StatelessWidget {
   const DashboardContent({super.key, required this.vm});
@@ -34,4 +43,3 @@ class DashboardContent extends StatelessWidget {
     }
   }
 }
-
