@@ -290,11 +290,7 @@ class AlertTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = switch (alert.level.toLowerCase()) {
-      'high' => const Color(0xFFDC2626),
-      'medium' => const Color(0xFFF59E0B),
-      _ => const Color(0xFF2563EB),
-    };
+    final accent = Color(alert.colorHex);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -327,7 +323,7 @@ class AlertTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  alert.message,
+                  alert.description,
                   style: const TextStyle(
                     color: Color(0xFF667B75),
                     height: 1.5,
@@ -341,3 +337,4 @@ class AlertTile extends StatelessWidget {
     );
   }
 }
+
