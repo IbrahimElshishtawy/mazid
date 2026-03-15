@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
+import 'package:m_shop/features/attendance/presentation/widgets/section_components.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
 
 import 'package:m_shop/features/dashboard/presentation/widgets/charts/production_chart_card.dart';
@@ -255,4 +256,3 @@ class _ProductivityAdminPanel extends StatelessWidget {
     );
   }
 }
-

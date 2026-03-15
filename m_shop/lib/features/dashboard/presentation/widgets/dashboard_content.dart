@@ -10,7 +10,6 @@ import 'package:m_shop/features/profile/presentation/widgets/profile_section.dar
 import 'package:m_shop/features/results/presentation/widgets/results_section.dart';
 import 'package:m_shop/features/settings/presentation/widgets/settings_section.dart';
 import 'package:m_shop/features/tasks/presentation/widgets/tasks_section.dart';
-import 'package:m_shop/features/users/presentation/widgets/users_section.dart';
 
 class DashboardContent extends StatelessWidget {
   const DashboardContent({super.key, required this.vm});
