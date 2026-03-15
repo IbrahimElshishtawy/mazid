@@ -1,46 +1,22 @@
-import 'section_components.dart';
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
 
 class ResultsSection extends StatelessWidget {
-  const ResultsSection({
-    super.key,
-    required this.production,
-    required this.tasks,
-  });
+  const ResultsSection({super.key, required this.production, required this.tasks});
 
   final List<ProductionPoint> production;
   final List<TaskModel> tasks;
 
   @override
   Widget build(BuildContext context) {
-    final totalProduction = production.fold<double>(
-      0,
-      (sum, item) => sum + item.actual,
-    );
-    final totalTarget = production.fold<double>(
-      0,
-      (sum, item) => sum + item.target,
-    );
-    final completion = totalTarget == 0 ? 0.0 : totalProduction / totalTarget;
-    final averageTaskCompletion = tasks.isEmpty
-        ? 0.0
-        : tasks.fold<double>(0, (sum, task) => sum + task.progress) /
-              tasks.length;
-    final completedTasks = tasks.where((task) => task.progress >= 1).length;
-    final delayedTasks = tasks
-        .where((task) => task.status.contains('??') || task.progress < 0.4)
-        .length;
-    final strongResult = completion >= 0.9;
-    final resultMessage = strongResult
-        ? '??????? ??????? ???? ????? ????????? ????? ?? ??????? ?? ???? ???? ???????? ????????.'
-        : '??????? ?????? ??? ????? ?????? ???? ?????? ??????? ?????? ??????? ??? ????? ????????.';
+    final totalProduction = production.fold<double>(0, (sum, item) => sum + item.actual);
+    final totalTarget = production.fold<double>(0, (sum, item) => sum + item.target);
+    final completedTasks = tasks.where((task) => task.progress >= 1 || task.status.toLowerCase().contains('done')).length;
 
     return SectionCard(
-      title: '????? ?????',
-      subtitle:
-          '???? ?????? ????? ??????? ??? ??? ??????? ?????????? ???? ?? ?????? ??????.',
+      title: 'Results',
+      subtitle: 'Combined outcome view for production delivery and task completion.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -48,242 +24,37 @@ class ResultsSection extends StatelessWidget {
             spacing: 12,
             runSpacing: 12,
             children: [
-              AttendanceStatCard(
-                title: '??????? ??????',
-                value: '${totalProduction.round()}',
-                note: '?? ?? ?????? ??????',
-                color: const Color(0xFF0F766E),
-                icon: Icons.factory_rounded,
-              ),
-              AttendanceStatCard(
-                title: '????????',
-                value: '${totalTarget.round()}',
-                note: '????? ???????? ??????',
-                color: const Color(0xFF2563EB),
-                icon: Icons.flag_circle_rounded,
-              ),
-              AttendanceStatCard(
-                title: '????? ??????',
-                value: '${(averageTaskCompletion * 100).round()}%',
-                note: '????? ??????? ?????',
-                color: const Color(0xFFF59E0B),
-                icon: Icons.assignment_turned_in_rounded,
-              ),
-              AttendanceStatCard(
-                title: '?????? ????????',
-                value: '$delayedTasks',
-                note: '????? ???? ?????',
-                color: const Color(0xFFDC2626),
-                icon: Icons.warning_amber_rounded,
-              ),
+              _ResultCard(title: 'Production', value: totalProduction.round().toString(), color: const Color(0xFF0F766E)),
+              _ResultCard(title: 'Target', value: totalTarget.round().toString(), color: const Color(0xFF2563EB)),
+              _ResultCard(title: 'Completed Tasks', value: completedTasks.toString(), color: const Color(0xFF16A34A)),
             ],
           ),
           const SizedBox(height: 18),
-          Container(
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF7FAF9),
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        '????? ??????? ???????',
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color:
-                            (strongResult
-                                    ? const Color(0xFF16A34A)
-                                    : const Color(0xFFF59E0B))
-                                .withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      child: Text(
-                        strongResult ? '????? ????' : '????? ?????',
-                        style: TextStyle(
-                          color: strongResult
-                              ? const Color(0xFF16A34A)
-                              : const Color(0xFFF59E0B),
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  resultMessage,
-                  style: const TextStyle(color: Color(0xFF667B75), height: 1.6),
-                ),
-                const SizedBox(height: 16),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(999),
-                  child: LinearProgressIndicator(
-                    value: completion.clamp(0.0, 1.0).toDouble(),
-                    minHeight: 12,
-                    color: strongResult
-                        ? const Color(0xFF16A34A)
-                        : const Color(0xFF0F766E),
-                    backgroundColor: const Color(0xFFD9E6E2),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '????? ?????: ${(completion * 100).round()}% ?? ????????',
-                  style: const TextStyle(
-                    color: Color(0xFF506662),
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 18),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              _ResultsBenefitCard(
-                title: '??? ?????? ?? ????????',
-                description:
-                    '????? ?????? ?????? ????????? ?? ????? ????? ????? ???????? ??? ?????? ??????.',
-              ),
-              _ResultsBenefitCard(
-                title: '?? ???? ????? ?????',
-                description:
-                    '?? ?????? ?? ???????? ?? ????? ?? ?????? ???????? ????? ????? ????? ????? ????.',
-              ),
-              _ResultsBenefitCard(
-                title: '??? ???????? ?? ????????',
-                description:
-                    '?????? ?? ???????? ?????? ?????? ???????? ???????? ?????????? ???????? ?????? ???????.',
-              ),
-            ],
-          ),
-          const SizedBox(height: 18),
-          const SectionCard(
-            title: '????????? ????? ????? ????? ?????',
-            subtitle:
-                '????????? ??? ???? ????? ???? ?? ?????? ???? ??????? ??????.',
-            child: Column(
-              children: [
-                OverviewLine(
-                  title: '?????? ?????? ?????????',
-                  description:
-                      '?????? ??? ????? ?? ?????? ????? ??? ????? ?? ????? ????? ????.',
-                ),
-                OverviewLine(
-                  title: '?????? ???? ???????',
-                  description:
-                      '????? ????? ?????? ???? ?? ??? ??????? ?????? ?? ?? ???? ?????? ?? ????????.',
-                ),
-                OverviewLine(
-                  title: '????? ???? ?????',
-                  description:
-                      '??? ?????? ???????? ?? ?????? ?????? ???????? ???? ????? ????? ???? ?????.',
-                ),
-                OverviewLine(
-                  title: '????? ????? ????? ????',
-                  description:
-                      '???? ?????? ???????? ??? ??? ??????? ?? ?????????? ??????? ?? ?????? ????? ???????.',
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 18),
-          SimpleTile(
-            title: '??????? ??????',
-            subtitle: '${totalProduction.round()} ????',
-            trailing: '????',
-          ),
-          SimpleTile(
-            title: '????????',
-            subtitle: '${totalTarget.round()} ????',
-            trailing: '???',
-          ),
-          SimpleTile(
-            title: '?????? ????????',
-            subtitle: '$completedTasks ?? ${tasks.length}',
-            trailing: '????',
-          ),
-          SimpleTile(
-            title: '????? ????? ??????',
-            subtitle: '${(averageTaskCompletion * 100).round()}%',
-            trailing: strongResult ? '??? ????' : '????? ??????',
-          ),
+          const _ResultLine(title: 'Execution is measurable', description: 'Results are easier to track when targets and delivery are reviewed together.'),
+          const _ResultLine(title: 'Progress should stay consistent', description: 'Keep unfinished work visible and compare it against expected output regularly.'),
         ],
       ),
     );
   }
 }
 
-class _ResultsBenefitCard extends StatelessWidget {
-  const _ResultsBenefitCard({required this.title, required this.description});
-
+class _ResultCard extends StatelessWidget {
+  const _ResultCard({required this.title, required this.value, required this.color});
   final String title;
-  final String description;
-
+  final String value;
+  final Color color;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 260,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE2ECE8)),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF0F766E).withValues(alpha: 0.05),
-            blurRadius: 12,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: const Color(0x140F766E),
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: const Icon(
-              Icons.analytics_rounded,
-              color: Color(0xFF0F766E),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            description,
-            style: const TextStyle(color: Color(0xFF667B75), height: 1.5),
-          ),
-        ],
-      ),
-    );
+    return Container(width: 190, padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: color.withValues(alpha: 0.12))), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Container(width: 34, height: 4, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(999))), const SizedBox(height: 12), Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w700)), const SizedBox(height: 8), Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900))]));
   }
 }
 
-
-
+class _ResultLine extends StatelessWidget {
+  const _ResultLine({required this.title, required this.description});
+  final String title;
+  final String description;
+  @override
+  Widget build(BuildContext context) {
+    return Padding(padding: const EdgeInsets.only(bottom: 12), child: Container(width: double.infinity, padding: const EdgeInsets.all(16), decoration: BoxDecoration(color: const Color(0xFFF7FAF9), borderRadius: BorderRadius.circular(18)), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(title, style: const TextStyle(fontWeight: FontWeight.w800)), const SizedBox(height: 6), Text(description, style: const TextStyle(color: Color(0xFF667B75), height: 1.5))])));
+  }
+}
