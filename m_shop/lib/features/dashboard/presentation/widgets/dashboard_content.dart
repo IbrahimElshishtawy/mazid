@@ -14,7 +14,7 @@ class DashboardContent extends StatelessWidget {
       case DashboardTab.overview:
         return OverviewSection(alerts: vm.alerts);
       case DashboardTab.profile:
-        return ProfileSection(user: vm.users.first);
+        return ProfileSection(user: vm.users.first, users: vm.users);
       case DashboardTab.users:
         return UsersSection(users: vm.users);
       case DashboardTab.attendance:
@@ -34,3 +34,4 @@ class DashboardContent extends StatelessWidget {
     }
   }
 }
+

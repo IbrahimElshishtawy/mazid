@@ -15,20 +15,42 @@ class DashboardScreen extends StatelessWidget {
     return StoreConnector<DashboardState, DashboardVm>(
       converter: DashboardVm.fromStore,
       builder: (context, vm) {
+        final showHomeHero = vm.tab == DashboardTab.overview;
+
         return Directionality(
           textDirection: TextDirection.rtl,
           child: DashboardShell(
             vm: vm,
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  DashboardHero(vm: vm),
-                  const SizedBox(height: 18),
-                  OverviewMetrics(vm: vm),
-                  const SizedBox(height: 18),
-                  DashboardContent(vm: vm),
-                ],
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 320),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              transitionBuilder: (child, animation) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0.03, 0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  ),
+                );
+              },
+              child: SingleChildScrollView(
+                key: ValueKey(vm.tab),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (showHomeHero) ...[
+                      DashboardHero(vm: vm),
+                      const SizedBox(height: 18),
+                      OverviewMetrics(vm: vm),
+                      const SizedBox(height: 18),
+                    ],
+                    DashboardContent(vm: vm),
+                  ],
+                ),
               ),
             ),
           ),
