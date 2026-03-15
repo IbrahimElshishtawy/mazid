@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
+import 'package:m_shop/features/attendance/presentation/widgets/section_components.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
-import 'section_components.dart';
 
 class FinanceSection extends StatelessWidget {
   const FinanceSection({super.key, required this.financialReports});
@@ -503,8 +503,3 @@ class _FinanceGraphBar extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
