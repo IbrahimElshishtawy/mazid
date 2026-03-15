@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
-import '../../../../core/widgets/section_components.dart';
+import 'section_components.dart';
 
 class SettingsSection extends StatelessWidget {
   const SettingsSection({super.key});
@@ -156,6 +156,7 @@ class _SettingsFeatureCard extends StatelessWidget {
     );
   }
 }
+
 
 
 

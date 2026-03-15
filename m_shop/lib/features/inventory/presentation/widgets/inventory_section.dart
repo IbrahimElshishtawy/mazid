@@ -1,4 +1,4 @@
-import '../../../../core/widgets/section_components.dart';
+import 'section_components.dart';
 import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
@@ -452,5 +452,6 @@ class _InventoryCoverageChart extends StatelessWidget {
     );
   }
 }
+
 
 

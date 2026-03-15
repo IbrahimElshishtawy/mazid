@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
-import '../../../../core/widgets/section_components.dart';
+import 'section_components.dart';
 
 class OverviewSection extends StatelessWidget {
   const OverviewSection({super.key, required this.alerts});
@@ -191,6 +191,7 @@ class _PulseCard extends StatelessWidget {
     );
   }
 }
+
 
 
 

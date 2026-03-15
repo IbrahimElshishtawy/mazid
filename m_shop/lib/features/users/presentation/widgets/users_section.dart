@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
-import '../../../../core/widgets/section_components.dart';
+import 'section_components.dart';
 
 class UsersSection extends StatelessWidget {
   const UsersSection({super.key, required this.users});
@@ -123,6 +123,7 @@ class _LegacyQuickAction extends StatelessWidget {
     return OutlinedButton.icon(onPressed: () {}, icon: Icon(icon), label: Text(label));
   }
 }
+
 
 
 
