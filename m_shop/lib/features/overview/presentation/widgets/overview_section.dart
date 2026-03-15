@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
 import 'package:m_shop/features/attendance/presentation/widgets/section_components.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
@@ -278,6 +278,65 @@ class _PulseCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class AlertTile extends StatelessWidget {
+  const AlertTile({super.key, required this.alert});
+
+  final AlertModel alert;
+
+  @override
+  Widget build(BuildContext context) {
+    final accent = switch (alert.level.toLowerCase()) {
+      'high' => const Color(0xFFDC2626),
+      'medium' => const Color(0xFFF59E0B),
+      _ => const Color(0xFF2563EB),
+    };
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF7FAF9),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: accent.withValues(alpha: 0.16)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: accent.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(Icons.notifications_active_rounded, color: accent),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  alert.title,
+                  style: const TextStyle(fontWeight: FontWeight.w900),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  alert.message,
+                  style: const TextStyle(
+                    color: Color(0xFF667B75),
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

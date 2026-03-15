@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
 import 'package:m_shop/features/attendance/presentation/widgets/section_components.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
@@ -500,6 +500,128 @@ class _FinanceGraphBar extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class FinanceTile extends StatelessWidget {
+  const FinanceTile({super.key, required this.report});
+
+  final FinancialReport report;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF7FAF9),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFE2ECE8)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  report.period,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0x140F766E),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  report.profit.round().toString(),
+                  style: const TextStyle(
+                    color: Color(0xFF0F766E),
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              Expanded(
+                child: _FinanceMetric(
+                  label: 'الإيراد',
+                  value: report.income.round().toString(),
+                  color: const Color(0xFF16A34A),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _FinanceMetric(
+                  label: 'المصروف',
+                  value: report.expenses.round().toString(),
+                  color: const Color(0xFFDC2626),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _FinanceMetric(
+                  label: 'الربح',
+                  value: report.profit.round().toString(),
+                  color: const Color(0xFF2563EB),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FinanceMetric extends StatelessWidget {
+  const _FinanceMetric({
+    required this.label,
+    required this.value,
+    required this.color,
+  });
+
+  final String label;
+  final String value;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
