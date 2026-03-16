@@ -21,9 +21,9 @@ class DashboardContent extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (vm.tab) {
       case DashboardTab.overview:
-        return OverviewSection(alerts: vm.alerts);
+        return OverviewSection(users: vm.users, attendance: vm.attendance, production: vm.production, tasks: vm.tasks, inventory: vm.inventory, financialReports: vm.financialReports, alerts: vm.alerts);
       case DashboardTab.profile:
-        return ProfileSection(user: vm.users.first, users: vm.users);
+        return ProfileSection(user: vm.users.first, users: vm.users, production: vm.production, financialReports: vm.financialReports, inventory: vm.inventory, tasks: vm.tasks, alerts: vm.alerts);
       case DashboardTab.users:
         return UsersSection(users: vm.users);
       case DashboardTab.attendance:
@@ -31,7 +31,7 @@ class DashboardContent extends StatelessWidget {
       case DashboardTab.productivity:
         return ProductivitySection(production: vm.production);
       case DashboardTab.results:
-        return ResultsSection(production: vm.production, tasks: vm.tasks);
+        return ResultsSection(production: vm.production, tasks: vm.tasks, inventory: vm.inventory, financialReports: vm.financialReports, attendance: vm.attendance, alerts: vm.alerts);
       case DashboardTab.tasks:
         return TasksSection(tasks: vm.tasks);
       case DashboardTab.inventory:
