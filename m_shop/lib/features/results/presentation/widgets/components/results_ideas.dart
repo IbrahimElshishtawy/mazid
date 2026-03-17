@@ -10,6 +10,8 @@ class ResultsIdeasPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -20,16 +22,46 @@ class ResultsIdeasPanel extends StatelessWidget {
             children: ideas
                 .map(
                   (idea) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.only(bottom: 10),
                     child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(color: idea.accent.withValues(alpha: 0.06), borderRadius: BorderRadius.circular(20), border: Border.all(color: idea.accent.withValues(alpha: 0.16))),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: idea.accent.withValues(alpha: theme.brightness == Brightness.dark ? 0.12 : 0.06),
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: idea.accent.withValues(alpha: 0.16)),
+                      ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(width: 42, height: 42, decoration: BoxDecoration(color: idea.accent.withValues(alpha: 0.14), borderRadius: BorderRadius.circular(14)), child: Icon(idea.icon, color: idea.accent)),
-                          const SizedBox(width: 12),
-                          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(idea.title, style: const TextStyle(fontWeight: FontWeight.w900)), const SizedBox(height: 6), Text(idea.description, style: const TextStyle(color: Color(0xFF667B75), height: 1.5))])),
+                          Container(
+                            width: 38,
+                            height: 38,
+                            decoration: BoxDecoration(
+                              color: idea.accent.withValues(alpha: 0.14),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(idea.icon, color: idea.accent, size: 20),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  idea.title,
+                                  style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  idea.description,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                    height: 1.45,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -38,7 +70,7 @@ class ResultsIdeasPanel extends StatelessWidget {
                 .toList(),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         SectionCard(
           title: 'قرارات استراتيجية مقترحة',
           subtitle: 'ترجمة النتائج الحالية إلى قرارات واضحة يمكن للإدارة التحرك بها بسرعة.',
@@ -46,15 +78,41 @@ class ResultsIdeasPanel extends StatelessWidget {
             children: decisions
                 .map(
                   (decision) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
+                    padding: const EdgeInsets.only(bottom: 10),
                     child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: decision.accent.withValues(alpha: 0.14))),
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Row(children: [Expanded(child: Text(decision.label, style: const TextStyle(fontWeight: FontWeight.w900))), Text(decision.value, style: TextStyle(color: decision.accent, fontWeight: FontWeight.w900))]),
-                        const SizedBox(height: 8),
-                        Text(decision.note, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
-                      ]),
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: theme.cardColor,
+                        borderRadius: BorderRadius.circular(18),
+                        border: Border.all(color: decision.accent.withValues(alpha: 0.16)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  decision.label,
+                                  style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
+                                ),
+                              ),
+                              Text(
+                                decision.value,
+                                style: TextStyle(color: decision.accent, fontWeight: FontWeight.w900),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            decision.note,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                              height: 1.45,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 )
