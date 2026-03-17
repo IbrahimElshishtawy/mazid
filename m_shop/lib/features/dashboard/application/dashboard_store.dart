@@ -65,8 +65,8 @@ class DashboardState {
   final bool? _cameraPermissionEnabled;
   final bool? _reportsPermissionEnabled;
 
-  AppThemePreference get themePreference => _themePreference ?? AppThemePreference.light;
-  AppTextScale get textScale => _textScale ?? AppTextScale.normal;
+  AppThemePreference get themePreference => _themePreference ?? AppThemePreference.dark;
+  AppTextScale get textScale => _textScale ?? AppTextScale.compact;
   bool get notificationsEnabled => _notificationsEnabled ?? true;
   bool get storagePermissionEnabled => _storagePermissionEnabled ?? true;
   bool get cameraPermissionEnabled => _cameraPermissionEnabled ?? true;
@@ -176,8 +176,8 @@ Future<Store<DashboardState>> createDashboardStore() async {
     inventory: DashboardSeed.inventory,
     financialReports: DashboardSeed.financialReports,
     alerts: DashboardSeed.alerts,
-    themePreference: AppThemePreference.light,
-    textScale: AppTextScale.normal,
+    themePreference: AppThemePreference.dark,
+    textScale: AppTextScale.compact,
     notificationsEnabled: true,
     storagePermissionEnabled: true,
     cameraPermissionEnabled: true,
@@ -189,3 +189,4 @@ Future<Store<DashboardState>> createDashboardStore() async {
     initialState: initialState,
   );
 }
+

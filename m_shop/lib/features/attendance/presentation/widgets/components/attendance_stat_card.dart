@@ -20,15 +20,21 @@ class AttendanceStatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       width: width,
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: accent.withValues(alpha: 0.14)),
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: accent.withValues(alpha: 0.18)),
         boxShadow: [
-          BoxShadow(color: accent.withValues(alpha: 0.08), blurRadius: 16, offset: const Offset(0, 10)),
+          BoxShadow(
+            color: accent.withValues(alpha: theme.brightness == Brightness.dark ? 0.10 : 0.08),
+            blurRadius: 14,
+            offset: const Offset(0, 8),
+          ),
         ],
       ),
       child: Column(
@@ -37,20 +43,43 @@ class AttendanceStatCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(color: accent.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(14)),
-                child: Icon(icon, color: accent, size: 18),
+                padding: const EdgeInsets.all(9),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: accent, size: 17),
               ),
               const Spacer(),
-              Container(width: 34, height: 4, decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(999))),
+              Container(
+                width: 30,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: accent,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(title, style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 8),
-          Text(value, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900)),
-          const SizedBox(height: 8),
-          Text(note, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontSize: 23,
+              fontWeight: FontWeight.w900,
+              height: 1,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            note,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              height: 1.45,
+            ),
+          ),
         ],
       ),
     );

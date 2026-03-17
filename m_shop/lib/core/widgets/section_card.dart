@@ -14,22 +14,28 @@ class SectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800, fontSize: 18),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
               subtitle,
-              style: const TextStyle(color: Color(0xFF667B75), height: 1.45),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                height: 1.35,
+                fontSize: 13,
+              ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 12),
             child,
           ],
         ),
