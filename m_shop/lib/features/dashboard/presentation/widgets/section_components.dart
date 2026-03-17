@@ -128,7 +128,7 @@ class ProfileHeader extends StatelessWidget {
                   side: BorderSide(color: Colors.white.withValues(alpha: 0.16)),
                 ),
                 icon: const Icon(Icons.visibility_outlined),
-                label: const Text('??????'),
+                label: const Text('عرض'),
               ),
               const SizedBox(height: 10),
               FilledButton.icon(
@@ -138,7 +138,7 @@ class ProfileHeader extends StatelessWidget {
                   foregroundColor: const Color(0xFF0F172A),
                 ),
                 icon: const Icon(Icons.edit_outlined),
-                label: const Text('?????'),
+                label: const Text('تعديل'),
               ),
             ],
           ),

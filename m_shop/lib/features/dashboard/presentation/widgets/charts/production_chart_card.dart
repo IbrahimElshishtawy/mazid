@@ -25,19 +25,35 @@ class ProductionChartCard extends StatelessWidget {
             spacing: 12,
             runSpacing: 12,
             children: [
-              _MiniStat(title: 'الإنتاج الفعلي', value: totalActual.round().toString(), accent: const Color(0xFF0F766E)),
-              _MiniStat(title: 'المستهدف', value: totalTarget.round().toString(), accent: const Color(0xFF94A3B8)),
-              _MiniStat(title: 'الفارق', value: variance.round().toString(), accent: variance >= 0 ? const Color(0xFF16A34A) : const Color(0xFFDC2626)),
+              _MiniStat(
+                title: 'الإنتاج الفعلي',
+                value: totalActual.round().toString(),
+                accent: const Color(0xFF0F766E),
+              ),
+              _MiniStat(
+                title: 'المستهدف',
+                value: totalTarget.round().toString(),
+                accent: const Color(0xFF94A3B8),
+              ),
+              _MiniStat(
+                title: 'الفارق',
+                value: variance.round().toString(),
+                accent: variance >= 0
+                    ? const Color(0xFF16A34A)
+                    : const Color(0xFFDC2626),
+              ),
             ],
           ),
           const SizedBox(height: 18),
           const _ChartLegend(),
           const SizedBox(height: 14),
           Container(
-            height: 320,
+            height: 240,
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
+              color: Theme.of(
+                context,
+              ).colorScheme.surface.withValues(alpha: 0.48),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: const Color(0xFFE2ECE8)),
             ),
@@ -53,7 +69,11 @@ class ProductionChartCard extends StatelessWidget {
 }
 
 class _MiniStat extends StatelessWidget {
-  const _MiniStat({required this.title, required this.value, required this.accent});
+  const _MiniStat({
+    required this.title,
+    required this.value,
+    required this.accent,
+  });
 
   final String title;
   final String value;
@@ -71,11 +91,24 @@ class _MiniStat extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(width: 10, height: 10, decoration: BoxDecoration(color: accent, shape: BoxShape.circle)),
+          Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(color: accent, shape: BoxShape.circle),
+          ),
           const SizedBox(height: 10),
-          Text(title, style: const TextStyle(color: Color(0xFF647874), fontWeight: FontWeight.w700)),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Color(0xFF647874),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           const SizedBox(height: 6),
-          Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+          ),
         ],
       ),
     );
@@ -91,7 +124,11 @@ class _ChartLegend extends StatelessWidget {
       spacing: 16,
       runSpacing: 10,
       children: [
-        _LegendItem(label: 'الإنتاج الفعلي', color: Color(0xFF0F766E), isLine: false),
+        _LegendItem(
+          label: 'الإنتاج الفعلي',
+          color: Color(0xFF0F766E),
+          isLine: false,
+        ),
         _LegendItem(label: 'المستهدف', color: Color(0xFF94A3B8), isLine: true),
       ],
     );
@@ -99,7 +136,11 @@ class _ChartLegend extends StatelessWidget {
 }
 
 class _LegendItem extends StatelessWidget {
-  const _LegendItem({required this.label, required this.color, required this.isLine});
+  const _LegendItem({
+    required this.label,
+    required this.color,
+    required this.isLine,
+  });
 
   final String label;
   final Color color;
@@ -120,7 +161,13 @@ class _LegendItem extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        Text(label, style: const TextStyle(color: Color(0xFF5E746E), fontWeight: FontWeight.w700)),
+        Text(
+          label,
+          style: const TextStyle(
+            color: Color(0xFF5E746E),
+            fontWeight: FontWeight.w700,
+          ),
+        ),
       ],
     );
   }
@@ -147,7 +194,10 @@ class _ProductionChartPainter extends CustomPainter {
     final maxValue = (values.reduce(math.max) + 8).ceilToDouble();
     const minValue = 0.0;
 
-    double scaleY(double value) => topPad + chartHeight - ((value - minValue) / (maxValue - minValue) * chartHeight);
+    double scaleY(double value) =>
+        topPad +
+        chartHeight -
+        ((value - minValue) / (maxValue - minValue) * chartHeight);
 
     final gridPaint = Paint()
       ..color = const Color(0xFFDDE8E4)
@@ -156,11 +206,19 @@ class _ProductionChartPainter extends CustomPainter {
     const rowCount = 5;
     for (var i = 0; i < rowCount; i++) {
       final y = topPad + chartHeight * i / (rowCount - 1);
-      canvas.drawLine(Offset(leftPad, y), Offset(size.width - rightPad, y), gridPaint);
+      canvas.drawLine(
+        Offset(leftPad, y),
+        Offset(size.width - rightPad, y),
+        gridPaint,
+      );
 
-      final value = (maxValue - ((maxValue - minValue) * i / (rowCount - 1))).round();
+      final value = (maxValue - ((maxValue - minValue) * i / (rowCount - 1)))
+          .round();
       final textPainter = TextPainter(
-        text: TextSpan(text: '$value', style: const TextStyle(color: Color(0xFF70857F), fontSize: 11)),
+        text: TextSpan(
+          text: '$value',
+          style: const TextStyle(color: Color(0xFF70857F), fontSize: 11),
+        ),
         textDirection: TextDirection.ltr,
       )..layout();
       textPainter.paint(canvas, Offset(4, y - textPainter.height / 2));
@@ -187,7 +245,12 @@ class _ProductionChartPainter extends CustomPainter {
 
       canvas.drawRRect(
         RRect.fromRectAndRadius(
-          Rect.fromLTWH(barX, actualY, barWidth, topPad + chartHeight - actualY),
+          Rect.fromLTWH(
+            barX,
+            actualY,
+            barWidth,
+            topPad + chartHeight - actualY,
+          ),
           const Radius.circular(10),
         ),
         barPaint,
@@ -196,10 +259,20 @@ class _ProductionChartPainter extends CustomPainter {
       points.add(Offset(centerX, targetY));
 
       final labelPainter = TextPainter(
-        text: TextSpan(text: data[i].label, style: const TextStyle(color: Color(0xFF677C76), fontSize: 11, fontWeight: FontWeight.w700)),
+        text: TextSpan(
+          text: data[i].label,
+          style: const TextStyle(
+            color: Color(0xFF677C76),
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         textDirection: TextDirection.rtl,
       )..layout();
-      labelPainter.paint(canvas, Offset(centerX - labelPainter.width / 2, size.height - 22));
+      labelPainter.paint(
+        canvas,
+        Offset(centerX - labelPainter.width / 2, size.height - 22),
+      );
     }
 
     for (var i = 0; i < points.length; i++) {
@@ -210,8 +283,22 @@ class _ProductionChartPainter extends CustomPainter {
         final previous = points[i - 1];
         final current = points[i];
         final controlX = (previous.dx + current.dx) / 2;
-        linePath.cubicTo(controlX, previous.dy, controlX, current.dy, current.dx, current.dy);
-        areaPath.cubicTo(controlX, previous.dy, controlX, current.dy, current.dx, current.dy);
+        linePath.cubicTo(
+          controlX,
+          previous.dy,
+          controlX,
+          current.dy,
+          current.dx,
+          current.dy,
+        );
+        areaPath.cubicTo(
+          controlX,
+          previous.dy,
+          controlX,
+          current.dy,
+          current.dx,
+          current.dy,
+        );
       }
     }
 
@@ -249,6 +336,6 @@ class _ProductionChartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _ProductionChartPainter oldDelegate) => oldDelegate.data != data;
+  bool shouldRepaint(covariant _ProductionChartPainter oldDelegate) =>
+      oldDelegate.data != data;
 }
-

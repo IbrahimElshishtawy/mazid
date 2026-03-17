@@ -24,12 +24,18 @@ abstract final class AppTheme {
           side: const BorderSide(color: Color(0xFFE2ECE8)),
         ),
       ),
-      listTileTheme: const ListTileThemeData(dense: true, contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1)),
+      listTileTheme: const ListTileThemeData(
+        dense: true,
+        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white.withValues(alpha: 0.42),
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFFD9E6E2)),
@@ -71,12 +77,18 @@ abstract final class AppTheme {
         ),
       ),
       dividerColor: const Color(0xFF23384C),
-      listTileTheme: const ListTileThemeData(dense: true, contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1)),
+      listTileTheme: const ListTileThemeData(
+        dense: true,
+        contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1),
+      ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: const Color(0xFF102132).withValues(alpha: 0.54),
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFF274159)),
@@ -105,7 +117,7 @@ abstract final class AppTheme {
   static double textScaleFactor(AppTextScale scale) {
     switch (scale) {
       case AppTextScale.compact:
-        return 0.92;
+        return 0.72;
       case AppTextScale.large:
         return 1.12;
       case AppTextScale.normal:
@@ -113,6 +125,3 @@ abstract final class AppTheme {
     }
   }
 }
-
-
-
