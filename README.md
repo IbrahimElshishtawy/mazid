@@ -1,7 +1,7 @@
 # factory_management_dashboard
 
 <p align="center">
-  <img src="assets/readme/overview.png" alt="factory_management_dashboard Banner" width="100%">
+  <img src="m_shop/assets/images/image3.jpg" alt="factory_management_dashboard Banner" width="100%">
 </p>
 
 <p align="center">
@@ -101,8 +101,8 @@
 ## معرض صور النظام
 
 <p align="center">
-  <img src="assets/readme/overview.png" alt="Overview Screen" width="47%">
-  <img src="assets/readme/attendance.png" alt="Attendance Screen" width="47%">
+  <img src="m_shop/assets/images/image2.jpg" alt="Overview Screen" width="47%">
+  <img src="m_shop/assets/images/image1.jpg" alt="Attendance Screen" width="47%">
 </p>
 
 <p align="center">
