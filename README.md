@@ -1,7 +1,7 @@
 # factory_management_dashboard
 
 <p align="center">
-  <img src="m_shop/assets/images/image3.jpg" alt="factory_management_dashboard Banner" width="100%">
+  <img src="m_shop/assets/images/factory.jpg" alt="factory_management_dashboard Banner" width="100%">
 </p>
 
 <p align="center">
