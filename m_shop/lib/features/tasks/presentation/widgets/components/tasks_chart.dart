@@ -44,10 +44,14 @@ class TasksChartCard extends StatelessWidget {
             height: 390,
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Color(0xFFFDFEFE), Color(0xFFF1F7F5), Color(0xFFEFF6FF)],
+                colors: [
+                  Theme.of(context).cardColor,
+                  const Color(0xFF0F766E).withValues(alpha: 0.04),
+                  const Color(0xFF2563EB).withValues(alpha: 0.04),
+                ],
               ),
               borderRadius: BorderRadius.circular(30),
               border: Border.all(color: const Color(0xFFDCE8E4)),
@@ -76,7 +80,7 @@ class ChartLegendItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: const Color(0xFFE2ECE8)),
       ),
@@ -255,3 +259,4 @@ class _LegendStrokePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _LegendStrokePainter oldDelegate) => oldDelegate.color != color || oldDelegate.dashed != dashed;
 }
+

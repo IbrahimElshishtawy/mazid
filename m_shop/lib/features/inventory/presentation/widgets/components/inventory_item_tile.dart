@@ -28,9 +28,10 @@ class InventoryItemTile extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: selected
-              ? const [Color(0xFFF3FBF9), Color(0xFFFFFFFF)]
-              : const [Color(0xFFF8FBFB), Color(0xFFFFFFFF)],
+          colors: [
+            Theme.of(context).cardColor,
+            accent.withValues(alpha: selected ? 0.10 : 0.04),
+          ],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: selected ? accent : const Color(0xFFE2ECE8), width: selected ? 1.5 : 1),
@@ -165,4 +166,5 @@ class ItemChip extends StatelessWidget {
     );
   }
 }
+
 

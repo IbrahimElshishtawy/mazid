@@ -25,7 +25,7 @@ class UserWorkerTile extends StatelessWidget {
       duration: const Duration(milliseconds: 180),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: selected ? profile.accent.withValues(alpha: 0.08) : Colors.white,
+        color: selected ? profile.accent.withValues(alpha: 0.08) : Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: selected ? profile.accent.withValues(alpha: 0.26) : const Color(0xFFE0EBE7)),
       ),
@@ -51,3 +51,4 @@ class UserWorkerTile extends StatelessWidget {
 }
 
 class _Mini extends StatelessWidget { const _Mini({required this.label, required this.value}); final String label; final String value; @override Widget build(BuildContext context) { return SizedBox(width: 150, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(label, style: const TextStyle(color: Color(0xFF667B75), fontSize: 12, fontWeight: FontWeight.w700)), const SizedBox(height: 4), Text(value, style: const TextStyle(fontWeight: FontWeight.w800, height: 1.35))])); } }
+

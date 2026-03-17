@@ -151,13 +151,16 @@ class InventoryActionHint extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 132, maxWidth: 330),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFFFFFBEB), Color(0xFFFFF1F2)],
+          colors: [
+            Theme.of(context).cardColor,
+            const Color(0xFFF59E0B).withValues(alpha: 0.06),
+          ],
         ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFFDE68A)),
+        border: Border.all(color: const Color(0xFFF59E0B).withValues(alpha: 0.18)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,12 +175,14 @@ class InventoryActionHint extends StatelessWidget {
             child: const Icon(Icons.crisis_alert_rounded, color: Colors.white),
           ),
           const SizedBox(height: 12),
-          Text(title, style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF92400E))),
+          Text(title, style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFFF59E0B))),
           const SizedBox(height: 6),
-          Text(description, style: const TextStyle(color: Color(0xFF7C5A10), height: 1.45)),
+          Text(description, style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.78), height: 1.45)),
         ],
       ),
     );
   }
 }
+
+
 

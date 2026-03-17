@@ -60,10 +60,14 @@ class InventoryChartCard extends StatelessWidget {
             height: 390,
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
+              gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [Color(0xFFFDFEFE), Color(0xFFF1F7F5), Color(0xFFEAF3F7)],
+                colors: [
+                  Theme.of(context).cardColor,
+                  const Color(0xFF0F766E).withValues(alpha: 0.04),
+                  const Color(0xFF2563EB).withValues(alpha: 0.04),
+                ],
               ),
               borderRadius: BorderRadius.circular(30),
               border: Border.all(color: const Color(0xFFDCE8E4)),
@@ -363,4 +367,5 @@ class _LegendStrokePainter extends CustomPainter {
     return oldDelegate.color != color || oldDelegate.dashed != dashed;
   }
 }
+
 

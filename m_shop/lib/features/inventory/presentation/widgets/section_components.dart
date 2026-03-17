@@ -134,8 +134,8 @@ class ProfileHeader extends StatelessWidget {
               FilledButton.icon(
                 onPressed: () {},
                 style: FilledButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  foregroundColor: const Color(0xFF0F172A),
+                  backgroundColor: Theme.of(context).cardColor,
+                  foregroundColor: Theme.of(context).colorScheme.onSurface,
                 ),
                 icon: const Icon(Icons.edit_outlined),
                 label: const Text('?????'),
@@ -1081,3 +1081,4 @@ class _InfoChip extends StatelessWidget {
     );
   }
 }
+

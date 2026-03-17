@@ -156,13 +156,16 @@ class TaskActionHint extends StatelessWidget {
       constraints: const BoxConstraints(minHeight: 132, maxWidth: 330),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFFFFFBEB), Color(0xFFEFF6FF)],
+          colors: [
+            Theme.of(context).cardColor,
+            const Color(0xFF2563EB).withValues(alpha: 0.05),
+          ],
         ),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFBFDBFE)),
+        border: Border.all(color: const Color(0xFF2563EB).withValues(alpha: 0.18)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,12 +180,14 @@ class TaskActionHint extends StatelessWidget {
             child: const Icon(Icons.psychology_alt_outlined, color: Colors.white),
           ),
           const SizedBox(height: 12),
-          Text(title, style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF1E3A8A))),
+          Text(title, style: const TextStyle(fontWeight: FontWeight.w900, color: Color(0xFF2563EB))),
           const SizedBox(height: 6),
-          Text(description, style: const TextStyle(color: Color(0xFF475569), height: 1.45)),
+          Text(description, style: TextStyle(color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.78), height: 1.45)),
         ],
       ),
     );
   }
 }
+
+
 

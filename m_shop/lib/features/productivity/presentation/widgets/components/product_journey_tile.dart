@@ -92,7 +92,7 @@ class _StepTile extends StatelessWidget {
       duration: const Duration(milliseconds: 180),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: selected ? step.accent.withValues(alpha: 0.08) : Colors.white,
+        color: selected ? step.accent.withValues(alpha: 0.08) : Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: selected ? step.accent.withValues(alpha: 0.34) : const Color(0xFFE0EBE7)),
       ),
@@ -169,4 +169,5 @@ class _MiniInfo extends StatelessWidget {
     );
   }
 }
+
 
