@@ -308,24 +308,32 @@ class _TextScaleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final accent = const Color(0xFF0F766E);
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(18),
       child: Container(
-        width: 180,
-        padding: const EdgeInsets.all(16),
+        width: 168,
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: selected ? accent.withValues(alpha: 0.10) : Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: selected ? accent : const Color(0xFFE2ECE8)),
+          color: selected ? accent.withValues(alpha: 0.10) : theme.cardColor,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: selected ? accent : theme.dividerColor.withValues(alpha: 0.45)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w900)),
-            const SizedBox(height: 10),
-            Text(sample, style: TextStyle(fontSize: title == 'كبير' ? 26 : title == 'متوسط' ? 22 : 18, fontWeight: FontWeight.w900, color: accent)),
+            Text(title, style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900)),
+            const SizedBox(height: 8),
+            Text(
+              sample,
+              style: TextStyle(
+                fontSize: title == 'كبير' ? 24 : title == 'متوسط' ? 20 : 17,
+                fontWeight: FontWeight.w900,
+                color: accent,
+              ),
+            ),
           ],
         ),
       ),
@@ -341,32 +349,46 @@ class _PermissionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FAF9),
-        borderRadius: BorderRadius.circular(20),
+        color: theme.brightness == Brightness.dark
+            ? theme.colorScheme.surface.withValues(alpha: 0.72)
+            : const Color(0xFFF7FAF9),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.4)),
       ),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: const Color(0x140F766E), borderRadius: BorderRadius.circular(14)),
-            child: Icon(item.icon, color: const Color(0xFF0F766E)),
+            padding: const EdgeInsets.all(9),
+            decoration: BoxDecoration(
+              color: const Color(0x140F766E),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Icon(item.icon, color: const Color(0xFF0F766E), size: 20),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(item.title, style: const TextStyle(fontWeight: FontWeight.w900)),
+                Text(item.title, style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900)),
                 const SizedBox(height: 4),
-                Text(item.subtitle, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
+                Text(
+                  item.subtitle,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                    height: 1.45,
+                  ),
+                ),
               ],
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
           Switch(value: item.value, onChanged: onChanged),
         ],
       ),
@@ -382,14 +404,27 @@ class _SummaryLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Container(
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: const Color(0xFFF7FAF9), borderRadius: BorderRadius.circular(18)),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: theme.brightness == Brightness.dark
+              ? theme.colorScheme.surface.withValues(alpha: 0.72)
+              : const Color(0xFFF7FAF9),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: theme.dividerColor.withValues(alpha: 0.4)),
+        ),
         child: Row(
           children: [
-            Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w700))),
+            Expanded(
+              child: Text(
+                title,
+                style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
+              ),
+            ),
             Text(value, style: const TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w900)),
           ],
         ),
@@ -469,3 +504,4 @@ String _textScaleLabel(AppTextScale scale) {
       return 'متوسط';
   }
 }
+
