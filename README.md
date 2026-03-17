@@ -1,197 +1,162 @@
-<h1 align="center">Factory Management Dashboard</h1>
+# factory_management_dashboard
 
 <p align="center">
-  Smart factory operations management for bedding and textile manufacturing
+  <img src="assets/readme/overview.png" alt="factory_management_dashboard Banner" width="100%">
 </p>
 
 <p align="center">
-  Workers • Attendance • Production • Tasks • Inventory • Reports • Business Operations
+  <b>Professional factory operations and management dashboard built with Flutter</b>
+</p>
+
+<p align="center">
+  نظام إداري وتشغيلي احترافي للمصانع والشركات يساعد على متابعة التشغيل، العمال، الحضور، المخزون، المهام، الإنتاجية، والنتائج المالية من لوحة واحدة.
 </p>
 
 ---
 
-## Overview
+## نبذة عن المشروع
 
-**Factory Management Dashboard** is a professional business management solution designed for factories that need full visibility over daily operations, workforce activity, production flow, and inventory movement.
+`factory_management_dashboard` هو نظام Dashboard احترافي مبني باستخدام **Flutter**، يهدف إلى تسهيل إدارة وتشغيل المصانع والشركات من خلال واجهة حديثة تعرض أهم البيانات التشغيلية والإدارية والمالية بشكل واضح وسريع.
 
-The system is especially suitable for factories working in:
-
-- Quilts manufacturing
-- Bed sheets production
-- Bedding sets
-- Textile and fabric-based products
-
-It helps factory owners, managers, and supervisors move from manual management to a more organized, scalable, and data-driven operational model.
+النظام مصمم ليمنح أصحاب المصانع، مديري التشغيل، والمشرفين **رؤية تنفيذية شاملة** تساعدهم على متابعة الأداء اليومي واتخاذ القرارات بكفاءة أعلى.
 
 ---
 
-## Product Vision
+## الفكرة الرئيسية
 
-The vision behind this product is to provide a clear and reliable digital system that simplifies factory management and supports operational growth.
+النظام لا يقتصر على عرض بيانات فقط، بل يعمل كمنصة تشغيل متكاملة تساعد على:
 
-The platform is built to help businesses:
-
-- Improve workflow efficiency
-- Organize employees and job hierarchy
-- Monitor attendance and productivity
-- Track tasks and operational progress
-- Control raw materials and stock levels
-- Generate clear reports for better decision-making
+- متابعة المصنع لحظة بلحظة من شاشة واحدة.
+- ربط الحضور بالأجور والورديات.
+- مراقبة الإنتاجية وخط سير المنتج داخل مراحل التشغيل.
+- متابعة المخزون والتنبيه قبل حدوث نقص تشغيلي.
+- إدارة المستخدمين والصلاحيات من داخل النظام.
+- تحليل النتائج المالية والتشغيلية بشكل بصري احترافي.
 
 ---
 
-## Core Modules
+## لماذا هذا النظام مهم
 
-### User Management
-- Secure login and logout
-- Role-based access control
-- Support for different job levels:
-  - Admin
-  - Manager
-  - Supervisor
-  - Worker
+يوفر النظام قيمة عملية كبيرة لأنه يساعد على:
 
-### Attendance Management
-- Worker check-in and check-out
-- Daily working hours tracking
-- Late attendance and absence records
-- Attendance history
-
-### Task Management
-- Create and assign tasks
-- Track execution progress
-- Manage task status:
-  - Pending
-  - In Progress
-  - Completed
-  - Delayed
-
-### Productivity Tracking
-- Daily production statistics
-- Worker performance monitoring
-- Department-level productivity overview
-- Production progress tracking
-
-### Inventory Management
-- Raw material stock monitoring
-- Quantity tracking
-- Low stock alerts
-- Material usage visibility
-
-### Reports & Analytics
-- Daily operational reports
-- Weekly summaries
-- Monthly business insights
-- Attendance reports
-- Productivity reports
-- Inventory reports
-
-### Finance Module *(Planned)*
-- Salary tracking
-- Supplier payments
-- Banking transaction management
-- Revenue and expense monitoring
+- توحيد المتابعة التشغيلية والإدارية داخل منصة واحدة.
+- تقليل الاعتماد على ملفات أو أنظمة متفرقة.
+- تحسين سرعة اتخاذ القرار من خلال مؤشرات واضحة.
+- رفع كفاءة متابعة العمال والمهام والأداء اليومي.
+- تقديم تجربة استخدام حديثة تدعم **الوضع الداكن والفاتح**.
 
 ---
 
-## Business Value
+## أهم المميزات
 
-This system is designed to deliver practical business value through:
+### 1) Dashboard Overview
+- عرض سريع لأهم أرقام التشغيل.
+- بطاقات ذكية للمؤشرات الأساسية.
+- واجهة مركزية لمتابعة الوضع العام.
 
-- Better control over daily operations
-- Reduced manual errors
-- Improved workforce management
-- Stronger production monitoring
-- More accurate reporting
-- Better inventory planning
-- Faster and more confident decision-making
+### 2) Profile / Executive View
+- عرض احترافي لبيانات المصنع أو الشركة.
+- مؤشرات ورسوم بيانية موجهة للإدارة.
+- تصميم مناسب للعرض التنفيذي.
 
----
+### 3) Users Management
+- إدارة المستخدمين داخل النظام.
+- متابعة الحالة، الدور، والصلاحيات.
+- جاهزية للتوسع في إنشاء وتعديل المستخدمين.
 
-## Target Users
+### 4) Attendance Management
+- متابعة حضور وانصراف العمال.
+- ربط الحضور بالورديات.
+- عرض التأخير والساعات الفعلية.
+- قابلية الربط مع الأجور والاستحقاقات.
 
-This product is built for:
+### 5) Productivity Tracking
+- متابعة مراحل الإنتاج.
+- عرض نسب الإنجاز وحالة كل مرحلة.
+- كشف نقاط البطء والاختناقات التشغيلية.
 
-- Factory owners
-- General managers
-- Production supervisors
-- HR teams
-- Warehouse teams
-- Workers
+### 6) Tasks Management
+- متابعة مهام العمال والمشرفين.
+- عرض نسب الإنجاز والتأخير.
+- إمكانية التوسع لربط الحوافز والخصومات.
 
----
+### 7) Inventory & Stock
+- متابعة الكميات الحالية والحد الأدنى.
+- تنبيهات عند انخفاض المخزون.
+- دعم قرارات إعادة التوريد والتخطيط.
 
-## Key Benefits
+### 8) Finance & Results
+- متابعة الدخل والمصروفات والأرباح.
+- عرض مؤشرات تشغيلية ومالية.
+- دعم اتخاذ القرار بناءً على بيانات واضحة.
 
-- Centralized management in one dashboard
-- Clear operational visibility
-- Better coordination between departments
-- Improved production follow-up
-- Easier monitoring of workers and tasks
-- More organized reporting and analysis
-- Scalable for future business growth
-
----
-
-## Planned Screens
-
-- Splash Screen
-- Login Screen
-- Main Dashboard
-- Workers Management
-- Attendance Management
-- Task Management
-- Production Monitoring
-- Inventory Management
-- Reports & Analytics
-- Finance Module
-- Settings
+### 9) Settings & Permissions
+- دعم `Dark / Light Mode`.
+- تغيير حجم النص.
+- إدارة الإعدادات العامة والصلاحيات.
+- بنية قابلة للتوسعة والحفظ الدائم.
 
 ---
 
-## Future Roadmap
+## معرض صور النظام
 
-The product is planned to grow with additional advanced modules such as:
+<p align="center">
+  <img src="assets/readme/overview.png" alt="Overview Screen" width="47%">
+  <img src="assets/readme/attendance.png" alt="Attendance Screen" width="47%">
+</p>
 
-- QR-based attendance
-- Payroll system
-- Notifications and alerts
-- Machine maintenance tracking
-- Supplier management
-- Purchase management
-- Customer orders management
-- Multi-language support
-- Dark mode / Light mode
-- Web admin panel
-- Advanced analytics and smart insights
+<p align="center">
+  <img src="assets/readme/inventory.png" alt="Inventory Screen" width="47%">
+  <img src="assets/readme/finance.png" alt="Finance Screen" width="47%">
+</p>
 
 ---
 
-## Project Status
+## الواجهات الحالية داخل النظام
 
-**Current Status:** In Development
+المشروع يحتوي حاليًا على الأقسام التالية:
 
-### Planned Releases
-- **Version 1:** Core operational management
-- **Version 2:** Reporting and inventory improvements
-- **Version 3:** Financial and business operations
-- **Version 4:** Smart automation and advanced insights
-
----
-
-## Developer
-
-**Ibrahim Elshishtawy**  
-Flutter Developer
-
----
-
-## License
-
-This project is licensed under the **MIT License**.
+- `Overview`
+- `Profile`
+- `Users`
+- `Attendance`
+- `Productivity`
+- `Tasks`
+- `Inventory`
+- `Finance`
+- `Results`
+- `Settings`
+- `Auth / Login`
 
 ---
 
-## Final Note
+## التقنيات المستخدمة
 
-Factory Management Dashboard is designed as a scalable commercial-ready solution that can be adapted to different manufacturing environments and operational needs.
+- `Flutter`
+- `Dart`
+- `Redux`
+- `flutter_redux`
+- `Provider`
+- `flutter_bloc`
+- `SharedPreferences`
+- `Supabase`
+
+---
+
+## هيكلة المشروع
+
+```text
+lib/
+  features/
+    attendance/
+    auth/
+    dashboard/
+    finance/
+    inventory/
+    overview/
+    productivity/
+    profile/
+    results/
+    settings/
+    tasks/
+    users/
