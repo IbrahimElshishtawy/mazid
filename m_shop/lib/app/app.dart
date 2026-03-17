@@ -14,12 +14,36 @@ class DashboardApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreProvider<DashboardState>(
       store: store,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Factory Dashboard',
-        theme: AppTheme.light(),
-        home: const LoginScreen(),
+      child: StoreConnector<DashboardState, _AppSettingsVm>(
+        converter: (store) => _AppSettingsVm(
+          themePreference: store.state.themePreference,
+          textScale: store.state.textScale,
+        ),
+        builder: (context, vm) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Factory Dashboard',
+            theme: AppTheme.light(),
+            darkTheme: AppTheme.dark(),
+            themeMode: AppTheme.resolveThemeMode(vm.themePreference),
+            builder: (context, child) {
+              final mediaQuery = MediaQuery.of(context);
+              return MediaQuery(
+                data: mediaQuery.copyWith(textScaler: TextScaler.linear(AppTheme.textScaleFactor(vm.textScale))),
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
+            home: const LoginScreen(),
+          );
+        },
       ),
     );
   }
+}
+
+class _AppSettingsVm {
+  const _AppSettingsVm({required this.themePreference, required this.textScale});
+
+  final AppThemePreference themePreference;
+  final AppTextScale textScale;
 }

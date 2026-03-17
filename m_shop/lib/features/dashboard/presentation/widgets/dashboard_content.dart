@@ -39,7 +39,7 @@ class DashboardContent extends StatelessWidget {
       case DashboardTab.finance:
         return FinanceSection(financialReports: vm.financialReports);
       case DashboardTab.settings:
-        return const SettingsSection();
+        return SettingsSection(vm: vm);
     }
   }
 }

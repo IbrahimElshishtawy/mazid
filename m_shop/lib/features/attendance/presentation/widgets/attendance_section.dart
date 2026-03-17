@@ -1,5 +1,13 @@
-﻿import 'package:flutter/material.dart';
+﻿import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
+import 'package:m_shop/features/attendance/presentation/widgets/components/attendance_hero.dart';
+import 'package:m_shop/features/attendance/presentation/widgets/components/attendance_models.dart';
+import 'package:m_shop/features/attendance/presentation/widgets/components/attendance_stat_card.dart';
+import 'package:m_shop/features/attendance/presentation/widgets/components/attendance_formatters.dart';
+import 'package:m_shop/features/attendance/presentation/widgets/components/payroll_summary_card.dart';
+import 'package:m_shop/features/attendance/presentation/widgets/components/worker_attendance_card.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
 
 class AttendanceSection extends StatelessWidget {
@@ -9,77 +17,68 @@ class AttendanceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final presentCount = attendance.where((item) => item.present).length;
-    final absentCount = attendance.length - presentCount;
-    final avgHours = attendance.isEmpty ? 0.0 : attendance.fold<double>(0, (sum, item) => sum + item.workedHours) / attendance.length;
+    final workers = attendance.asMap().entries.map((entry) => WorkerAttendanceProfile.fromRecord(entry.value, entry.key)).toList();
+    final summary = AttendanceSummary.fromWorkers(workers);
 
     return SectionCard(
-      title: 'Attendance',
-      subtitle: 'Attendance summary, team presence, and daily working hours.',
+      title: 'إدارة الحضور والأجور',
+      subtitle: 'شاشة احترافية لمتابعة العمال والمواعيد والأجور من مكان واحد.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [
-              _AttendanceStatCard(title: 'Records', value: attendance.length.toString(), color: const Color(0xFF0F766E)),
-              _AttendanceStatCard(title: 'Present', value: presentCount.toString(), color: const Color(0xFF16A34A)),
-              _AttendanceStatCard(title: 'Absent', value: absentCount.toString(), color: const Color(0xFFDC2626)),
-              _AttendanceStatCard(title: 'Avg Hours', value: avgHours.toStringAsFixed(1), color: const Color(0xFF2563EB)),
-            ],
+          AttendanceHero(summary: summary),
+          const SizedBox(height: 20),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final wide = constraints.maxWidth > 880;
+              final cardWidth = wide ? (constraints.maxWidth - 36) / 4 : math.max(220.0, (constraints.maxWidth - 12) / 2);
+
+              return Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                children: [
+                  AttendanceStatCard(
+                    width: cardWidth,
+                    title: 'العمال الحاضرون',
+                    value: '${summary.presentCount}',
+                    note: 'العمال الملتزمون ببداية اليوم.',
+                    accent: const Color(0xFF16A34A),
+                    icon: Icons.groups_2_rounded,
+                  ),
+                  AttendanceStatCard(
+                    width: cardWidth,
+                    title: 'حالات التأخير',
+                    value: '${summary.lateCount}',
+                    note: 'عمال حضروا بعد موعد الوردية.',
+                    accent: const Color(0xFFF59E0B),
+                    icon: Icons.alarm_on_rounded,
+                  ),
+                  AttendanceStatCard(
+                    width: cardWidth,
+                    title: 'الغياب',
+                    value: '${summary.absentCount}',
+                    note: 'غياب يؤثر على التشغيل والأجر.',
+                    accent: const Color(0xFFDC2626),
+                    icon: Icons.person_off_rounded,
+                  ),
+                  AttendanceStatCard(
+                    width: cardWidth,
+                    title: 'متوسط الساعات',
+                    value: formatAttendanceHours(summary.averageHours),
+                    note: 'متوسط الساعات المنفذة للعمال.',
+                    accent: const Color(0xFF2563EB),
+                    icon: Icons.schedule_rounded,
+                  ),
+                ],
+              );
+            },
           ),
-          const SizedBox(height: 18),
-          ...attendance.map((record) => _AttendanceTile(record: record)),
+          const SizedBox(height: 20),
+          PayrollSummaryCard(summary: summary),
+          const SizedBox(height: 20),
+          ...workers.map((worker) => WorkerAttendanceCard(worker: worker)),
         ],
       ),
-    );
-  }
-}
-
-class _AttendanceStatCard extends StatelessWidget {
-  const _AttendanceStatCard({required this.title, required this.value, required this.color});
-  final String title;
-  final String value;
-  final Color color;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 180,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: color.withValues(alpha: 0.12))),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Container(width: 34, height: 4, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(999))),
-        const SizedBox(height: 12),
-        Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 8),
-        Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
-      ]),
-    );
-  }
-}
-
-class _AttendanceTile extends StatelessWidget {
-  const _AttendanceTile({required this.record});
-  final AttendanceRecord record;
-  @override
-  Widget build(BuildContext context) {
-    final accent = record.present ? const Color(0xFF16A34A) : const Color(0xFFDC2626);
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: const Color(0xFFF7FAF9), borderRadius: BorderRadius.circular(18)),
-      child: Row(children: [
-        CircleAvatar(backgroundColor: accent.withValues(alpha: 0.12), foregroundColor: accent, child: Icon(record.present ? Icons.check_rounded : Icons.close_rounded)),
-        const SizedBox(width: 12),
-        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(record.name, style: const TextStyle(fontWeight: FontWeight.w800)),
-          const SizedBox(height: 4),
-          Text('In: ${record.checkIn}  •  Out: ${record.checkOut}  •  Hours: ${record.workedHours}', style: const TextStyle(color: Color(0xFF667B75), height: 1.4)),
-        ])),
-        const SizedBox(width: 12),
-        Text(record.present ? 'Present' : 'Absent', style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
-      ]),
     );
   }
 }
