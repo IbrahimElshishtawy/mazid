@@ -106,8 +106,8 @@
 </p>
 
 <p align="center">
-  <img src="assets/readme/inventory.png" alt="Inventory Screen" width="47%">
-  <img src="assets/readme/finance.png" alt="Finance Screen" width="47%">
+  <img src="m_shop/assets/images/image4.png" alt="Inventory Screen" width="47%">
+  <img src="m_shop/assets/images/image5.png" alt="Finance Screen" width="47%">
 </p>
 
 ---
