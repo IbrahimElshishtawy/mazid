@@ -13,10 +13,10 @@ class WorkerAttendanceCard extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: worker.accent.withValues(alpha: 0.16)),
         boxShadow: [
           BoxShadow(
@@ -32,11 +32,11 @@ class WorkerAttendanceCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 46,
-                height: 46,
+                width: 42,
+                height: 42,
                 decoration: BoxDecoration(
                   color: worker.accent.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(worker.icon, color: worker.accent),
               ),
@@ -49,7 +49,7 @@ class WorkerAttendanceCard extends StatelessWidget {
                       worker.record.name,
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.w900,
-                        fontSize: 17,
+                        fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 3),
@@ -64,7 +64,7 @@ class WorkerAttendanceCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   color: worker.accent.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(999),
@@ -78,8 +78,8 @@ class WorkerAttendanceCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Wrap(
-            spacing: 8,
-            runSpacing: 8,
+            spacing: 7,
+            runSpacing: 7,
             children: [
               _InfoChip(label: 'موعد الوردية', value: '${worker.scheduleStart} - ${worker.scheduleEnd}', icon: Icons.event_repeat_rounded),
               _InfoChip(label: 'حضور', value: worker.record.checkIn, icon: Icons.login_rounded),
@@ -159,19 +159,19 @@ class _InfoChip extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 9),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: theme.brightness == Brightness.dark
             ? theme.colorScheme.surface.withValues(alpha: 0.72)
             : const Color(0xFFF7FAF9),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
         border: Border.all(color: theme.dividerColor.withValues(alpha: 0.5)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 15, color: const Color(0xFF0F766E)),
-          const SizedBox(width: 7),
+          Icon(icon, size: 14, color: const Color(0xFF0F766E)),
+          const SizedBox(width: 6),
           Text('$label: ', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w800)),
           Text(
             value,
@@ -198,11 +198,11 @@ class _FinanceLine extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      width: 156,
-      padding: const EdgeInsets.all(12),
+      width: 146,
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: accent.withValues(alpha: theme.brightness == Brightness.dark ? 0.14 : 0.08),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +213,7 @@ class _FinanceLine extends StatelessWidget {
             value,
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w900,
-              fontSize: 17,
+              fontSize: 16,
             ),
           ),
         ],
@@ -221,3 +221,4 @@ class _FinanceLine extends StatelessWidget {
     );
   }
 }
+

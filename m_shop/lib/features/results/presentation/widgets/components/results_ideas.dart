@@ -22,27 +22,27 @@ class ResultsIdeasPanel extends StatelessWidget {
             children: ideas
                 .map(
                   (idea) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 8),
                     child: Container(
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: idea.accent.withValues(alpha: theme.brightness == Brightness.dark ? 0.12 : 0.06),
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: idea.accent.withValues(alpha: 0.16)),
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            width: 38,
-                            height: 38,
+                            width: 34,
+                            height: 34,
                             decoration: BoxDecoration(
                               color: idea.accent.withValues(alpha: 0.14),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Icon(idea.icon, color: idea.accent, size: 20),
+                            child: Icon(idea.icon, color: idea.accent, size: 18),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 8),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +70,7 @@ class ResultsIdeasPanel extends StatelessWidget {
                 .toList(),
           ),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
         SectionCard(
           title: 'قرارات استراتيجية مقترحة',
           subtitle: 'ترجمة النتائج الحالية إلى قرارات واضحة يمكن للإدارة التحرك بها بسرعة.',
@@ -78,12 +78,12 @@ class ResultsIdeasPanel extends StatelessWidget {
             children: decisions
                 .map(
                   (decision) => Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.only(bottom: 8),
                     child: Container(
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: theme.cardColor,
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: decision.accent.withValues(alpha: 0.16)),
                       ),
                       child: Column(
@@ -103,7 +103,7 @@ class ResultsIdeasPanel extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 6),
+                          const SizedBox(height: 5),
                           Text(
                             decision.note,
                             style: theme.textTheme.bodyMedium?.copyWith(
@@ -123,3 +123,4 @@ class ResultsIdeasPanel extends StatelessWidget {
     );
   }
 }
+

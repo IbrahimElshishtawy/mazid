@@ -131,9 +131,9 @@ class ProfileLayout {
   const ProfileLayout({required this.metricWidth, required this.primaryWidth, required this.secondaryWidth});
 
   factory ProfileLayout.fromWidth(double width) {
-    if (width > 1220) return const ProfileLayout(metricWidth: 248, primaryWidth: 720, secondaryWidth: 340);
-    if (width > 900) return const ProfileLayout(metricWidth: 220, primaryWidth: 540, secondaryWidth: 300);
-    final panel = math.max(280.0, width - 92).toDouble();
+    if (width > 1220) return const ProfileLayout(metricWidth: 228, primaryWidth: 680, secondaryWidth: 320);
+    if (width > 900) return const ProfileLayout(metricWidth: 204, primaryWidth: 500, secondaryWidth: 276);
+    final panel = math.max(268.0, width - 92).toDouble();
     return ProfileLayout(metricWidth: panel, primaryWidth: panel, secondaryWidth: panel);
   }
 
@@ -188,3 +188,4 @@ String formatMoney(num value) {
 }
 
 String formatPercent(double value) => '${(value * 100).round()}%';
+

@@ -18,24 +18,24 @@ class SectionCard extends StatelessWidget {
 
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800, fontSize: 18),
+              style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800, fontSize: 17),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 3),
             Text(
               subtitle,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
                 height: 1.35,
-                fontSize: 13,
+                fontSize: 12,
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 10),
             child,
           ],
         ),
@@ -43,3 +43,4 @@ class SectionCard extends StatelessWidget {
     );
   }
 }
+

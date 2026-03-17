@@ -174,12 +174,12 @@ class ProductivityLayout {
 
   factory ProductivityLayout.fromWidth(double width) {
     if (width >= 1220) {
-      return const ProductivityLayout(metricWidth: 252, primaryWidth: 740, secondaryWidth: 340);
+      return const ProductivityLayout(metricWidth: 232, primaryWidth: 700, secondaryWidth: 320);
     }
     if (width >= 920) {
-      return const ProductivityLayout(metricWidth: 220, primaryWidth: 560, secondaryWidth: 300);
+      return const ProductivityLayout(metricWidth: 204, primaryWidth: 520, secondaryWidth: 276);
     }
-    final fullWidth = math.max(280.0, width - 92).toDouble();
+    final fullWidth = math.max(268.0, width - 92).toDouble();
     return ProductivityLayout(metricWidth: fullWidth, primaryWidth: fullWidth, secondaryWidth: fullWidth);
   }
 
@@ -323,3 +323,4 @@ String formatQuantity(double value) {
 }
 
 String formatPercent(double value) => '${(value * 100).round()}%';
+

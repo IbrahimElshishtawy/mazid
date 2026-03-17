@@ -12,24 +12,49 @@ class UsersMetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       width: width,
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFFFFFFFF), Color(0xFFF7FBFA)]),
-        borderRadius: BorderRadius.circular(24),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: isDark ? [theme.cardColor, const Color(0xFF122334)] : const [Color(0xFFFFFFFF), Color(0xFFF7FBFA)],
+        ),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: accent.withValues(alpha: 0.14)),
-        boxShadow: [BoxShadow(color: accent.withValues(alpha: 0.08), blurRadius: 18, offset: const Offset(0, 10))],
+        boxShadow: [BoxShadow(color: accent.withValues(alpha: 0.08), blurRadius: 16, offset: const Offset(0, 8))],
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [Container(width: 48, height: 48, decoration: BoxDecoration(color: accent.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(16)), child: Icon(icon, color: accent)), const Spacer(), Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6), decoration: BoxDecoration(color: accent.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(999)), child: Text('تحكم', style: TextStyle(color: accent, fontWeight: FontWeight.w800, fontSize: 12)))]),
-        const SizedBox(height: 16),
-        Text(title, style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
-        const SizedBox(height: 8),
-        Text(value, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, height: 1)),
-        const SizedBox(height: 8),
-        Text(note, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
-      ]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(color: accent.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
+                child: Icon(icon, color: accent, size: 18),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(color: accent.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(999)),
+                child: Text('تحكم', style: TextStyle(color: accent, fontWeight: FontWeight.w800, fontSize: 11)),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(title, style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 5),
+          Text(value, style: theme.textTheme.titleLarge?.copyWith(fontSize: 23, fontWeight: FontWeight.w900, height: 1)),
+          const SizedBox(height: 5),
+          Text(note, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant, height: 1.45)),
+        ],
+      ),
     );
   }
 }

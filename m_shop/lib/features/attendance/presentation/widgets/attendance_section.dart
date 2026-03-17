@@ -31,11 +31,11 @@ class AttendanceSection extends StatelessWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               final wide = constraints.maxWidth > 880;
-              final cardWidth = wide ? (constraints.maxWidth - 36) / 4 : math.max(220.0, (constraints.maxWidth - 12) / 2);
+              final cardWidth = wide ? (constraints.maxWidth - 30) / 4 : math.max(192.0, (constraints.maxWidth - 10) / 2);
 
               return Wrap(
-                spacing: 12,
-                runSpacing: 12,
+                spacing: 10,
+                runSpacing: 10,
                 children: [
                   AttendanceStatCard(
                     width: cardWidth,
@@ -82,3 +82,4 @@ class AttendanceSection extends StatelessWidget {
     );
   }
 }
+

@@ -22,10 +22,10 @@ class CompanyInfoPanel extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final wide = constraints.maxWidth > 560;
-              final itemWidth = wide ? (constraints.maxWidth - 10) / 2 : constraints.maxWidth;
+              final itemWidth = wide ? (constraints.maxWidth - 8) / 2 : constraints.maxWidth;
               return Wrap(
-                spacing: 10,
-                runSpacing: 10,
+                spacing: 8,
+                runSpacing: 8,
                 children: infoItems
                     .map((item) => SizedBox(width: itemWidth, child: _InfoCard(item: item)))
                     .toList(),
@@ -33,7 +33,7 @@ class CompanyInfoPanel extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(height: 14),
+        const SizedBox(height: 10),
         SectionCard(
           title: 'الأسواق والعملات',
           subtitle: 'متابعة مباشرة للأسواق والعملات المؤثرة على البيع.',
@@ -41,12 +41,12 @@ class CompanyInfoPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               ...markets.map((market) => _MarketCard(market: market)),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Text(
                 'العملات البيعية',
                 style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
@@ -71,7 +71,7 @@ class _InfoCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topRight,
@@ -80,7 +80,7 @@ class _InfoCard extends StatelessWidget {
               ? [theme.cardColor, const Color(0xFF122031)]
               : const [Color(0xFFFFFFFF), Color(0xFFF4F9F7)],
         ),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: theme.dividerColor.withValues(alpha: 0.45)),
       ),
       child: Column(
@@ -94,13 +94,13 @@ class _InfoCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(999),
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Text(item.title, style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900)),
           const SizedBox(height: 6),
           Text(
             item.value,
             style: theme.textTheme.titleSmall?.copyWith(
-              fontSize: 15,
+              fontSize: 14,
               color: theme.colorScheme.onSurface,
               fontWeight: FontWeight.w800,
             ),
@@ -131,12 +131,12 @@ class _MarketCard extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: theme.brightness == Brightness.dark
             ? theme.colorScheme.surface.withValues(alpha: 0.72)
             : const Color(0xFFF7FAF9),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: growthColor.withValues(alpha: 0.16)),
       ),
       child: Column(
@@ -151,7 +151,7 @@ class _MarketCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
                 decoration: BoxDecoration(
                   color: growthColor.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(999),
@@ -180,7 +180,7 @@ class _MarketCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           ClipRRect(
             borderRadius: BorderRadius.circular(999),
             child: LinearProgressIndicator(
@@ -209,7 +209,7 @@ class _CurrencyCard extends StatelessWidget {
     final sign = up ? '+' : '-';
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: theme.cardColor,
         borderRadius: BorderRadius.circular(16),
@@ -241,3 +241,4 @@ class _CurrencyCard extends StatelessWidget {
     );
   }
 }
+

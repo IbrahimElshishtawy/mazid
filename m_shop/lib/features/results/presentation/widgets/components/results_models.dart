@@ -85,12 +85,12 @@ class ResultsLayout {
 
   factory ResultsLayout.fromWidth(double width) {
     if (width > 1220) {
-      return const ResultsLayout(metricWidth: 248, primaryWidth: 720, secondaryWidth: 340);
+      return const ResultsLayout(metricWidth: 228, primaryWidth: 680, secondaryWidth: 320);
     }
     if (width > 900) {
-      return const ResultsLayout(metricWidth: 220, primaryWidth: 540, secondaryWidth: 300);
+      return const ResultsLayout(metricWidth: 204, primaryWidth: 500, secondaryWidth: 276);
     }
-    final panel = math.max(280.0, width - 92).toDouble();
+    final panel = math.max(268.0, width - 92).toDouble();
     return ResultsLayout(metricWidth: panel, primaryWidth: panel, secondaryWidth: panel);
   }
 
@@ -189,3 +189,4 @@ String formatCurrency(num value) {
 }
 
 String formatPercent(double value) => '${(value * 100).round()}%';
+

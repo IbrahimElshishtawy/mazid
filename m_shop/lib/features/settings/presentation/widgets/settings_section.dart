@@ -83,7 +83,7 @@ class SettingsSection extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             _SettingsBlock(
               title: 'حجم النص',
               subtitle: 'تكبير أو تصغير النص على مستوى النظام بالكامل.',
@@ -112,7 +112,7 @@ class SettingsSection extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             _SettingsBlock(
               title: 'صلاحيات النظام',
               subtitle: 'التحكم في الصلاحيات الأساسية التي يعتمد عليها تشغيل النظام.',
@@ -127,7 +127,7 @@ class SettingsSection extends StatelessWidget {
                     .toList(),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 10),
             _SettingsBlock(
               title: 'قراءة الصلاحيات الإدارية',
               subtitle: 'ملخص سريع لما يتيحه هذا الحساب داخل النظام.',
@@ -184,7 +184,7 @@ class _SettingsHero extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const _HeroPill(label: 'إعدادات النظام'),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 const Text(
                   'تحكم كامل في واجهة النظام والصلاحيات',
                   style: TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900, height: 1.15),
@@ -223,19 +223,19 @@ class _SettingsBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Theme.of(context).dividerColor.withValues(alpha: 0.18)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w900)),
-          const SizedBox(height: 6),
+          const SizedBox(height: 5),
           Text(subtitle, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           child,
         ],
       ),
@@ -264,13 +264,13 @@ class _ThemeChoiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(22),
+      borderRadius: BorderRadius.circular(18),
       child: Container(
-        width: 260,
-        padding: const EdgeInsets.all(18),
+        width: 228,
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: selected ? accent.withValues(alpha: 0.10) : Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(color: selected ? accent : const Color(0xFFE2ECE8)),
         ),
         child: Column(
@@ -279,17 +279,17 @@ class _ThemeChoiceCard extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(color: accent.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(14)),
+                  padding: const EdgeInsets.all(9),
+                  decoration: BoxDecoration(color: accent.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
                   child: Icon(icon, color: accent),
                 ),
                 const Spacer(),
                 Icon(selected ? Icons.check_circle_rounded : Icons.radio_button_unchecked_rounded, color: accent),
               ],
             ),
-            const SizedBox(height: 14),
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16)),
-            const SizedBox(height: 6),
+            const SizedBox(height: 10),
+            Text(title, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 15)),
+            const SizedBox(height: 5),
             Text(subtitle, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
           ],
         ),
@@ -504,4 +504,5 @@ String _textScaleLabel(AppTextScale scale) {
       return 'متوسط';
   }
 }
+
 

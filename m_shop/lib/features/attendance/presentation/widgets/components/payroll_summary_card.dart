@@ -13,7 +13,7 @@ class PayrollSummaryCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topRight,
@@ -22,7 +22,7 @@ class PayrollSummaryCard extends StatelessWidget {
               ? const [Color(0xFF0B1522), Color(0xFF102033)]
               : const [Color(0xFFF7FAF9), Color(0xFFF1F7F5)],
         ),
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: theme.dividerColor.withValues(alpha: 0.45)),
       ),
       child: Column(
@@ -43,10 +43,10 @@ class PayrollSummaryCard extends StatelessWidget {
               height: 1.45,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           Wrap(
-            spacing: 10,
-            runSpacing: 10,
+            spacing: 8,
+            runSpacing: 8,
             children: [
               _PayrollMetric(
                 title: 'الأجر المخطط',
@@ -88,22 +88,22 @@ class _PayrollMetric extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Container(
-      width: 188,
-      padding: const EdgeInsets.all(14),
+      width: 172,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(color: accent.withValues(alpha: 0.16)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
           Text(
             value,
             style: theme.textTheme.titleMedium?.copyWith(
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.w900,
             ),
           ),
@@ -112,3 +112,4 @@ class _PayrollMetric extends StatelessWidget {
     );
   }
 }
+

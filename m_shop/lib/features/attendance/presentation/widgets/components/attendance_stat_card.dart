@@ -24,10 +24,10 @@ class AttendanceStatCard extends StatelessWidget {
 
     return Container(
       width: width,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: theme.cardColor,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: accent.withValues(alpha: 0.18)),
         boxShadow: [
           BoxShadow(
@@ -43,12 +43,12 @@ class AttendanceStatCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                padding: const EdgeInsets.all(9),
+                padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   color: accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(11),
                 ),
-                child: Icon(icon, color: accent, size: 17),
+                child: Icon(icon, color: accent, size: 16),
               ),
               const Spacer(),
               Container(
@@ -61,18 +61,18 @@ class AttendanceStatCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Text(title, style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
+          const SizedBox(height: 5),
           Text(
             value,
             style: theme.textTheme.titleLarge?.copyWith(
-              fontSize: 23,
+              fontSize: 21,
               fontWeight: FontWeight.w900,
               height: 1,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 5),
           Text(
             note,
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -85,3 +85,4 @@ class AttendanceStatCard extends StatelessWidget {
     );
   }
 }
+

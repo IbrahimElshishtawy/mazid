@@ -13,33 +13,33 @@ abstract final class AppTheme {
       colorScheme: scheme,
       scaffoldBackgroundColor: const Color(0xFFF4F7F6),
       fontFamily: 'sans-serif',
-      visualDensity: VisualDensity.compact,
+      visualDensity: const VisualDensity(horizontal: -2, vertical: -2),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       cardTheme: CardThemeData(
         elevation: 0,
         margin: EdgeInsets.zero,
         color: Colors.white.withValues(alpha: 0.92),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(18),
           side: const BorderSide(color: Color(0xFFE2ECE8)),
         ),
       ),
-      listTileTheme: const ListTileThemeData(dense: true, contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 2)),
+      listTileTheme: const ListTileThemeData(dense: true, contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1)),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white.withValues(alpha: 0.92),
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFFD9E6E2)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFFD9E6E2)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFF0F766E), width: 1.2),
         ),
       ),
@@ -59,34 +59,34 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: const Color(0xFF050B12),
       canvasColor: const Color(0xFF050B12),
       fontFamily: 'sans-serif',
-      visualDensity: VisualDensity.compact,
+      visualDensity: const VisualDensity(horizontal: -2, vertical: -2),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       cardTheme: CardThemeData(
         elevation: 0,
         margin: EdgeInsets.zero,
         color: const Color(0xFF0C1622).withValues(alpha: 0.78),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(18),
           side: const BorderSide(color: Color(0xFF1D3145)),
         ),
       ),
       dividerColor: const Color(0xFF23384C),
-      listTileTheme: const ListTileThemeData(dense: true, contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 2)),
+      listTileTheme: const ListTileThemeData(dense: true, contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1)),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: const Color(0xFF102132).withValues(alpha: 0.84),
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFF274159)),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFF274159)),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFF14B8A6), width: 1.2),
         ),
       ),
@@ -113,3 +113,4 @@ abstract final class AppTheme {
     }
   }
 }
+

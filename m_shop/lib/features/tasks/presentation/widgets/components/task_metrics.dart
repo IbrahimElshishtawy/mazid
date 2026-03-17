@@ -20,20 +20,21 @@ class TaskMetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Container(
       width: width,
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFFFFFFFF), Color(0xFFF8FBFB)],
+          colors: isDark ? [theme.cardColor, const Color(0xFF122334)] : const [Color(0xFFFFFFFF), Color(0xFFF8FBFB)],
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: accent.withValues(alpha: 0.14)),
-        boxShadow: [
-          BoxShadow(color: accent.withValues(alpha: 0.08), blurRadius: 18, offset: const Offset(0, 10)),
-        ],
+        boxShadow: [BoxShadow(color: accent.withValues(alpha: 0.08), blurRadius: 16, offset: const Offset(0, 8))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,31 +42,25 @@ class TaskMetricCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Icon(icon, color: accent, size: 22),
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(color: accent.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(12)),
+                child: Icon(icon, color: accent, size: 18),
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: accent.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text('متابعة', style: TextStyle(color: accent, fontWeight: FontWeight.w800, fontSize: 12)),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(color: accent.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(999)),
+                child: Text('متابعة', style: TextStyle(color: accent, fontWeight: FontWeight.w800, fontSize: 11)),
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 10),
           Text(title, style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 8),
-          Text(value, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, height: 1)),
-          const SizedBox(height: 8),
-          Text(note, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
+          const SizedBox(height: 5),
+          Text(value, style: theme.textTheme.titleLarge?.copyWith(fontSize: 23, fontWeight: FontWeight.w900, height: 1)),
+          const SizedBox(height: 5),
+          Text(note, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant, height: 1.45)),
         ],
       ),
     );
@@ -81,29 +76,27 @@ class MiniLegendStat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
-      width: 176,
-      padding: const EdgeInsets.all(14),
+      width: 160,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE6EFEC)),
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: theme.dividerColor.withValues(alpha: 0.4)),
       ),
       child: Row(
         children: [
-          Container(
-            width: 14,
-            height: 38,
-            decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(999)),
-          ),
-          const SizedBox(width: 12),
+          Container(width: 12, height: 34, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(999))),
+          const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: const TextStyle(color: Color(0xFF647874), fontWeight: FontWeight.w700)),
-                const SizedBox(height: 4),
-                Text(value, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900)),
+                Text(label, style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 3),
+                Text(value, style: theme.textTheme.titleMedium?.copyWith(fontSize: 18, fontWeight: FontWeight.w900)),
               ],
             ),
           ),

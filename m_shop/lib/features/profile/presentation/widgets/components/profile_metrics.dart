@@ -25,7 +25,7 @@ class ProfileMetricCard extends StatelessWidget {
 
     return Container(
       width: width,
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -34,7 +34,7 @@ class ProfileMetricCard extends StatelessWidget {
               ? [theme.cardColor, const Color(0xFF122334)]
               : const [Color(0xFFFFFFFF), Color(0xFFF8FBFB)],
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(color: accent.withValues(alpha: 0.16)),
         boxShadow: [
           BoxShadow(
@@ -50,17 +50,17 @@ class ProfileMetricCard extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 42,
-                height: 42,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   color: accent.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(14),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: Icon(icon, color: accent, size: 20),
+                child: Icon(icon, color: accent, size: 18),
               ),
               const Spacer(),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: accent.withValues(alpha: 0.10),
                   borderRadius: BorderRadius.circular(999),
@@ -69,18 +69,18 @@ class ProfileMetricCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Text(title, style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
+          const SizedBox(height: 5),
           Text(
             value,
             style: theme.textTheme.titleLarge?.copyWith(
-              fontSize: 25,
+              fontSize: 23,
               fontWeight: FontWeight.w900,
               height: 1,
             ),
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 5),
           Text(
             note,
             style: theme.textTheme.bodyMedium?.copyWith(
@@ -93,3 +93,4 @@ class ProfileMetricCard extends StatelessWidget {
     );
   }
 }
+
