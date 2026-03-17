@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:m_shop/features/attendance/presentation/widgets/components/attendance_formatters.dart';
 import 'package:m_shop/features/attendance/presentation/widgets/components/attendance_models.dart';
 
@@ -81,12 +81,12 @@ class WorkerAttendanceCard extends StatelessWidget {
             spacing: 7,
             runSpacing: 7,
             children: [
-              _InfoChip(label: 'موعد الوردية', value: '${worker.scheduleStart} - ${worker.scheduleEnd}', icon: Icons.event_repeat_rounded),
-              _InfoChip(label: 'حضور', value: worker.record.checkIn, icon: Icons.login_rounded),
-              _InfoChip(label: 'انصراف', value: worker.record.checkOut, icon: Icons.logout_rounded),
-              _InfoChip(label: 'الساعات', value: formatAttendanceHours(worker.record.workedHours), icon: Icons.schedule_rounded),
-              _InfoChip(label: 'أجر الساعة', value: formatAttendanceMoney(worker.hourlyRate), icon: Icons.payments_outlined),
-              _InfoChip(label: 'الأجر المستحق', value: formatAttendanceMoney(worker.duePay), icon: Icons.account_balance_wallet_rounded),
+              _InfoChip(label: '???? ???????', value: '${worker.scheduleStart} - ${worker.scheduleEnd}', icon: Icons.event_repeat_rounded),
+              _InfoChip(label: '????', value: worker.record.checkIn, icon: Icons.login_rounded),
+              _InfoChip(label: '??????', value: worker.record.checkOut, icon: Icons.logout_rounded),
+              _InfoChip(label: '???????', value: formatAttendanceHours(worker.record.workedHours), icon: Icons.schedule_rounded),
+              _InfoChip(label: '??? ??????', value: formatAttendanceMoney(worker.hourlyRate), icon: Icons.payments_outlined),
+              _InfoChip(label: '????? ???????', value: formatAttendanceMoney(worker.duePay), icon: Icons.account_balance_wallet_rounded),
             ],
           ),
           const SizedBox(height: 12),
@@ -94,7 +94,7 @@ class WorkerAttendanceCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'نسبة الالتزام بالوردية',
+                  '???? ???????? ????????',
                   style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w800),
                 ),
               ),
@@ -117,17 +117,17 @@ class WorkerAttendanceCard extends StatelessWidget {
             runSpacing: 10,
             children: [
               _FinanceLine(
-                title: 'تأخير',
+                title: '?????',
                 value: formatAttendanceMinutes(worker.lateMinutes),
                 accent: worker.lateMinutes == 0 ? const Color(0xFF16A34A) : const Color(0xFFF59E0B),
               ),
               _FinanceLine(
-                title: 'إضافي',
+                title: '?????',
                 value: formatAttendanceHours(worker.overtimeHours),
                 accent: worker.overtimeHours > 0 ? const Color(0xFF2563EB) : const Color(0xFF94A3B8),
               ),
               _FinanceLine(
-                title: 'أجر الخطة',
+                title: '??? ?????',
                 value: formatAttendanceMoney(worker.plannedPay),
                 accent: const Color(0xFF0F766E),
               ),
@@ -163,7 +163,7 @@ class _InfoChip extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.brightness == Brightness.dark
             ? theme.colorScheme.surface.withValues(alpha: 0.72)
-            : const Color(0xFFF7FAF9),
+            : theme.colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: theme.dividerColor.withValues(alpha: 0.5)),
       ),
@@ -221,4 +221,5 @@ class _FinanceLine extends StatelessWidget {
     );
   }
 }
+
 

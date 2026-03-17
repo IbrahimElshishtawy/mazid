@@ -1,13 +1,9 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({
-    super.key,
-    required this.user,
-    required this.users,
-  });
+  const ProfileScreen({super.key, required this.user, required this.users});
 
   final UserModel user;
   final List<UserModel> users;
@@ -15,7 +11,9 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final badgeColor = _roleColor(user.role);
-    final activeUsers = users.where((item) => item.status == 'نشط' || item.status == 'في الوردية').length;
+    final activeUsers = users
+        .where((item) => item.status == 'نشط' || item.status == 'في الوردية')
+        .length;
     final managers = users.where((item) => item.role == 'Manager').length;
     final supervisors = users.where((item) => item.role == 'Supervisor').length;
     final workers = users.where((item) => item.role == 'Worker').length;
@@ -38,16 +36,36 @@ class ProfileScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _ProfileHero(user: user, badgeColor: badgeColor, activeUsers: activeUsers),
+                  _ProfileHero(
+                    user: user,
+                    badgeColor: badgeColor,
+                    activeUsers: activeUsers,
+                  ),
                   const SizedBox(height: 18),
                   Wrap(
                     spacing: 12,
                     runSpacing: 12,
                     children: [
-                      const _ProfileMetric(title: 'المهام المنجزة', value: '128', color: Color(0xFF0F766E)),
-                      const _ProfileMetric(title: 'معدل الالتزام', value: '96%', color: Color(0xFF2563EB)),
-                      _ProfileMetric(title: 'المستخدمون النشطون', value: '$activeUsers', color: const Color(0xFF059669)),
-                      _ProfileMetric(title: 'المستخدمون الكلي', value: '${users.length}', color: const Color(0xFF7C3AED)),
+                      const _ProfileMetric(
+                        title: 'المهام المنجزة',
+                        value: '128',
+                        color: Color(0xFF0F766E),
+                      ),
+                      const _ProfileMetric(
+                        title: 'معدل الالتزام',
+                        value: '96%',
+                        color: Color(0xFF2563EB),
+                      ),
+                      _ProfileMetric(
+                        title: 'المستخدمون النشطون',
+                        value: '$activeUsers',
+                        color: const Color(0xFF059669),
+                      ),
+                      _ProfileMetric(
+                        title: 'المستخدمون الكلي',
+                        value: '${users.length}',
+                        color: const Color(0xFF7C3AED),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 18),
@@ -60,30 +78,58 @@ class ProfileScreen extends StatelessWidget {
                         _InfoRow(label: 'البريد الإلكتروني', value: user.email),
                         _InfoRow(label: 'الدور الوظيفي', value: user.role),
                         _InfoRow(label: 'حالة الحساب', value: user.status),
-                        const _InfoRow(label: 'رقم الهاتف', value: '+20 109 555 8201'),
-                        const _InfoRow(label: 'الموقع', value: 'مصنع مدينة العاشر'),
+                        const _InfoRow(
+                          label: 'رقم الهاتف',
+                          value: '+20 109 555 8201',
+                        ),
+                        const _InfoRow(
+                          label: 'الموقع',
+                          value: 'مصنع مدينة العاشر',
+                        ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 18),
                   SectionCard(
                     title: 'صلاحيات الإدارة والمراقبة',
-                    subtitle: 'ما الذي يستطيع هذا الحساب مراقبته وإدارته داخل النظام.',
+                    subtitle:
+                        'ما الذي يستطيع هذا الحساب مراقبته وإدارته داخل النظام.',
                     child: const Column(
                       children: [
-                        _PermissionTile(title: 'مراقبة كل المستخدمين', subtitle: 'متابعة حالة الحسابات والإيميلات وأدوار النظام', state: 'مفعل'),
-                        _PermissionTile(title: 'إدارة الصلاحيات', subtitle: 'تحديد صلاحيات المديرين والمشرفين والعمال', state: 'مستوى كامل'),
-                        _PermissionTile(title: 'الوصول للتقارير والأرباح', subtitle: 'عرض نتائج الشغل، التقارير المالية، والجرد', state: 'مفعل'),
-                        _PermissionTile(title: 'اعتماد التغييرات', subtitle: 'اعتماد التعديلات الحساسة في المستخدمين والإعدادات', state: 'مفعل'),
+                        _PermissionTile(
+                          title: 'مراقبة كل المستخدمين',
+                          subtitle:
+                              'متابعة حالة الحسابات والإيميلات وأدوار النظام',
+                          state: 'مفعل',
+                        ),
+                        _PermissionTile(
+                          title: 'إدارة الصلاحيات',
+                          subtitle: 'تحديد صلاحيات المديرين والمشرفين والعمال',
+                          state: 'مستوى كامل',
+                        ),
+                        _PermissionTile(
+                          title: 'الوصول للتقارير والأرباح',
+                          subtitle: 'عرض نتائج الشغل، التقارير المالية، والجرد',
+                          state: 'مفعل',
+                        ),
+                        _PermissionTile(
+                          title: 'اعتماد التغييرات',
+                          subtitle:
+                              'اعتماد التعديلات الحساسة في المستخدمين والإعدادات',
+                          state: 'مفعل',
+                        ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 18),
                   SectionCard(
                     title: 'لوحة مراقبة المستخدمين',
-                    subtitle: 'عرض إداري سريع للحسابات داخل النظام مع الإيميل والحالة والدور.',
+                    subtitle:
+                        'عرض إداري سريع للحسابات داخل النظام مع الإيميل والحالة والدور.',
                     child: Column(
-                      children: users.map((member) => _MonitoredUserTile(user: member)).toList(),
+                      children: users
+                          .map((member) => _MonitoredUserTile(user: member))
+                          .toList(),
                     ),
                   ),
                   const SizedBox(height: 18),
@@ -94,9 +140,21 @@ class ProfileScreen extends StatelessWidget {
                       spacing: 12,
                       runSpacing: 12,
                       children: [
-                        _RoleSummary(title: 'مديرون', count: '$managers', color: const Color(0xFF0F766E)),
-                        _RoleSummary(title: 'مشرفون', count: '$supervisors', color: const Color(0xFFF59E0B)),
-                        _RoleSummary(title: 'عمال', count: '$workers', color: const Color(0xFF2563EB)),
+                        _RoleSummary(
+                          title: 'مديرون',
+                          count: '$managers',
+                          color: const Color(0xFF0F766E),
+                        ),
+                        _RoleSummary(
+                          title: 'مشرفون',
+                          count: '$supervisors',
+                          color: const Color(0xFFF59E0B),
+                        ),
+                        _RoleSummary(
+                          title: 'عمال',
+                          count: '$workers',
+                          color: const Color(0xFF2563EB),
+                        ),
                       ],
                     ),
                   ),
@@ -152,7 +210,11 @@ class _ProfileHero extends StatelessWidget {
                 backgroundColor: Colors.white.withValues(alpha: 0.16),
                 child: Text(
                   user.name.isNotEmpty ? user.name.substring(0, 1) : '?',
-                  style: const TextStyle(color: Colors.white, fontSize: 28, fontWeight: FontWeight.w900),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
@@ -160,9 +222,19 @@ class _ProfileHero extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(user.name, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900)),
+                    Text(
+                      user.name,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
                     const SizedBox(height: 6),
-                    Text(user.email, style: const TextStyle(color: Color(0xD7FFFFFF))),
+                    Text(
+                      user.email,
+                      style: const TextStyle(color: Color(0xD7FFFFFF)),
+                    ),
                     const SizedBox(height: 12),
                     Wrap(
                       spacing: 10,
@@ -177,13 +249,24 @@ class _ProfileHero extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: badgeColor.withValues(alpha: 0.22),
                   borderRadius: BorderRadius.circular(999),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.18),
+                  ),
                 ),
-                child: const Text('حساب قيادي', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800)),
+                child: Text(
+                  'حساب قيادي',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ),
             ],
           ),
@@ -196,10 +279,23 @@ class _ProfileHero extends StatelessWidget {
             ),
             child: Row(
               children: [
-                const Expanded(
-                  child: Text('المستخدمون تحت المراقبة المباشرة', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800)),
+                Expanded(
+                  child: Text(
+                    'المستخدمون تحت المراقبة المباشرة',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ),
-                Text('$activeUsers / نشط', style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w900)),
+                Text(
+                  '$activeUsers / نشط',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
               ],
             ),
           ),
@@ -222,13 +318,23 @@ class _HeroTag extends StatelessWidget {
         color: Colors.white.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(999),
       ),
-      child: Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800)),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
     );
   }
 }
 
 class _ProfileMetric extends StatelessWidget {
-  const _ProfileMetric({required this.title, required this.value, required this.color});
+  const _ProfileMetric({
+    required this.title,
+    required this.value,
+    required this.color,
+  });
 
   final String title;
   final String value;
@@ -240,18 +346,31 @@ class _ProfileMetric extends StatelessWidget {
       width: 180,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: const Color(0xFFE2ECE8)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(width: 12, height: 12, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+          Container(
+            width: 12,
+            height: 12,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
           const SizedBox(height: 12),
-          Text(title, style: const TextStyle(color: Color(0xFF647874), fontWeight: FontWeight.w700)),
+          Text(
+            title,
+            style: const TextStyle(
+              color: Color(0xFF647874),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
           const SizedBox(height: 6),
-          Text(value, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900)),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
+          ),
         ],
       ),
     );
@@ -259,7 +378,11 @@ class _ProfileMetric extends StatelessWidget {
 }
 
 class _PermissionTile extends StatelessWidget {
-  const _PermissionTile({required this.title, required this.subtitle, required this.state});
+  const _PermissionTile({
+    required this.title,
+    required this.subtitle,
+    required this.state,
+  });
 
   final String title;
   final String subtitle;
@@ -272,7 +395,7 @@ class _PermissionTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: const Color(0xFFF7FAF9),
+          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
           borderRadius: BorderRadius.circular(18),
         ),
         child: Row(
@@ -283,14 +406,29 @@ class _PermissionTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
+                  Text(
+                    title,
+                    style: const TextStyle(fontWeight: FontWeight.w800),
+                  ),
                   const SizedBox(height: 4),
-                  Text(subtitle, style: const TextStyle(color: Color(0xFF667B75), height: 1.4)),
+                  Text(
+                    subtitle,
+                    style: const TextStyle(
+                      color: Color(0xFF667B75),
+                      height: 1.4,
+                    ),
+                  ),
                 ],
               ),
             ),
             const SizedBox(width: 12),
-            Text(state, style: const TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w900)),
+            Text(
+              state,
+              style: const TextStyle(
+                color: Color(0xFF0F766E),
+                fontWeight: FontWeight.w900,
+              ),
+            ),
           ],
         ),
       ),
@@ -310,7 +448,7 @@ class _MonitoredUserTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FAF9),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(18),
       ),
       child: Row(
@@ -328,18 +466,33 @@ class _MonitoredUserTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(user.name, style: const TextStyle(fontWeight: FontWeight.w800)),
+                Text(
+                  user.name,
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
                 const SizedBox(height: 4),
-                Text(user.email, style: const TextStyle(color: Color(0xFF667B75))),
+                Text(
+                  user.email,
+                  style: const TextStyle(color: Color(0xFF667B75)),
+                ),
               ],
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(user.role, style: TextStyle(color: color, fontWeight: FontWeight.w800)),
+              Text(
+                user.role,
+                style: TextStyle(color: color, fontWeight: FontWeight.w800),
+              ),
               const SizedBox(height: 4),
-              Text(user.status, style: const TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w700)),
+              Text(
+                user.status,
+                style: const TextStyle(
+                  color: Color(0xFF0F766E),
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
             ],
           ),
         ],
@@ -349,7 +502,11 @@ class _MonitoredUserTile extends StatelessWidget {
 }
 
 class _RoleSummary extends StatelessWidget {
-  const _RoleSummary({required this.title, required this.count, required this.color});
+  const _RoleSummary({
+    required this.title,
+    required this.count,
+    required this.color,
+  });
 
   final String title;
   final String count;
@@ -367,9 +524,15 @@ class _RoleSummary extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w800)),
+          Text(
+            title,
+            style: TextStyle(color: color, fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: 10),
-          Text(count, style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900)),
+          Text(
+            count,
+            style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
+          ),
         ],
       ),
     );
@@ -389,13 +552,24 @@ class _InfoRow extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: const Color(0xFFF7FAF9),
+          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
           borderRadius: BorderRadius.circular(18),
         ),
         child: Row(
           children: [
-            Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w700))),
-            Text(value, style: const TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w800)),
+            Expanded(
+              child: Text(
+                label,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            Text(
+              value,
+              style: const TextStyle(
+                color: Color(0xFF0F766E),
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ],
         ),
       ),

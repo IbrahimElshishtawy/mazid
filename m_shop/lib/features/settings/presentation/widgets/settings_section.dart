@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:m_shop/core/widgets/section_card.dart';
 import 'package:m_shop/features/dashboard/application/dashboard_store.dart';
 import 'package:m_shop/features/dashboard/presentation/dashboard_vm.dart';
@@ -357,7 +357,7 @@ class _PermissionTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.brightness == Brightness.dark
             ? theme.colorScheme.surface.withValues(alpha: 0.72)
-            : const Color(0xFFF7FAF9),
+            : theme.colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: theme.dividerColor.withValues(alpha: 0.4)),
       ),
@@ -413,7 +413,7 @@ class _SummaryLine extends StatelessWidget {
         decoration: BoxDecoration(
           color: theme.brightness == Brightness.dark
               ? theme.colorScheme.surface.withValues(alpha: 0.72)
-              : const Color(0xFFF7FAF9),
+              : theme.colorScheme.surface.withValues(alpha: 0.48),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: theme.dividerColor.withValues(alpha: 0.4)),
         ),
