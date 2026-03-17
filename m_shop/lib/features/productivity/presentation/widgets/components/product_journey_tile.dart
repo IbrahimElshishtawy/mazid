@@ -26,7 +26,7 @@ class ProductJourneyPanel extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(color: const Color(0xFFF7FAF9), borderRadius: BorderRadius.circular(22)),
+            decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48), borderRadius: BorderRadius.circular(22)),
             child: Wrap(
               spacing: 18,
               runSpacing: 12,
@@ -169,3 +169,4 @@ class _MiniInfo extends StatelessWidget {
     );
   }
 }
+

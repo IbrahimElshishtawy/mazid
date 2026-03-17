@@ -97,7 +97,7 @@ class FinanceActionButton extends StatelessWidget {
           child: Ink(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(22),
               border: Border.all(color: accent.withValues(alpha: 0.16)),
             ),
@@ -158,3 +158,4 @@ class FinanceActionHint extends StatelessWidget {
     );
   }
 }
+

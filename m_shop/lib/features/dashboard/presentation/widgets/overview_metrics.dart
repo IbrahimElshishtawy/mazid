@@ -74,7 +74,7 @@ class MetricTile extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
-                    colors: isDark ? [theme.cardColor, color.withValues(alpha: 0.14)] : [Colors.white, color.withValues(alpha: 0.08)],
+                    colors: [theme.cardColor, color.withValues(alpha: isDark ? 0.14 : 0.05)],
                   ),
                   borderRadius: BorderRadius.circular(18),
                   border: Border.all(color: color.withValues(alpha: 0.18)),
@@ -126,3 +126,4 @@ class MetricTile extends StatelessWidget {
     );
   }
 }
+

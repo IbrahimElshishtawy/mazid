@@ -103,7 +103,7 @@ class ChartLegendItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(999),
         border: Border.all(color: const Color(0xFFE2ECE8)),
       ),
@@ -363,3 +363,4 @@ class _LegendStrokePainter extends CustomPainter {
     return oldDelegate.color != color || oldDelegate.dashed != dashed;
   }
 }
+

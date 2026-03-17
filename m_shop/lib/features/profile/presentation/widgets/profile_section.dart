@@ -187,7 +187,7 @@ class _OwnerDecisionPanel extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [Color(0xFF0F766E), Color(0xFF123A67)]),
+              gradient: LinearGradient(begin: Alignment.topRight, end: Alignment.bottomLeft, colors: [Color(0xFF0F766E), Color(0xFF123A67)]),
               borderRadius: BorderRadius.circular(22),
             ),
             child: Column(
@@ -296,7 +296,7 @@ class _DecisionLine extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: const Color(0xFFF7FAF9), borderRadius: BorderRadius.circular(18), border: Border.all(color: const Color(0xFFE2ECE8))),
+        decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48), borderRadius: BorderRadius.circular(18), border: Border.all(color: const Color(0xFFE2ECE8))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -314,3 +314,5 @@ class _DecisionLine extends StatelessWidget {
     );
   }
 }
+
+

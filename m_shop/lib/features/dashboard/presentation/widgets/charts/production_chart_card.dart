@@ -37,7 +37,7 @@ class ProductionChartCard extends StatelessWidget {
             height: 320,
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
             decoration: BoxDecoration(
-              color: const Color(0xFFF7FAF9),
+              color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: const Color(0xFFE2ECE8)),
             ),
@@ -65,7 +65,7 @@ class _MiniStat extends StatelessWidget {
       width: 170,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FAF9),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -251,3 +251,4 @@ class _ProductionChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _ProductionChartPainter oldDelegate) => oldDelegate.data != data;
 }
+

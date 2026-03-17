@@ -25,10 +25,10 @@ class ProductivityMetricCard extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFFFFFFFF), Color(0xFFF7FBFA)],
+          colors: [Theme.of(context).cardColor, const Color(0xFF0F766E).withValues(alpha: Theme.of(context).brightness == Brightness.dark ? 0.10 : 0.04)],
         ),
         border: Border.all(color: accent.withValues(alpha: 0.14)),
         boxShadow: [BoxShadow(color: accent.withValues(alpha: 0.08), blurRadius: 18, offset: const Offset(0, 10))],
@@ -63,3 +63,6 @@ class ProductivityMetricCard extends StatelessWidget {
     );
   }
 }
+
+
+

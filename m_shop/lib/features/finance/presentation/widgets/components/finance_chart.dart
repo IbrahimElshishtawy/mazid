@@ -48,7 +48,7 @@ class FinanceChartCard extends StatelessWidget {
             height: 360,
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 4),
             decoration: BoxDecoration(
-              color: const Color(0xFFF7FAF9),
+              color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: const Color(0xFFE2ECE8)),
             ),
@@ -214,3 +214,4 @@ class FinanceLineChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant FinanceLineChartPainter oldDelegate) => oldDelegate.reports != reports;
 }
+

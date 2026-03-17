@@ -18,7 +18,7 @@ abstract final class AppTheme {
       cardTheme: CardThemeData(
         elevation: 0,
         margin: EdgeInsets.zero,
-        color: Colors.white.withValues(alpha: 0.92),
+        color: Colors.white.withValues(alpha: 0.38),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
           side: const BorderSide(color: Color(0xFFE2ECE8)),
@@ -27,7 +27,7 @@ abstract final class AppTheme {
       listTileTheme: const ListTileThemeData(dense: true, contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1)),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: Colors.white.withValues(alpha: 0.92),
+        fillColor: Colors.white.withValues(alpha: 0.42),
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         border: OutlineInputBorder(
@@ -64,7 +64,7 @@ abstract final class AppTheme {
       cardTheme: CardThemeData(
         elevation: 0,
         margin: EdgeInsets.zero,
-        color: const Color(0xFF0C1622).withValues(alpha: 0.78),
+        color: const Color(0xFF0C1622).withValues(alpha: 0.46),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18),
           side: const BorderSide(color: Color(0xFF1D3145)),
@@ -74,7 +74,7 @@ abstract final class AppTheme {
       listTileTheme: const ListTileThemeData(dense: true, contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 1)),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF102132).withValues(alpha: 0.84),
+        fillColor: const Color(0xFF102132).withValues(alpha: 0.54),
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         border: OutlineInputBorder(
@@ -113,4 +113,6 @@ abstract final class AppTheme {
     }
   }
 }
+
+
 

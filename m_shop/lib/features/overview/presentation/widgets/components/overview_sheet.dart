@@ -15,7 +15,7 @@ Future<void> showOverviewInfoSheet({
         margin: const EdgeInsets.all(16),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(28),
           boxShadow: const [BoxShadow(color: Color(0x1A0F172A), blurRadius: 30, offset: Offset(0, 16))],
         ),
@@ -51,7 +51,7 @@ class OverviewSheetLine extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: const Color(0xFFF7FAF9), borderRadius: BorderRadius.circular(18)),
+        decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48), borderRadius: BorderRadius.circular(18)),
         child: Row(
           children: [
             Expanded(child: Text(label, style: const TextStyle(fontWeight: FontWeight.w700))),
@@ -73,8 +73,9 @@ class OverviewSheetMessage extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(color: const Color(0xFFEFFBF7), borderRadius: BorderRadius.circular(18)),
+      decoration: BoxDecoration(color: const Color(0xFF0F766E).withValues(alpha: 0.10), borderRadius: BorderRadius.circular(18)),
       child: Text(message, style: const TextStyle(color: Color(0xFF30413D), height: 1.5)),
     );
   }
 }
+

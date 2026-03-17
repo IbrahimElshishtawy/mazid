@@ -35,7 +35,7 @@ class MachineStatusPanel extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
-                colors: [selectedMachine.accent.withValues(alpha: 0.16), Colors.white],
+                colors: [Theme.of(context).cardColor, selectedMachine.accent.withValues(alpha: 0.12)],
               ),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: selectedMachine.accent.withValues(alpha: 0.16)),
@@ -57,7 +57,7 @@ class MachineStatusPanel extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.72), borderRadius: BorderRadius.circular(16)),
+                  decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(16)),
                   child: Text(selectedMachine.maintenanceNote, style: const TextStyle(height: 1.5)),
                 ),
                 const SizedBox(height: 12),
@@ -79,7 +79,7 @@ class MachineStatusPanel extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
-                    color: machine.name == selectedMachine.name ? machine.accent.withValues(alpha: 0.08) : const Color(0xFFF7FAF9),
+                    color: machine.name == selectedMachine.name ? machine.accent.withValues(alpha: 0.08) : Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(color: machine.name == selectedMachine.name ? machine.accent.withValues(alpha: 0.24) : Colors.transparent),
                   ),
@@ -129,3 +129,5 @@ class _InfoLine extends StatelessWidget {
     );
   }
 }
+
+

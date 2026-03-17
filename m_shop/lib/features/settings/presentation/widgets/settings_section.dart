@@ -167,7 +167,7 @@ class _SettingsHero extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [Color(0xFF0B1320), Color(0xFF123A67), Color(0xFF0F766E)],
@@ -504,5 +504,7 @@ String _textScaleLabel(AppTextScale scale) {
       return 'متوسط';
   }
 }
+
+
 
 

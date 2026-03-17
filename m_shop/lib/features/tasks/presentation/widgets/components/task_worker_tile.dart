@@ -28,7 +28,7 @@ class TaskWorkerTile extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: selected ? const [Color(0xFFF3FBF9), Color(0xFFFFFFFF)] : const [Color(0xFFF8FBFB), Color(0xFFFFFFFF)],
+          colors: [Theme.of(context).cardColor, accent.withValues(alpha: selected ? 0.10 : 0.05)],
         ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: selected ? accent : const Color(0xFFE2ECE8), width: selected ? 1.5 : 1),
@@ -135,7 +135,7 @@ class WorkerChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE2ECE8)),
       ),
@@ -151,3 +151,4 @@ class WorkerChip extends StatelessWidget {
     );
   }
 }
+

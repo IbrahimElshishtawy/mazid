@@ -130,7 +130,7 @@ class _ActionCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(22),
           child: Ink(
             padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(22), border: Border.all(color: accent.withValues(alpha: 0.14))),
+            decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(22), border: Border.all(color: accent.withValues(alpha: 0.14))),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(width: 44, height: 44, decoration: BoxDecoration(color: accent.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(14)), child: Icon(icon, color: accent)),
               const SizedBox(height: 14),
@@ -154,7 +154,7 @@ class _MonitorTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(18), border: Border.all(color: accent.withValues(alpha: 0.14))),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(18), border: Border.all(color: accent.withValues(alpha: 0.14))),
       child: Row(children: [Container(width: 12, height: 42, decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(999))), const SizedBox(width: 12), Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(title, style: const TextStyle(fontWeight: FontWeight.w900)), const SizedBox(height: 6), Text(subtitle, style: const TextStyle(color: Color(0xFF667B75), height: 1.45))]))]),
     );
   }
@@ -171,9 +171,11 @@ class _IdeaTile extends StatelessWidget {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFFF8FBFB), Color(0xFFF2F8F6)]), borderRadius: BorderRadius.circular(20), border: Border.all(color: const Color(0xFFE2ECE8))),
+        decoration: BoxDecoration(gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Theme.of(context).cardColor, const Color(0xFF0F766E).withValues(alpha: Theme.of(context).brightness == Brightness.dark ? 0.10 : 0.04)]), borderRadius: BorderRadius.circular(20), border: Border.all(color: Theme.of(context).dividerColor.withValues(alpha: 0.4))),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(title, style: const TextStyle(fontWeight: FontWeight.w900)), const SizedBox(height: 6), Text(description, style: const TextStyle(color: Color(0xFF667B75), height: 1.5))]),
       ),
     );
   }
 }
+
+

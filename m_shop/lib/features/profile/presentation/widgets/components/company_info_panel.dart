@@ -26,14 +26,12 @@ class CompanyInfoPanel extends StatelessWidget {
               return Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: infoItems
-                    .map((item) => SizedBox(width: itemWidth, child: _InfoCard(item: item)))
-                    .toList(),
+                children: infoItems.map((item) => SizedBox(width: itemWidth, child: _InfoCard(item: item))).toList(),
               );
             },
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         SectionCard(
           title: 'الأسواق والعملات',
           subtitle: 'متابعة مباشرة للأسواق والعملات المؤثرة على البيع.',
@@ -42,14 +40,11 @@ class CompanyInfoPanel extends StatelessWidget {
             children: [
               ...markets.map((market) => _MarketCard(market: market)),
               const SizedBox(height: 10),
-              Text(
-                'العملات البيعية',
-                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900),
-              ),
+              Text('العملات البيعية', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w900)),
               const SizedBox(height: 6),
               Wrap(
-                spacing: 8,
-                runSpacing: 8,
+                spacing: 6,
+                runSpacing: 6,
                 children: currencies.map((currency) => _CurrencyCard(currency: currency)).toList(),
               ),
             ],
@@ -68,7 +63,6 @@ class _InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -76,9 +70,7 @@ class _InfoCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: isDark
-              ? [theme.cardColor, const Color(0xFF122031)]
-              : const [Color(0xFFFFFFFF), Color(0xFFF4F9F7)],
+          colors: [theme.cardColor, const Color(0xFF0F766E).withValues(alpha: theme.brightness == Brightness.dark ? 0.10 : 0.04)],
         ),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: theme.dividerColor.withValues(alpha: 0.45)),
@@ -86,33 +78,13 @@ class _InfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 34,
-            height: 4,
-            decoration: BoxDecoration(
-              color: const Color(0xFF0F766E),
-              borderRadius: BorderRadius.circular(999),
-            ),
-          ),
+          Container(width: 34, height: 4, decoration: BoxDecoration(color: const Color(0xFF0F766E), borderRadius: BorderRadius.circular(999))),
           const SizedBox(height: 10),
           Text(item.title, style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900)),
-          const SizedBox(height: 6),
-          Text(
-            item.value,
-            style: theme.textTheme.titleSmall?.copyWith(
-              fontSize: 14,
-              color: theme.colorScheme.onSurface,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            item.note,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-              height: 1.45,
-            ),
-          ),
+          const SizedBox(height: 5),
+          Text(item.value, style: theme.textTheme.titleSmall?.copyWith(fontSize: 14, color: theme.colorScheme.onSurface, fontWeight: FontWeight.w800)),
+          const SizedBox(height: 5),
+          Text(item.note, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant, height: 1.45)),
         ],
       ),
     );
@@ -133,9 +105,7 @@ class _MarketCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 10),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: theme.brightness == Brightness.dark
-            ? theme.colorScheme.surface.withValues(alpha: 0.72)
-            : const Color(0xFFF7FAF9),
+        color: theme.colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: growthColor.withValues(alpha: 0.16)),
       ),
@@ -144,51 +114,26 @@ class _MarketCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(
-                child: Text(
-                  market.name,
-                  style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900),
-                ),
-              ),
+              Expanded(child: Text(market.name, style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900))),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                decoration: BoxDecoration(
-                  color: growthColor.withValues(alpha: 0.10),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  '${market.currency} | ${formatPercent(market.growth)} نمو',
-                  style: TextStyle(color: growthColor, fontWeight: FontWeight.w800),
-                ),
+                decoration: BoxDecoration(color: growthColor.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(999)),
+                child: Text('${market.currency} | ${formatPercent(market.growth)} نمو', style: TextStyle(color: growthColor, fontWeight: FontWeight.w800)),
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Row(
             children: [
-              Text(
-                'حصة البيع',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+              Text('حصة البيع', style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant, fontWeight: FontWeight.w700)),
               const Spacer(),
-              Text(
-                formatPercent(market.share),
-                style: const TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w900),
-              ),
+              Text(formatPercent(market.share), style: const TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w900)),
             ],
           ),
           const SizedBox(height: 6),
           ClipRRect(
             borderRadius: BorderRadius.circular(999),
-            child: LinearProgressIndicator(
-              value: market.share,
-              minHeight: 8,
-              color: const Color(0xFF0F766E),
-              backgroundColor: theme.dividerColor.withValues(alpha: 0.45),
-            ),
+            child: LinearProgressIndicator(value: market.share, minHeight: 8, color: const Color(0xFF0F766E), backgroundColor: theme.dividerColor.withValues(alpha: 0.45)),
           ),
         ],
       ),
@@ -210,35 +155,18 @@ class _CurrencyCard extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-      decoration: BoxDecoration(
-        color: theme.cardColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: accent.withValues(alpha: 0.16)),
-      ),
+      decoration: BoxDecoration(color: theme.cardColor, borderRadius: BorderRadius.circular(14), border: Border.all(color: accent.withValues(alpha: 0.16))),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            currency.code,
-            style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900, fontSize: 14),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            currency.value.toStringAsFixed(1),
-            style: TextStyle(color: accent, fontWeight: FontWeight.w900),
-          ),
+          Text(currency.code, style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w900, fontSize: 14)),
           const SizedBox(height: 3),
-          Text(
-            '$sign${(currency.change * 100).toStringAsFixed(1)}%',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+          Text(currency.value.toStringAsFixed(1), style: TextStyle(color: accent, fontWeight: FontWeight.w900)),
+          const SizedBox(height: 2),
+          Text('$sign${(currency.change * 100).toStringAsFixed(1)}%', style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant, fontWeight: FontWeight.w700)),
         ],
       ),
     );
   }
 }
-

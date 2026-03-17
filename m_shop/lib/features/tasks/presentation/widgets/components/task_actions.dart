@@ -106,7 +106,7 @@ class TaskActionButton extends StatelessWidget {
           child: Ink(
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(24),
               border: Border.all(color: accent.withValues(alpha: 0.18)),
               boxShadow: [
@@ -185,3 +185,4 @@ class TaskActionHint extends StatelessWidget {
     );
   }
 }
+

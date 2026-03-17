@@ -53,7 +53,7 @@ class _ActionCard extends StatelessWidget {
       child: Container(
         width: 208,
         padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), border: Border.all(color: accent.withValues(alpha: 0.14))),
+        decoration: BoxDecoration(color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(20), border: Border.all(color: accent.withValues(alpha: 0.14))),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(width: 44, height: 44, decoration: BoxDecoration(color: accent.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(14)), child: Icon(icon, color: accent)),
           const SizedBox(height: 14),
@@ -65,3 +65,4 @@ class _ActionCard extends StatelessWidget {
     );
   }
 }
+

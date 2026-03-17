@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
 
 class OverviewLine extends StatelessWidget {
@@ -52,7 +52,7 @@ class AttendanceStatCard extends StatelessWidget {
       width: 220,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: color.withValues(alpha: 0.14)),
         boxShadow: [
@@ -110,7 +110,7 @@ class SimpleTile extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(color: const Color(0xFFF7FAF9), borderRadius: BorderRadius.circular(18)),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48), borderRadius: BorderRadius.circular(18)),
       child: Row(
         children: [
           Container(width: 10, height: 10, decoration: BoxDecoration(color: accent, shape: BoxShape.circle)),
@@ -150,7 +150,7 @@ class AttendanceTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FAF9),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: accent.withValues(alpha: 0.12)),
       ),
@@ -221,7 +221,7 @@ class TaskTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FAF9),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: accent.withValues(alpha: 0.12)),
       ),
@@ -294,7 +294,7 @@ class _InfoChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE2ECE8)),
       ),
@@ -310,3 +310,4 @@ class _InfoChip extends StatelessWidget {
     );
   }
 }
+

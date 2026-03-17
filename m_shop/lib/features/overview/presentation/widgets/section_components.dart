@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:m_shop/features/dashboard/domain/models/dashboard_models.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -12,7 +12,7 @@ class ProfileHeader extends StatelessWidget {
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [Color(0xFF111827), Color(0xFF0F766E)],
@@ -38,8 +38,8 @@ class ProfileHeader extends StatelessWidget {
             child: Center(
               child: Text(
                 user.name.isNotEmpty ? user.name.substring(0, 1) : '?',
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: Theme.of(context).cardColor,
                   fontSize: 28,
                   fontWeight: FontWeight.w900,
                 ),
@@ -56,25 +56,39 @@ class ProfileHeader extends StatelessWidget {
                   runSpacing: 8,
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: const Text(
                         '???? ?????',
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 12),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFBBF7D0).withValues(alpha: 0.18),
                         borderRadius: BorderRadius.circular(999),
                       ),
                       child: const Text(
                         '??? ????',
-                        style: TextStyle(color: Color(0xFFBBF7D0), fontWeight: FontWeight.w800, fontSize: 12),
+                        style: TextStyle(
+                          color: Color(0xFFBBF7D0),
+                          fontWeight: FontWeight.w800,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ],
@@ -82,12 +96,19 @@ class ProfileHeader extends StatelessWidget {
                 const SizedBox(height: 12),
                 Text(
                   user.name,
-                  style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w900),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   user.role,
-                  style: const TextStyle(color: Color(0xD7FFFFFF), fontWeight: FontWeight.w600),
+                  style: const TextStyle(
+                    color: Color(0xD7FFFFFF),
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -128,7 +149,12 @@ class ProfileHeader extends StatelessWidget {
 }
 
 class ProfileBadge extends StatelessWidget {
-  const ProfileBadge({super.key, required this.title, required this.value, required this.color});
+  const ProfileBadge({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.color,
+  });
 
   final String title;
   final String value;
@@ -140,7 +166,7 @@ class ProfileBadge extends StatelessWidget {
       width: 182,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: color.withValues(alpha: 0.12)),
         boxShadow: [
@@ -157,12 +183,21 @@ class ProfileBadge extends StatelessWidget {
           Container(
             width: 36,
             height: 4,
-            decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(999)),
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(999),
+            ),
           ),
           const SizedBox(height: 12),
-          Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w700)),
+          Text(
+            title,
+            style: TextStyle(color: color, fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 8),
-          Text(value, style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+          ),
         ],
       ),
     );
@@ -181,11 +216,25 @@ class SettingRow extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
         padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(color: const Color(0xFFF7FAF9), borderRadius: BorderRadius.circular(18)),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
+          borderRadius: BorderRadius.circular(18),
+        ),
         child: Row(
           children: [
-            Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w700))),
-            Text(value, style: const TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w800)),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            Text(
+              value,
+              style: const TextStyle(
+                color: Color(0xFF0F766E),
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ],
         ),
       ),
@@ -194,7 +243,11 @@ class SettingRow extends StatelessWidget {
 }
 
 class OverviewLine extends StatelessWidget {
-  const OverviewLine({super.key, required this.title, required this.description});
+  const OverviewLine({
+    super.key,
+    required this.title,
+    required this.description,
+  });
 
   final String title;
   final String description;
@@ -206,15 +259,29 @@ class OverviewLine extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(width: 10, height: 10, margin: const EdgeInsets.only(top: 5), decoration: const BoxDecoration(color: Color(0xFF0F766E), shape: BoxShape.circle)),
+          Container(
+            width: 10,
+            height: 10,
+            margin: const EdgeInsets.only(top: 5),
+            decoration: const BoxDecoration(
+              color: Color(0xFF0F766E),
+              shape: BoxShape.circle,
+            ),
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
                 const SizedBox(height: 4),
-                Text(description, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
+                Text(
+                  description,
+                  style: const TextStyle(color: Color(0xFF667B75), height: 1.5),
+                ),
               ],
             ),
           ),
@@ -251,9 +318,15 @@ class AlertTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(alert.title, style: TextStyle(color: color, fontWeight: FontWeight.w800)),
+          Text(
+            alert.title,
+            style: TextStyle(color: color, fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: 8),
-          Text(alert.description, style: const TextStyle(color: Color(0xFF30413D), height: 1.5)),
+          Text(
+            alert.description,
+            style: const TextStyle(color: Color(0xFF30413D), height: 1.5),
+          ),
         ],
       ),
     );
@@ -267,12 +340,23 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SimpleTile(title: user.name, subtitle: '${user.role} � ${user.email}', trailing: user.status);
+    return SimpleTile(
+      title: user.name,
+      subtitle: '${user.role} • ${user.email}',
+      trailing: user.status,
+    );
   }
 }
 
 class AttendanceStatCard extends StatelessWidget {
-  const AttendanceStatCard({super.key, required this.title, required this.value, required this.note, required this.color, required this.icon});
+  const AttendanceStatCard({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.note,
+    required this.color,
+    required this.icon,
+  });
 
   final String title;
   final String value;
@@ -286,11 +370,15 @@ class AttendanceStatCard extends StatelessWidget {
       width: 220,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: color.withValues(alpha: 0.14)),
         boxShadow: [
-          BoxShadow(color: color.withValues(alpha: 0.08), blurRadius: 14, offset: const Offset(0, 10)),
+          BoxShadow(
+            color: color.withValues(alpha: 0.08),
+            blurRadius: 14,
+            offset: const Offset(0, 10),
+          ),
         ],
       ),
       child: Column(
@@ -300,19 +388,38 @@ class AttendanceStatCard extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(color: color.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(14)),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(14),
+                ),
                 child: Icon(icon, color: color, size: 18),
               ),
               const Spacer(),
-              Container(width: 34, height: 4, decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(999))),
+              Container(
+                width: 34,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 14),
-          Text(title, style: TextStyle(color: color, fontWeight: FontWeight.w800)),
+          Text(
+            title,
+            style: TextStyle(color: color, fontWeight: FontWeight.w800),
+          ),
           const SizedBox(height: 8),
-          Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900)),
+          Text(
+            value,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+          ),
           const SizedBox(height: 6),
-          Text(note, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
+          Text(
+            note,
+            style: const TextStyle(color: Color(0xFF667B75), height: 1.5),
+          ),
         ],
       ),
     );
@@ -327,7 +434,11 @@ class QuickAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton.icon(onPressed: () {}, icon: Icon(icon), label: Text(label));
+    return OutlinedButton.icon(
+      onPressed: () {},
+      icon: Icon(icon),
+      label: Text(label),
+    );
   }
 }
 
@@ -338,17 +449,21 @@ class AttendanceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accent = record.present ? const Color(0xFF16A34A) : const Color(0xFFDC2626);
+    final accent = record.present
+        ? const Color(0xFF16A34A)
+        : const Color(0xFFDC2626);
     final status = record.present ? '????' : '????';
     final note = record.present
-        ? (record.checkIn != '-' && _late(record.checkIn) ? '???? ?? ?????? ??????' : '????? ????? ??????')
+        ? (record.checkIn != '-' && _late(record.checkIn)
+              ? '???? ?? ?????? ??????'
+              : '????? ????? ??????')
         : '????? ?????? ?? ???????';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FAF9),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: accent.withValues(alpha: 0.12)),
       ),
@@ -357,11 +472,28 @@ class AttendanceTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: Text(record.name, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16))),
+              Expanded(
+                child: Text(
+                  record.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: accent.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(999)),
-                child: Text(status, style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  status,
+                  style: TextStyle(color: accent, fontWeight: FontWeight.w800),
+                ),
               ),
             ],
           ),
@@ -370,13 +502,28 @@ class AttendanceTile extends StatelessWidget {
             spacing: 10,
             runSpacing: 10,
             children: [
-              _InfoChip(icon: Icons.login_rounded, label: '????', value: record.checkIn),
-              _InfoChip(icon: Icons.logout_rounded, label: '??????', value: record.checkOut),
-              _InfoChip(icon: Icons.schedule_rounded, label: '???????', value: '${record.workedHours}'),
+              _InfoChip(
+                icon: Icons.login_rounded,
+                label: '????',
+                value: record.checkIn,
+              ),
+              _InfoChip(
+                icon: Icons.logout_rounded,
+                label: '??????',
+                value: record.checkOut,
+              ),
+              _InfoChip(
+                icon: Icons.schedule_rounded,
+                label: '???????',
+                value: '${record.workedHours}',
+              ),
             ],
           ),
           const SizedBox(height: 12),
-          Text(note, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
+          Text(
+            note,
+            style: const TextStyle(color: Color(0xFF667B75), height: 1.5),
+          ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 10,
@@ -413,13 +560,17 @@ class TaskTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final approvalReady = task.progress >= 0.8;
     final delayed = task.progress < 0.4 || task.status.contains('??????');
-    final accent = approvalReady ? const Color(0xFF16A34A) : delayed ? const Color(0xFFDC2626) : const Color(0xFF0F766E);
+    final accent = approvalReady
+        ? const Color(0xFF16A34A)
+        : delayed
+        ? const Color(0xFFDC2626)
+        : const Color(0xFF0F766E);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FAF9),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: accent.withValues(alpha: 0.12)),
       ),
@@ -428,27 +579,60 @@ class TaskTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: Text(task.title, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16))),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: accent.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(999)),
+              Expanded(
                 child: Text(
-                  approvalReady ? '????? ????????' : delayed ? '????? ????' : task.status,
+                  task.title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: accent.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  approvalReady
+                      ? '????? ????????'
+                      : delayed
+                      ? '????? ????'
+                      : task.status,
                   style: TextStyle(color: accent, fontWeight: FontWeight.w800),
                 ),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          Text(task.description, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
+          Text(
+            task.description,
+            style: const TextStyle(color: Color(0xFF667B75), height: 1.5),
+          ),
           const SizedBox(height: 12),
           Wrap(
             spacing: 10,
             runSpacing: 10,
             children: [
-              _InfoChip(icon: Icons.person_outline_rounded, label: '???????', value: task.assignedTo),
-              _InfoChip(icon: Icons.calendar_today_outlined, label: '??????', value: task.dueDate),
-              _InfoChip(icon: Icons.analytics_outlined, label: '???????', value: '${(task.progress * 100).round()}%'),
+              _InfoChip(
+                icon: Icons.person_outline_rounded,
+                label: '???????',
+                value: task.assignedTo,
+              ),
+              _InfoChip(
+                icon: Icons.calendar_today_outlined,
+                label: '??????',
+                value: task.dueDate,
+              ),
+              _InfoChip(
+                icon: Icons.analytics_outlined,
+                label: '???????',
+                value: '${(task.progress * 100).round()}%',
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -463,7 +647,11 @@ class TaskTile extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            approvalReady ? '???? ??????? ?????? ?????? ???? ????????? ??????.' : delayed ? '???? ??????? ??? ?????? ?? ????? ??????? ??????.' : '?????? ???? ???? ????? ?????? ?????? ??? ????????.',
+            approvalReady
+                ? '???? ??????? ?????? ?????? ???? ????????? ??????.'
+                : delayed
+                ? '???? ??????? ??? ?????? ?? ????? ??????? ??????.'
+                : '?????? ???? ???? ????? ?????? ?????? ??? ????????.',
             style: const TextStyle(color: Color(0xFF667B75), height: 1.5),
           ),
           const SizedBox(height: 12),
@@ -471,10 +659,21 @@ class TaskTile extends StatelessWidget {
             spacing: 10,
             runSpacing: 10,
             children: [
-              const QuickAction(label: '??????', icon: Icons.visibility_outlined),
+              const QuickAction(
+                label: '??????',
+                icon: Icons.visibility_outlined,
+              ),
               const QuickAction(label: '?????', icon: Icons.edit_outlined),
-              QuickAction(label: approvalReady ? '??????' : '????? ??????', icon: approvalReady ? Icons.fact_check_rounded : Icons.sync_alt_rounded),
-              const QuickAction(label: '????? ?????', icon: Icons.swap_horiz_rounded),
+              QuickAction(
+                label: approvalReady ? '??????' : '????? ??????',
+                icon: approvalReady
+                    ? Icons.fact_check_rounded
+                    : Icons.sync_alt_rounded,
+              ),
+              const QuickAction(
+                label: '????? ?????',
+                icon: Icons.swap_horiz_rounded,
+              ),
             ],
           ),
         ],
@@ -498,7 +697,7 @@ class InventoryTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FAF9),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withValues(alpha: 0.12)),
       ),
@@ -507,11 +706,28 @@ class InventoryTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: Text(item.name, style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16))),
+              Expanded(
+                child: Text(
+                  item.name,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: color.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(999)),
-                child: Text(low ? '???' : '?????', style: TextStyle(color: color, fontWeight: FontWeight.w800)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  low ? '???' : '?????',
+                  style: TextStyle(color: color, fontWeight: FontWeight.w800),
+                ),
               ),
             ],
           ),
@@ -520,9 +736,21 @@ class InventoryTile extends StatelessWidget {
             spacing: 10,
             runSpacing: 10,
             children: [
-              _InfoChip(icon: Icons.inventory_2_outlined, label: '???????', value: '${item.quantity} ${item.unit}'),
-              _InfoChip(icon: Icons.warning_amber_outlined, label: '???? ??????', value: '${item.minimum} ${item.unit}'),
-              _InfoChip(icon: Icons.speed_outlined, label: '???????', value: '${(coverage * 100).round()}%'),
+              _InfoChip(
+                icon: Icons.inventory_2_outlined,
+                label: '???????',
+                value: '${item.quantity} ${item.unit}',
+              ),
+              _InfoChip(
+                icon: Icons.warning_amber_outlined,
+                label: '???? ??????',
+                value: '${item.minimum} ${item.unit}',
+              ),
+              _InfoChip(
+                icon: Icons.speed_outlined,
+                label: '???????',
+                value: '${(coverage * 100).round()}%',
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -537,7 +765,9 @@ class InventoryTile extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            low ? '??? ????? ????? ?????? ?????? ?? ?????? ??? ???? ??? ?? ???? ??? ???????.' : '??? ????? ?? ????? ????? ????? ???????? ???? ?? ??????? ??????.',
+            low
+                ? '??? ????? ????? ?????? ?????? ?? ?????? ??? ???? ??? ?? ???? ??? ???????.'
+                : '??? ????? ?? ????? ????? ????? ???????? ???? ?? ??????? ??????.',
             style: const TextStyle(color: Color(0xFF667B75), height: 1.5),
           ),
           const SizedBox(height: 12),
@@ -546,7 +776,10 @@ class InventoryTile extends StatelessWidget {
             runSpacing: 10,
             children: const [
               QuickAction(label: '?????', icon: Icons.edit_outlined),
-              QuickAction(label: '??? ????', icon: Icons.shopping_cart_checkout_rounded),
+              QuickAction(
+                label: '??? ????',
+                icon: Icons.shopping_cart_checkout_rounded,
+              ),
               QuickAction(label: '????? ?????', icon: Icons.swap_horiz_rounded),
               QuickAction(label: '??????', icon: Icons.visibility_outlined),
             ],
@@ -572,7 +805,7 @@ class FinanceTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FAF9),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: color.withValues(alpha: 0.12)),
       ),
@@ -581,11 +814,28 @@ class FinanceTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: Text('????? ${report.period}', style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16))),
+              Expanded(
+                child: Text(
+                  '????? ${report.period}',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(color: color.withValues(alpha: 0.10), borderRadius: BorderRadius.circular(999)),
-                child: Text(healthy ? '????? ????' : '????? ?????', style: TextStyle(color: color, fontWeight: FontWeight.w800)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: color.withValues(alpha: 0.10),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  healthy ? '????? ????' : '????? ?????',
+                  style: TextStyle(color: color, fontWeight: FontWeight.w800),
+                ),
               ),
             ],
           ),
@@ -594,9 +844,21 @@ class FinanceTile extends StatelessWidget {
             spacing: 10,
             runSpacing: 10,
             children: [
-              _InfoChip(icon: Icons.arrow_downward_rounded, label: '???????', value: report.income.toStringAsFixed(0)),
-              _InfoChip(icon: Icons.arrow_upward_rounded, label: '?????????', value: report.expenses.toStringAsFixed(0)),
-              _InfoChip(icon: Icons.savings_outlined, label: '?????', value: report.profit.toStringAsFixed(0)),
+              _InfoChip(
+                icon: Icons.arrow_downward_rounded,
+                label: '???????',
+                value: report.income.toStringAsFixed(0),
+              ),
+              _InfoChip(
+                icon: Icons.arrow_upward_rounded,
+                label: '?????????',
+                value: report.expenses.toStringAsFixed(0),
+              ),
+              _InfoChip(
+                icon: Icons.savings_outlined,
+                label: '?????',
+                value: report.profit.toStringAsFixed(0),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -611,7 +873,9 @@ class FinanceTile extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            healthy ? '??? ??????? ???? ????? ???? ????? ?????? ???? ?? ????? ??????.' : '??? ??????? ????? ?????? ????????? ?? ????? ?????? ???? ???????.',
+            healthy
+                ? '??? ??????? ???? ????? ???? ????? ?????? ???? ?? ????? ??????.'
+                : '??? ??????? ????? ?????? ????????? ?? ????? ?????? ???? ???????.',
             style: const TextStyle(color: Color(0xFF667B75), height: 1.5),
           ),
           const SizedBox(height: 12),
@@ -632,7 +896,11 @@ class FinanceTile extends StatelessWidget {
 }
 
 class StrategyTile extends StatelessWidget {
-  const StrategyTile({super.key, required this.title, required this.description});
+  const StrategyTile({
+    super.key,
+    required this.title,
+    required this.description,
+  });
 
   final String title;
   final String description;
@@ -643,10 +911,17 @@ class StrategyTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
-          colors: [Color(0xFFF7FAF9), Color(0xFFF0F7F5)],
+          colors: [
+            Theme.of(context).cardColor,
+            const Color(0xFF0F766E).withValues(
+              alpha: Theme.of(context).brightness == Brightness.dark
+                  ? 0.10
+                  : 0.04,
+            ),
+          ],
         ),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: const Color(0xFFE2ECE8)),
@@ -658,10 +933,16 @@ class StrategyTile extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: const BoxDecoration(
-              gradient: LinearGradient(colors: [Color(0xFF0F766E), Color(0xFF14B8A6)]),
+              gradient: LinearGradient(
+                colors: [Color(0xFF0F766E), Color(0xFF14B8A6)],
+              ),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.trending_up_rounded, color: Colors.white, size: 20),
+            child: const Icon(
+              Icons.trending_up_rounded,
+              color: Colors.white,
+              size: 20,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -670,16 +951,37 @@ class StrategyTile extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Expanded(child: Text(title, style: const TextStyle(fontWeight: FontWeight.w800))),
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: const TextStyle(fontWeight: FontWeight.w800),
+                      ),
+                    ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      decoration: BoxDecoration(color: const Color(0x140F766E), borderRadius: BorderRadius.circular(999)),
-                      child: const Text('?????? ?????', style: TextStyle(color: Color(0xFF0F766E), fontWeight: FontWeight.w800, fontSize: 12)),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: const Color(0x140F766E),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: const Text(
+                        '?????? ?????',
+                        style: TextStyle(
+                          color: Color(0xFF0F766E),
+                          fontWeight: FontWeight.w800,
+                          fontSize: 12,
+                        ),
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 6),
-                Text(description, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
+                Text(
+                  description,
+                  style: const TextStyle(color: Color(0xFF667B75), height: 1.5),
+                ),
               ],
             ),
           ),
@@ -690,7 +992,13 @@ class StrategyTile extends StatelessWidget {
 }
 
 class SimpleTile extends StatelessWidget {
-  const SimpleTile({super.key, required this.title, required this.subtitle, required this.trailing, this.accent = const Color(0xFF0F766E)});
+  const SimpleTile({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.trailing,
+    this.accent = const Color(0xFF0F766E),
+  });
 
   final String title;
   final String subtitle;
@@ -702,23 +1010,39 @@ class SimpleTile extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(color: const Color(0xFFF7FAF9), borderRadius: BorderRadius.circular(18)),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
+        borderRadius: BorderRadius.circular(18),
+      ),
       child: Row(
         children: [
-          Container(width: 10, height: 10, decoration: BoxDecoration(color: accent, shape: BoxShape.circle)),
+          Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(color: accent, shape: BoxShape.circle),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
+                Text(
+                  title,
+                  style: const TextStyle(fontWeight: FontWeight.w800),
+                ),
                 const SizedBox(height: 4),
-                Text(subtitle, style: const TextStyle(color: Color(0xFF667B75), height: 1.4)),
+                Text(
+                  subtitle,
+                  style: const TextStyle(color: Color(0xFF667B75), height: 1.4),
+                ),
               ],
             ),
           ),
           const SizedBox(width: 12),
-          Text(trailing, style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
+          Text(
+            trailing,
+            style: TextStyle(color: accent, fontWeight: FontWeight.w800),
+          ),
         ],
       ),
     );
@@ -726,7 +1050,11 @@ class SimpleTile extends StatelessWidget {
 }
 
 class _InfoChip extends StatelessWidget {
-  const _InfoChip({required this.icon, required this.label, required this.value});
+  const _InfoChip({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 
   final IconData icon;
   final String label;
@@ -737,7 +1065,7 @@ class _InfoChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE2ECE8)),
       ),

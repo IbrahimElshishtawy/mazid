@@ -93,7 +93,7 @@ class TaskInsightTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: data.accent.withValues(alpha: 0.14)),
       ),
@@ -156,3 +156,4 @@ class WorkerBar extends StatelessWidget {
     );
   }
 }
+

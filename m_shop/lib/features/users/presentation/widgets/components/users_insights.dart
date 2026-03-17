@@ -33,7 +33,7 @@ class UsersInsightsPanel extends StatelessWidget {
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(color: const Color(0xFFF7FAF9), borderRadius: BorderRadius.circular(20)),
+          decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48), borderRadius: BorderRadius.circular(20)),
           child: Text(selectedProfile.canApprove ? 'المستخدم ده يقدر يعتمد أوامر أو يراجع تشغيل حسب صلاحياته الحالية.' : 'المستخدم ده يحتاج ترقية صلاحية لو مطلوب منه اعتماد أو مراجعة أقسام حساسة.', style: const TextStyle(color: Color(0xFF30413D), height: 1.5)),
         ),
       ]),
@@ -42,3 +42,4 @@ class UsersInsightsPanel extends StatelessWidget {
 }
 
 class _Line extends StatelessWidget { const _Line({required this.label, required this.value}); final String label; final String value; @override Widget build(BuildContext context) { return Padding(padding: const EdgeInsets.only(bottom: 8), child: Row(children: [Expanded(child: Text(label, style: const TextStyle(color: Color(0xFF667B75), fontWeight: FontWeight.w700))), Flexible(child: Text(value, style: const TextStyle(fontWeight: FontWeight.w900), textAlign: TextAlign.end))])); } }
+

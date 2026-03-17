@@ -58,7 +58,7 @@ class _ActionButton extends StatelessWidget {
         width: 204,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: accent.withValues(alpha: 0.14)),
         ),
@@ -81,3 +81,4 @@ class _ActionButton extends StatelessWidget {
     );
   }
 }
+

@@ -145,7 +145,7 @@ class ItemChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE2ECE8)),
       ),
@@ -165,3 +165,4 @@ class ItemChip extends StatelessWidget {
     );
   }
 }
+

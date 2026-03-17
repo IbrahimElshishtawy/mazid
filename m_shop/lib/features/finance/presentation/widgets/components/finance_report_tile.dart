@@ -25,7 +25,7 @@ class FinanceReportTile extends StatelessWidget {
       duration: const Duration(milliseconds: 220),
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: selected ? const Color(0xFFEFFBF7) : const Color(0xFFF7FAF9),
+        color: selected ? const Color(0xFF0F766E).withValues(alpha: 0.10) : Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(22),
         border: Border.all(
           color: selected ? accent : const Color(0xFFE2ECE8),
@@ -113,7 +113,7 @@ class ReportChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: const Color(0xFFE2ECE8)),
       ),
@@ -129,3 +129,4 @@ class ReportChip extends StatelessWidget {
     );
   }
 }
+

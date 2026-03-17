@@ -24,7 +24,7 @@ class FinanceMetricCard extends StatelessWidget {
       width: width,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(22),
         border: Border.all(color: accent.withValues(alpha: 0.12)),
         boxShadow: [
@@ -81,7 +81,7 @@ class MiniLegendStat extends StatelessWidget {
       width: 170,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7FAF9),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.48),
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
@@ -97,3 +97,4 @@ class MiniLegendStat extends StatelessWidget {
     );
   }
 }
+

@@ -22,7 +22,7 @@ class UsersMetricCard extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: isDark ? [theme.cardColor, const Color(0xFF122334)] : const [Color(0xFFFFFFFF), Color(0xFFF7FBFA)],
+          colors: [theme.cardColor, accent.withValues(alpha: isDark ? 0.12 : 0.05)],
         ),
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: accent.withValues(alpha: 0.14)),
@@ -58,3 +58,4 @@ class UsersMetricCard extends StatelessWidget {
     );
   }
 }
+

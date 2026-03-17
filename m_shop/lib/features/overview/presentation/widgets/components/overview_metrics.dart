@@ -20,11 +20,17 @@ class OverviewMetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       width: width,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xFFFFFFFF), Color(0xFFF8FBFB)]),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [theme.cardColor, accent.withValues(alpha: theme.brightness == Brightness.dark ? 0.12 : 0.05)],
+        ),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: accent.withValues(alpha: 0.14)),
         boxShadow: [BoxShadow(color: accent.withValues(alpha: 0.08), blurRadius: 18, offset: const Offset(0, 10))],
@@ -38,9 +44,9 @@ class OverviewMetricCard extends StatelessWidget {
         const SizedBox(height: 16),
         Text(title, style: TextStyle(color: accent, fontWeight: FontWeight.w800)),
         const SizedBox(height: 8),
-        Text(value, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900, height: 1)),
+        Text(value, style: theme.textTheme.titleLarge?.copyWith(fontSize: 28, fontWeight: FontWeight.w900, height: 1)),
         const SizedBox(height: 8),
-        Text(note, style: const TextStyle(color: Color(0xFF667B75), height: 1.5)),
+        Text(note, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant, height: 1.5)),
       ]),
     );
   }
